@@ -1,0 +1,313 @@
+
+<div class="container-fluid">
+  	<div [hidden]="submitted">
+	    <h3>Submitted Thresholds:</h3>
+<div class="col-xs-6 well ">
+<div *ngFor = "let value of setValues" >
+		    <div class="row" >
+		      <div class="col-xs-3" > Temperature: </div>
+		      <div class="col-xs-9  pull-left ">{{value.temperature_value}}</div>
+		      
+		    </div>
+
+		    <div class="row">
+		      <div class="col-xs-3">Inclination: </div>
+		      <div class="col-xs-9 pull-left"> {{value.inclination_value}}</div>
+		    </div>
+</div>
+		    <br>
+		   <button class="btn btn-primary" (click)="onEdit()" >Edit </button>
+		   <!-- <button class="btn btn-primary"  
+		    routerLink="1" routerLinkActive="activeLink" > Edit </button>-->
+		</div>
+	</div>
+
+</div>
+
+
+
+
+<div [hidden]="!submitted">
+	    <h1>Update Threshold</h1>
+<div class="col-xs-6 well ">
+	    {{diagnostic}}
+
+	    <form  #ThresholdForm="ngForm" >
+	      <div class="form-group">
+	        <label for="Temperature">Temperature</label>
+	        <input type="text" class="form-control" id="Temperature" 
+	        placeholder="Enter Value" required
+	               [(ngModel)]="model.TemperatureValue" name="Temperature"
+	               #TemperatureValue="ngModel" >
+	      </div>
+	    
+	    	<div class="form-group">
+	        <label for="Inclination">Inclination</label>
+	        <input type="text" class="form-control" id="Inclination" 
+	        placeholder="Enter Value" required 
+	               [(ngModel)]="model.InclinationValue" name="Inclination" 
+	               #InclinationValue="ngModel" >
+	      </div>
+		<button type="submit" class="btn btn-success" (click)="onUpdate()" >Update
+		</button>
+		</form>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+<div class="row">
+	<div class="col-xs-6 well ">
+	<h4>Temperature data</h4>
+			<table border=1 class="table table-striped">
+
+<tr>
+      <th><a href="" ng-click="sortField = 'Index'; reverse=!reverse">Index</a></th>
+          <th><a href="" ng-click="sortField = 'Mac'; reverse=!reverse">Mac-Id</a></th>
+          <th><a href="" ng-click="sortField = 'Temperature'; reverse=!reverse">Temperature</a></th>
+          <th><a href="" ng-click="sortField = 'Time'; reverse=!reverse">TimeStamp</a></th>
+              
+</tr>
+
+<tr *ngFor= "let data of myDataTemp ; let i = index" [attr.data-index]="i"  >
+          <td>{{ i+1}}</td>
+          <td>{{ data.mac_id }}</td>
+          <td>{{ data.temperature_data }}</td>
+          <td>{{ data.time_stamp }}</td>
+
+
+
+
+
+
+
+</table>
+   	</div>
+
+
+
+
+   	<div class="col-xs-6 well">
+   	<h4>Inclination data</h4>
+      <table border=1 class="table table-striped">
+
+<tr>
+      <th><a href="" ng-click="sortField = 'Index'; reverse=!reverse">Index</a></th>
+          <th><a href="" ng-click="sortField = 'Mac'; reverse=!reverse">Mac-Id</a></th>
+          <th><a href="" ng-click="sortField = 'Inclination'; reverse=!reverse">Inclination</a></th>
+          <th><a href="" ng-click="sortField = 'Time'; reverse=!reverse">TimeStamp</a></th>
+              
+</tr>
+
+<tr *ngFor= "let data of myDataIncli ; let i = index" [attr.data-index]="i"  >
+          <td>{{ i+1}}</td>
+          <td>{{ data.mac_id }}</td>
+          <td>{{ data.inclination_data }}</td>
+          <td>{{ data.time_stamp }}</td>
+
+
+
+
+
+
+
+
+</table>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<style>
+  .no-style .ng-valid {
+  border-left: 1px  solid #CCC
+}
+
+  .no-style .ng-invalid {
+  border-left: 1px  solid #CCC
+}
+</style>
+
+
+
+<hr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+
+{{setValues | json}} 
+		        {{value | json}}
+		        
+		        
+		        {{value.date_time}}
+{{value.temperature_value}}
+{{value.inclination_value}}
+
+
+<div class="container-fluid">
+  	<div [hidden]="submitted">
+	    <h1>Set Threshold</h1>
+<div class="col-xs-6 well ">
+	    {{diagnostic}}
+
+	    <form (ngSubmit)="onSubmit($event)" #ThresholdForm="ngForm" 
+	    action="/threshold" method="POST">
+	      <div class="form-group">
+	        <label for="Temperature">Temperature</label>
+	        <input type="text" class="form-control" id="Temperature" 
+	        placeholder="Enter Value" required
+	               [(ngModel)]="model.TemperatureValue" name="Temperature"
+	               #TemperatureValue="ngModel" >
+	      </div>
+	    
+	    	<div class="form-group">
+	        <label for="Inclination">Inclination</label>
+	        <input type="text" class="form-control" id="Inclination" 
+	        placeholder="Enter Value" required 
+	               [(ngModel)]="model.InclinationValue" name="Inclination" 
+	               #InclinationValue="ngModel" >
+	      </div>
+		<button type="submit" class="btn btn-success" >Submit
+		</button>
+		</form>
+		</div>
+	</div>
+
+
+		<div [hidden]="!submitted">
+		    <h2>You submitted the following:</h2>
+<div class="row">		    
+ <div class="col-xs-6 well ">
+		    <div class="row">
+		      <div class="col-xs-3">Temperature: </div>
+		      <div class="col-xs-9  pull-left">{{ model.TemperatureValue }}</div>
+		    </div>
+		    <div class="row">
+		      <div class="col-xs-3">Inclination: </div>
+		      <div class="col-xs-9 pull-left">{{ model.InclinationValue }}</div>
+		    </div>
+		    <br>
+		    <button class="btn btn-primary"  routerLink="1" routerLinkActive="activeLink" > 
+		    Edit </button>
+		</div>
+	</div>
+  </div>
+</div>
+
+
+<hr>
+<style>
+  .no-style .ng-valid {
+  border-left: 1px  solid #CCC
+}
+
+  .no-style .ng-invalid {
+  border-left: 1px  solid #CCC
+}
+</style>
+
+
+
+<hr>
+
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!---
+<tr *ngFor= "let tabule of tabules ; let i = index" [attr.data-index]="i"  >
+          <td>{{ i+1}}</td>
+          <td>{{ tabule.mac }}</td>
+          <td>{{ tabule.temp }}</td>
+          <td>{{ tabule.time_stamp }}</td>
+          <td>{{ tabule.epoch_time_stamp }}</td>  
+</tr>
+</table>
+
+
+
+[disabled]="!ThresholdForm.form.valid"
+
+
+<div class="container">
+    <h1>Set Threshold</h1>
+    <form>
+    {{diagnostic}}
+      <div class="form-group">
+        <label for="Temperature">Temperature</label>
+        <input type="text" class="form-control" id="Temperature" required 
+        [(ngModel)]="model.TemperatureValue" name="Temperature" >
+      </div>
+      <div class="form-group">
+        <label for="Inclination">Inclination</label>
+        <input type="text" class="form-control" id="Inclination" required 
+        [(ngModel)]="model.InclinationValue" name="Inclination" >
+      </div>
+      <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+</div>
+
+
+
+
+
+
+-->

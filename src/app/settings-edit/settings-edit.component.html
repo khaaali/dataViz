@@ -1,0 +1,84 @@
+<p>
+  settings-edit works!
+</p>
+
+<div [hidden]="submitted">
+	    <h1>Update Threshold</h1>
+<div class="col-xs-6 well ">
+	    {{diagnostic}}
+
+	    <form  #ThresholdForm="ngForm" >
+	      <div class="form-group">
+	        <label for="Temperature">Temperature</label>
+	        <input type="text" class="form-control" id="Temperature" 
+	        placeholder="Enter Value" required
+	               [(ngModel)]="model.TemperatureValue" name="Temperature"
+	               #TemperatureValue="ngModel" >
+	      </div>
+	    
+	    	<div class="form-group">
+	        <label for="Inclination">Inclination</label>
+	        <input type="text" class="form-control" id="Inclination" 
+	        placeholder="Enter Value" required 
+	               [(ngModel)]="model.InclinationValue" name="Inclination" 
+	               #InclinationValue="ngModel" >
+	      </div>
+		<button type="submit" class="btn btn-success" (click)="onUpdate()" >Update
+		</button>
+		</form>
+		</div>
+	</div>
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+<hr>
+<style>
+  .no-style .ng-valid {
+  border-left: 1px  solid #CCC
+}
+
+  .no-style .ng-invalid {
+  border-left: 1px  solid #CCC
+}
+</style>
+
+
+
+<hr>
