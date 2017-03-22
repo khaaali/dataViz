@@ -307,10 +307,12 @@ console.log("getting data in other function");
         console.log(this.mail_tempvalue);
         console.log(this.mail_inclivalue);
 
+///function for mail
+function(){
 
+}
 
-
-
+//function to setup sheduler
 
 
 
