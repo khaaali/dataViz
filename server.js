@@ -8,6 +8,7 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var sendgrid = require('sendgrid')(process.env.SENDGRID_API_KEY);
 
 var pool      =    mysql.createPool({
     connectionLimit : 100, //important
@@ -28,13 +29,15 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 //app.use('/', require('./routes/index')); //added
 
-
 var mail_settime;
 var mail_tempvalue;
 var mail_inclivalue;
 
 
 
+//send grid apikeys in sendgrid.env file
+// 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
+// key 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
 
 
 function time(){
@@ -105,6 +108,10 @@ app.get("/",function(req,res){
 
 
 app.get("/senor_data",function(req,res){
+
+        console.log(this.mail_tempvalue);
+        console.log(this.mail_inclivalue);
+        
         pool.getConnection(function(err,connection){
         if (err) {
           res.json({"code" : 100, "status" : "Error in connection database"});
@@ -139,11 +146,8 @@ app.get("/senor_data",function(req,res){
 app.get("/setting",function(req,res){
 
         console.log("from get");
-        
 
-        
         var condition={id_value:"1"};
-
         pool.getConnection(function(err,connection){
         if (err) {
           res.json({"code" : 100, "status" : "Error in connection database"});
@@ -177,8 +181,6 @@ app.get("/setting",function(req,res){
 app.put("/setting/edit",function(req,res){
 
         console.log("from put");
-
-
 
         this.mail_settime= time();
         this.mail_tempvalue=req.body.tempValue;
@@ -236,13 +238,47 @@ app.put("/setting/edit",function(req,res){
         res.setHeader('Content-Type', 'text/plain');
         //res.end('Something broke');
         //res.sendFile(__dirname+'/public/index.html');
+
+var send_mail = require('sendgrid').mail;
+var schedule = require('node-schedule');
+var job = schedule.scheduleJob('10 * * * * *', function(){
+from_email = new send_mail.Email("astrose.enas@gmail.com");
+to_email = new send_mail.Email("sairamaaaa@gmail.com");
+
+subject = "Astrose Notifications";
+
+content = new send_mail.Content("text/html", 
+          "<h2><font color='LimeGreen'>Your Set Threshold Limits Reached</font></h2>"+"<br>"
+          +"<h3>Temperature : "+" "+ "<font color='red'>"+this.mail_tempvalue+"</font>"+"<br>"+
+          "Inclination  :"+" "+" <font color='red'>"+this.mail_inclivalue +"</font>"+"<br>"+
+          "Time: "+" "+" <font color='red'>"+this.mail_settime+"</font>"+"<br>"
+          +"</h3>");
+
+mail = new send_mail.Mail(from_email, subject, to_email, content);
+
+var request = sendgrid.emptyRequest({
+          method: 'POST',
+          path: '/v3/mail/send',
+          body: mail.toJSON()
+        });
+
+      sendgrid.API(request, function(error, response) {
+      console.log(response.statusCode);
+      console.log(response.body);
+      console.log(response.headers);
+      })
+      console.log('The answer to life, the universe, and everything!',this.mail_tempvalue);
 });
 
 
+});
+
 
 app.post("/setting",function(req,res){
-
+//this reuest is not implemented with angular only 'put' method is used to update the data
         console.log("from post");
+        
+
         
         var settime= time();
         var tempvalue=req.body.tempValue;
@@ -308,9 +344,9 @@ console.log("getting data in other function");
         console.log(this.mail_inclivalue);
 
 ///function for mail
-function(){
+//function(){
 
-}
+//}
 
 //function to setup sheduler
 
