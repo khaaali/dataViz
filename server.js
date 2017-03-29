@@ -34,12 +34,6 @@ var mail_tempvalue;
 var mail_inclivalue;
 
 
-
-//send grid apikeys in sendgrid.env file
-// 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
-// key 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
-
-
 function time(){
 var now     = new Date(); 
  var epoch= Date.now();
