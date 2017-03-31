@@ -1,6 +1,6 @@
 
 <div class="container-fluid">
-  	<div [hidden]="submitted">
+  	<div [hidden]="SetThreshold">
 	    <h3>Submitted Thresholds:</h3>
 <div class="col-xs-6 well ">
 <div *ngFor = "let value of setValues" >
@@ -25,9 +25,7 @@
 </div>
 
 
-
-
-<div [hidden]="!submitted">
+<div [hidden]="!SetThreshold">
 	    <h1>Update Threshold</h1>
 <div class="col-xs-6 well ">
 	    {{diagnostic}}
@@ -48,12 +46,11 @@
 	               [(ngModel)]="model.InclinationValue" name="Inclination" 
 	               #InclinationValue="ngModel" >
 	      </div>
-		<button type="submit" class="btn btn-success" (click)="onUpdate()" >Update
+		<button type="submit" class="btn btn-success" (click)="onUpdate()" (click)="refreshSetValues()">Update
 		</button>
 		</form>
 		</div>
 	</div>
-
 
 
 
@@ -81,11 +78,6 @@
           <td>{{ data.time_stamp }}</td>
 
 
-
-
-
-
-
 </table>
    	</div>
 
@@ -111,38 +103,12 @@
           <td>{{ data.time_stamp }}</td>
 
 
-
-
-
-
-
+</tr>
 
 </table>
   </div>
 
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

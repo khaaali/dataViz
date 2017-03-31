@@ -1,5 +1,5 @@
 //sudo netstat -lpn |grep :3000
-//sudo kill -9 8047(PID
+//sudo kill -9 8047(PID)
 var port=3000;
 var express   =    require("express");
 var mysql     =    require('mysql');
@@ -8,7 +8,7 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var sendgrid = require('sendgrid')(process.env.SENDGRID_API_KEY);
+var schedule = require('node-schedule');
 
 var pool      =    mysql.createPool({
     connectionLimit : 100, //important
@@ -72,6 +72,7 @@ return timestamp = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second; //+':'
 
 
 
+
 app.get("/",function(req,res){
         pool.getConnection(function(err,connection){
         if (err) {
@@ -81,7 +82,7 @@ app.get("/",function(req,res){
 
         console.log('connected as id ' + connection.threadId);
         
-        connection.query("SELECT * from Temperature_table",function(err,rows){
+        connection.query("SELECT * from sensor_data_table",function(err,rows){
             console.log(rows);
             
             if(!err) {
@@ -174,11 +175,17 @@ app.get("/setting",function(req,res){
 
 app.put("/setting/edit",function(req,res){
 
-        console.log("from put");
+        console.log("1 from put");
 
         this.mail_settime= time();
         this.mail_tempvalue=req.body.tempValue;
         this.mail_inclivalue=req.body.incliValue;
+
+         console.log("2 from mail_settime",this.mail_settime);
+         console.log("3 from mail_tempvalue",this.mail_tempvalue);
+         console.log("4 from mail_inclivalue",this.mail_inclivalue);
+
+        var job = schedule.scheduleJob('30 * * * * *', sendmail);
 
         var settime= time();
         var tempvalue=req.body.tempValue;
@@ -191,8 +198,8 @@ app.put("/setting/edit",function(req,res){
         //var tempValue=tempvalue;
         //var incliValue=inclivalue;
 
-        console.log(tempValue);
-        console.log(incliValue);
+        console.log("5 from put tempvalue",tempValue);
+        console.log("6 from put inclivalue",incliValue);
 
 
         var createThreshold={
@@ -203,7 +210,7 @@ app.put("/setting/edit",function(req,res){
 
       }
 
-        console.log(createThreshold);
+        console.log("7 showing created threshold",createThreshold);
 
         pool.getConnection(function(err,connection){
         if (err) {
@@ -211,7 +218,7 @@ app.put("/setting/edit",function(req,res){
           return;
         }   
 
-        console.log('connected as id ' + connection.threadId);
+        console.log('8 connected as id ' + connection.threadId);
         
         connection.query('UPDATE threshold_table set ? WHERE ?', [createThreshold,condition],function(err,rows){
         console.log(rows);
@@ -221,6 +228,7 @@ app.put("/setting/edit",function(req,res){
             }       
             else{
               //res.json({"error": false});
+              console.log("9 from else showing rows");
               res.json(rows);
             }
             connection.release();    
@@ -229,43 +237,19 @@ app.put("/setting/edit",function(req,res){
               res.json({"code" : 100, "status" : "Error in connection database"});
               return;     });
   });
-        res.setHeader('Content-Type', 'text/plain');
         //res.end('Something broke');
         //res.sendFile(__dirname+'/public/index.html');
 
-var send_mail = require('sendgrid').mail;
-var schedule = require('node-schedule');
-var job = schedule.scheduleJob('10 * * * * *', function(){
-from_email = new send_mail.Email("astrose.enas@gmail.com");
-to_email = new send_mail.Email("sairamaaaa@gmail.com");
 
-subject = "Astrose Notifications";
-
-content = new send_mail.Content("text/html", 
-          "<h2><font color='LimeGreen'>Your Set Threshold Limits Reached</font></h2>"+"<br>"
-          +"<h3>Temperature : "+" "+ "<font color='red'>"+this.mail_tempvalue+"</font>"+"<br>"+
-          "Inclination  :"+" "+" <font color='red'>"+this.mail_inclivalue +"</font>"+"<br>"+
-          "Time: "+" "+" <font color='red'>"+this.mail_settime+"</font>"+"<br>"
-          +"</h3>");
-
-mail = new send_mail.Mail(from_email, subject, to_email, content);
-
-var request = sendgrid.emptyRequest({
-          method: 'POST',
-          path: '/v3/mail/send',
-          body: mail.toJSON()
-        });
-
-      sendgrid.API(request, function(error, response) {
-      console.log(response.statusCode);
-      console.log(response.body);
-      console.log(response.headers);
-      })
-      console.log('The answer to life, the universe, and everything!',this.mail_tempvalue);
-});
-
+        res.setHeader('Content-Type', 'text/plain');
+  
 
 });
+
+
+
+
+
 
 
 app.post("/setting",function(req,res){
@@ -305,7 +289,7 @@ app.post("/setting",function(req,res){
 
         console.log('connected as id ' + connection.threadId);
         
-        connection.query('INSERT INTO threshold_table set ?', createThreshold,function(err,rows){
+        connection.query('INSERT INTO threshold_table set ', ,function(err,rows){
         console.log(rows);
             
             if(err) {
@@ -331,12 +315,40 @@ app.post("/setting",function(req,res){
 
                     ///////////for sending mail///////////////////
 
+function sendmail() {
+
+pool.getConnection(function(err,connection){
+        var condition={id_value:"1"};
+        console.log('connected as id ' + connection.threadId);
+        
+        connection.query('SELECT * threshold_table WHERE ?',condition,function(err,rows){
+        console.log(rows);
+            
+            if(err) {
+                res.json(err);
+            }       
+            else{
+              //res.json({"error": false});
+              res.json(rows);
+            }
+            connection.release();    
+        });
+        connection.on('error', function(err) {      
+              res.json({"code" : 100, "status" : "Error in connection database"});
+              return;     });
+  });
+
+
+
+
+
+
 
 console.log("getting data in other function");
         console.log(this.mail_settime);
         console.log(this.mail_tempvalue);
         console.log(this.mail_inclivalue);
-
+}
 ///function for mail
 //function(){
 
@@ -345,6 +357,52 @@ console.log("getting data in other function");
 //function to setup sheduler
 
 
+
+
+
+
+
+function mails() {
+
+         console.log("2-- from mail_settime",this.mail_settime);
+         console.log("3-- from mail_tempvalue",this.mail_tempvalue);
+         console.log("4-- from mail_inclivalue",this.mail_inclivalue);
+
+var send_mail = require('sendgrid').mail;
+from_email = new send_mail.Email("astrose.enas@gmail.com");
+to_email = new send_mail.Email("sairamaaaa@gmail.com");
+
+subject = "Astrose Notifications";
+
+content = new send_mail.Content("text/html", 
+          "<h2><font color='LimeGreen'>Your Set Threshold Limits Reached</font></h2>"+"<br>"
+          +"<h3>Temperature : "+" "+ "<font color='red'>"+this.mail_tempvalue+"</font>"+"<br>"+
+          "Inclination  :"+" "+" <font color='red'>"+this.mail_inclivalue +"</font>"+"<br>"+
+          "Time: "+" "+" <font color='red'>"+this.mail_settime+"</font>"+"<br>"
+          +"</h3>");
+
+mail = new send_mail.Mail(from_email, subject, to_email, content);
+
+var _sendgrid = require('sendgrid')(process.env.SENDGRID_API_KEY);
+
+         console.log("2- from mail_settime",this.mail_settime);
+         console.log("3- from mail_tempvalue",this.mail_tempvalue);
+         console.log("4- from mail_inclivalue",this.mail_inclivalue);
+
+
+var request = _sendgrid.emptyRequest({
+          method: 'POST',
+          path: '/v3/mail/send',
+          body: mail.toJSON()
+        });
+
+      _sendgrid.API(request, function(error, response) {
+      console.log("sg1",response.statusCode);
+      console.log("sg2",response.body);
+      console.log("sg3",response.headers);
+      })
+      console.log('The answer to life, the universe, and everything!',this.mail_tempvalue);
+}
 
 
 

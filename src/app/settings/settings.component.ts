@@ -35,12 +35,15 @@ export class SettingsComponent implements OnInit {
     ) { }
 
 
-  submitted = false;
+  SetThreshold = false;
+  Display_SetThreshold_data = false;
+
   
 ngOnInit(): void {
 
 		this._MySqlService.getThresholds()
 			.subscribe(setValues => this.setValues=setValues);
+
 
 }
 
@@ -53,16 +56,17 @@ refreshSetValues(): void{
 
 onEdit(){
 
-  this.submitted = true;
+  this.SetThreshold = true;
+  this.Display_SetThreshold_data= true;
 }
 
 onUpdate(){
 
-this.submitted = false;
+this.SetThreshold = false;
   let formTemp=this.model.TemperatureValue;
   let formIncli=this.model.InclinationValue;
-  console.log(formTemp);
-  console.log(formIncli);
+  console.log("from client set temp",formTemp);
+  console.log("from client set incli",formIncli);
 
 this._MySqlService.updateThresholds(formTemp,formIncli)
       .subscribe(Data => console.log(Data));

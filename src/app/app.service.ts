@@ -135,7 +135,7 @@ updateThresholds(formTemp:string,formIncli:string): Observable<Thresholds[]> {
       tempValue:formTemp,
       incliValue:formIncli
     }
-    console.log(formData);
+    console.log("from service",formData);
 
      return this._http.put(url,JSON.stringify(formData),{ headers: this.headers })
                 .map(res =>res.json())
