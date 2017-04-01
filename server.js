@@ -19,6 +19,9 @@ var pool      =    mysql.createPool({
     debug    :  false
 });
 
+
+
+
 var app       =    express();
 
 app.use(logger('dev'));
@@ -29,9 +32,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 //app.use('/', require('./routes/index')); //added
 
-var mail_settime;
-var mail_tempvalue;
-var mail_inclivalue;
+
 
 
 function time(){
@@ -185,7 +186,6 @@ app.put("/setting/edit",function(req,res){
          console.log("3 from mail_tempvalue",this.mail_tempvalue);
          console.log("4 from mail_inclivalue",this.mail_inclivalue);
 
-        var job = schedule.scheduleJob('30 * * * * *', sendmail);
 
         var settime= time();
         var tempvalue=req.body.tempValue;
@@ -289,7 +289,7 @@ app.post("/setting",function(req,res){
 
         console.log('connected as id ' + connection.threadId);
         
-        connection.query('INSERT INTO threshold_table set ', ,function(err,rows){
+        connection.query('INSERT INTO threshold_table set ?',createThreshold ,function(err,rows){
         console.log(rows);
             
             if(err) {
@@ -315,40 +315,64 @@ app.post("/setting",function(req,res){
 
                     ///////////for sending mail///////////////////
 
+
+
+
+//runs every minute 10th second
+var job = schedule.scheduleJob('10 * * * * *', sendmail);
+
+
+
 function sendmail() {
 
+var mail_settime;
+var mail_tempvalue;
+var mail_inclivalue;
+        
+
 pool.getConnection(function(err,connection){
+        
         var condition={id_value:"1"};
+        
         console.log('connected as id ' + connection.threadId);
         
-        connection.query('SELECT * threshold_table WHERE ?',condition,function(err,rows){
-        console.log(rows);
-            
+        connection.query('SELECT * FROM threshold_table WHERE ?',condition,function(err,data){
+
+        console.log("log as :",data[0]);
+        //console.log(data[0].temperature_value);
+        //console.log(data[0].inclination_value);
             if(err) {
-                res.json(err);
+                JSON.stringify(err);
             }       
             else{
               //res.json({"error": false});
-              res.json(rows);
+              this.mail_settime=data[0].date_time
+              this.mail_tempvalue=data[0].temperature_value;
+              this.mail_inclivalue=data[0].inclination_value
+        console.log("1",this.mail_settime);
+        console.log("1",this.mail_tempvalue);
+        console.log("1",this.mail_inclivalue);
+
             }
             connection.release();    
+
+        console.log("2",this.mail_settime);
+        console.log("2",this.mail_tempvalue);
+        console.log("2",this.mail_inclivalue);    
+
+        mails(this.mail_settime,this.mail_tempvalue,this.mail_inclivalue)
+
+
         });
-        connection.on('error', function(err) {      
-              res.json({"code" : 100, "status" : "Error in connection database"});
-              return;     });
+
+        
   });
 
+        console.log("getting data in other function");
+        console.log("3",this.mail_settime);
+        console.log("3",this.mail_tempvalue);
+        console.log("3",this.mail_inclivalue);
 
-
-
-
-
-
-console.log("getting data in other function");
-        console.log(this.mail_settime);
-        console.log(this.mail_tempvalue);
-        console.log(this.mail_inclivalue);
-}
 ///function for mail
 //function(){
 
@@ -362,12 +386,9 @@ console.log("getting data in other function");
 
 
 
-function mails() {
+function mails(string,string,string) {
 
-         console.log("2-- from mail_settime",this.mail_settime);
-         console.log("3-- from mail_tempvalue",this.mail_tempvalue);
-         console.log("4-- from mail_inclivalue",this.mail_inclivalue);
-
+        
 var send_mail = require('sendgrid').mail;
 from_email = new send_mail.Email("astrose.enas@gmail.com");
 to_email = new send_mail.Email("sairamaaaa@gmail.com");
@@ -385,10 +406,7 @@ mail = new send_mail.Mail(from_email, subject, to_email, content);
 
 var _sendgrid = require('sendgrid')(process.env.SENDGRID_API_KEY);
 
-         console.log("2- from mail_settime",this.mail_settime);
-         console.log("3- from mail_tempvalue",this.mail_tempvalue);
-         console.log("4- from mail_inclivalue",this.mail_inclivalue);
-
+        
 
 var request = _sendgrid.emptyRequest({
           method: 'POST',
@@ -407,7 +425,7 @@ var request = _sendgrid.emptyRequest({
 
 
 
-
+}
 
 
 
