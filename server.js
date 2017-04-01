@@ -318,17 +318,15 @@ app.post("/setting",function(req,res){
 
 
 
+
+
+
 //runs every minute 10th second
-var job = schedule.scheduleJob('10 * * * * *', sendmail);
+var job = schedule.scheduleJob('10 * * * * *', getSetThresholds);
 
 
 
-function sendmail() {
-
-var mail_settime;
-var mail_tempvalue;
-var mail_inclivalue;
-        
+function getSetThresholds() {
 
 pool.getConnection(function(err,connection){
         
@@ -341,26 +339,29 @@ pool.getConnection(function(err,connection){
         console.log("log as :",data[0]);
         //console.log(data[0].temperature_value);
         //console.log(data[0].inclination_value);
+        var mail_settime;
+        var mail_tempvalue;
+        var mail_inclivalue;
             if(err) {
                 JSON.stringify(err);
             }       
             else{
               //res.json({"error": false});
-              this.mail_settime=data[0].date_time
-              this.mail_tempvalue=data[0].temperature_value;
-              this.mail_inclivalue=data[0].inclination_value
-        console.log("1",this.mail_settime);
-        console.log("1",this.mail_tempvalue);
-        console.log("1",this.mail_inclivalue);
+              mail_settime=data[0].date_time
+              mail_tempvalue=data[0].temperature_value;
+              mail_inclivalue=data[0].inclination_value
+        console.log("1",mail_settime);
+        console.log("1",mail_tempvalue);
+        console.log("1",mail_inclivalue);
 
             }
             connection.release();    
 
-        console.log("2",this.mail_settime);
-        console.log("2",this.mail_tempvalue);
-        console.log("2",this.mail_inclivalue);    
+        console.log("2",mail_settime);
+        console.log("2",mail_tempvalue);
+        console.log("2",mail_inclivalue);    
 
-        mails(this.mail_settime,this.mail_tempvalue,this.mail_inclivalue)
+        sendMail(mail_settime,mail_tempvalue,mail_inclivalue)
 
 
         });
@@ -368,25 +369,12 @@ pool.getConnection(function(err,connection){
         
   });
 
-        console.log("getting data in other function");
-        console.log("3",this.mail_settime);
-        console.log("3",this.mail_tempvalue);
-        console.log("3",this.mail_inclivalue);
+        
 
-///function for mail
-//function(){
-
-//}
-
-//function to setup sheduler
+//function to setup mail payload via sendgrid
 
 
-
-
-
-
-
-function mails(string,string,string) {
+function sendMail(mail_settime,mail_tempvalue,mail_inclivalue) {
 
         
 var send_mail = require('sendgrid').mail;
@@ -396,10 +384,11 @@ to_email = new send_mail.Email("sairamaaaa@gmail.com");
 subject = "Astrose Notifications";
 
 content = new send_mail.Content("text/html", 
-          "<h2><font color='LimeGreen'>Your Set Threshold Limits Reached</font></h2>"+"<br>"
-          +"<h3>Temperature : "+" "+ "<font color='red'>"+this.mail_tempvalue+"</font>"+"<br>"+
-          "Inclination  :"+" "+" <font color='red'>"+this.mail_inclivalue +"</font>"+"<br>"+
-          "Time: "+" "+" <font color='red'>"+this.mail_settime+"</font>"+"<br>"
+          "<h1 align='centre'><font color='#00a300'> ASTROSE Wirless Sensor Network </h1>"+"<br>"+
+          "<h2 align='centre'><font color='LimeGreen'>Your Set Threshold Limits Reached</font></h2>"+"<br>"
+          +"<h3>Temperature : "+" "+ "<font color='red'>"+mail_tempvalue+"</font>"+"<br>"+
+          "Inclination  :"+" "+" <font color='red'>"+mail_inclivalue +"</font>"+"<br>"+
+          "Time: "+" "+" <font color='red'>"+mail_settime+"</font>"+"<br>"
           +"</h3>");
 
 mail = new send_mail.Mail(from_email, subject, to_email, content);
@@ -415,26 +404,17 @@ var request = _sendgrid.emptyRequest({
         });
 
       _sendgrid.API(request, function(error, response) {
-      console.log("sg1",response.statusCode);
-      console.log("sg2",response.body);
-      console.log("sg3",response.headers);
+      //console.log("sg1",response.statusCode);
+      //console.log("sg2",response.body);
+      //console.log("sg3",response.headers);
       })
-      console.log('The answer to life, the universe, and everything!',this.mail_tempvalue);
+      console.log('The answer to life, the universe, and everything!',mail_tempvalue);
 }
 
 
 
 
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -446,19 +426,9 @@ app.use(redirectRouter);
 
 
 
-
-
-
-
-
-
-
-
 app.listen(port);
 
 console.log('Listening on localhost port '+port);
-
-
 
 
 module.exports = app;//added
@@ -468,3 +438,5 @@ module.exports = app;//added
 //select * from Temperature_table WHERE mac='3s-ds-23-sf-23-ce-32';
 
 //WHERE mac='3s-ds-23-sf-23-ce-32'
+
+//INSERT INTO threshold_table(id_value,temperature_value,inclination_value,date_time) VALUES ("1", "23", "34","2017-02-02 22:04:05");
