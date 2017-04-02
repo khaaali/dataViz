@@ -162,7 +162,7 @@ getThresholds():Observable<setThreshold[]>{
                       //////getting thresholds and filtering/////////////
 
 
-
+// returns temperature data greater than or equal to the filtered temperature data
 setTemperatures(id: String): Observable<MyData[]> {
     const url = this._Url+'/senor_data';              // should change here
     //console.log(url);
@@ -182,7 +182,7 @@ setTemperatures(id: String): Observable<MyData[]> {
                .catch(this.handleError);
                }  
 
-
+// returns inclination data greater than or equal to the filtered nclination data
 setInclination(id: String): Observable<MyData[]> {
     const url = this._Url+'/senor_data';              // should change here
     //console.log(url);

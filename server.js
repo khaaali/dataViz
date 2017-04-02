@@ -325,7 +325,7 @@ app.post("/setting",function(req,res){
 var job = schedule.scheduleJob('10 * * * * *', getSetThresholds);
 
 
-
+//getThresholds will query data base for the current values of thresholds.
 function getSetThresholds() {
 
 pool.getConnection(function(err,connection){
@@ -357,17 +357,72 @@ pool.getConnection(function(err,connection){
             }
             connection.release();    
 
-        console.log("2",mail_settime);
-        console.log("2",mail_tempvalue);
-        console.log("2",mail_inclivalue);    
+        //console.log("2",mail_settime);
+        //console.log("2",mail_tempvalue);
+        //console.log("2",mail_inclivalue);    
 
-        sendMail(mail_settime,mail_tempvalue,mail_inclivalue)
+        //sendMail(mail_settime,mail_tempvalue,mail_inclivalue)
+
+        //getCriteria holds the logic for filtering the sensor_data with thresholds
+        getCriteria(mail_settime,mail_tempvalue,mail_inclivalue)
 
 
         });
 
         
   });
+
+
+
+function getCriteria(mail_settime,mail_tempvalue,mail_inclivalue){
+
+pool.getConnection(function(err,connection){
+        
+        var condition1=mail_tempvalue;
+        var condition2=mail_tempvalue+1;
+        console.log('condition1',condition1);
+        console.log('condition2',condition2);
+         //let a =parseFloat(condition1)
+        console.log('connected as id ' + connection.threadId);
+        
+        connection.query('SELECT * FROM sensor_data_table WHERE temperature_data >= ? and temperature_data <=?',[condition1,condition2],function(err,data){
+
+         //console.log("log as :",data);      
+
+         if(err) {
+                JSON.stringify(err);
+            }
+
+            else{
+              //res.json({"error": false});
+             
+              console.log("log as :",data);
+            }
+
+          connection.release();   
+
+           });
+
+        
+  });
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         
 
@@ -384,11 +439,11 @@ to_email = new send_mail.Email("sairamaaaa@gmail.com");
 subject = "Astrose Notifications";
 
 content = new send_mail.Content("text/html", 
-          "<h1 align='centre'><font color='#00a300'> ASTROSE Wirless Sensor Network </h1>"+"<br>"+
-          "<h2 align='centre'><font color='LimeGreen'>Your Set Threshold Limits Reached</font></h2>"+"<br>"
-          +"<h3>Temperature : "+" "+ "<font color='red'>"+mail_tempvalue+"</font>"+"<br>"+
-          "Inclination  :"+" "+" <font color='red'>"+mail_inclivalue +"</font>"+"<br>"+
-          "Time: "+" "+" <font color='red'>"+mail_settime+"</font>"+"<br>"
+          "<h1 align='center'><font color='#008b46'> ASTROSE Wirless Sensor Network </font></h1>"+"<br>"+
+          "<h2 align='center'><font color='#008b46'>Threshold Limits Fulfilled</font></h2>"+"<br>"
+          +"<h3 align='center' >Temperature : "+" "+ "<font color='#e02e00'>"+mail_tempvalue+"</font>"+"<br>"+
+          "Inclination  :"+" "+" <font color='#e02e00'>"+mail_inclivalue +"</font>"+"<br>"+
+          "Time: "+" "+" <font color='#e02e00'>"+mail_settime+"</font>"+"<br>"
           +"</h3>");
 
 mail = new send_mail.Mail(from_email, subject, to_email, content);
