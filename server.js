@@ -1,4 +1,4 @@
-//sudo netstat -lpn |grep :3000
+//sudo netstat -lpn |grep:3000
 //sudo kill -9 8047(PID)
 var port=3000;
 var express   =    require("express");
@@ -176,15 +176,15 @@ app.get("/setting",function(req,res){
 
 app.put("/setting/edit",function(req,res){
 
-        console.log("1 from put");
+        //console.log("1 from put");
 
         this.mail_settime= time();
         this.mail_tempvalue=req.body.tempValue;
         this.mail_inclivalue=req.body.incliValue;
 
-         console.log("2 from mail_settime",this.mail_settime);
-         console.log("3 from mail_tempvalue",this.mail_tempvalue);
-         console.log("4 from mail_inclivalue",this.mail_inclivalue);
+         //console.log("2 from mail_settime",this.mail_settime);
+         //console.log("3 from mail_tempvalue",this.mail_tempvalue);
+         //console.log("4 from mail_inclivalue",this.mail_inclivalue);
 
 
         var settime= time();
@@ -198,8 +198,8 @@ app.put("/setting/edit",function(req,res){
         //var tempValue=tempvalue;
         //var incliValue=inclivalue;
 
-        console.log("5 from put tempvalue",tempValue);
-        console.log("6 from put inclivalue",incliValue);
+        //console.log("5 from put tempvalue",tempValue);
+        //console.log("6 from put inclivalue",incliValue);
 
 
         var createThreshold={
@@ -210,7 +210,7 @@ app.put("/setting/edit",function(req,res){
 
       }
 
-        console.log("7 showing created threshold",createThreshold);
+        //console.log("7 showing created threshold",createThreshold);
 
         pool.getConnection(function(err,connection){
         if (err) {
@@ -218,17 +218,17 @@ app.put("/setting/edit",function(req,res){
           return;
         }   
 
-        console.log('8 connected as id ' + connection.threadId);
+        //console.log('8 connected as id ' + connection.threadId);
         
         connection.query('UPDATE threshold_table set ? WHERE ?', [createThreshold,condition],function(err,rows){
-        console.log(rows);
+        //console.log(rows);
             
             if(err) {
                 res.json(err);
             }       
             else{
               //res.json({"error": false});
-              console.log("9 from else showing rows");
+              //console.log("9 from else showing rows");
               res.json(rows);
             }
             connection.release();    
@@ -245,9 +245,6 @@ app.put("/setting/edit",function(req,res){
   
 
 });
-
-
-
 
 
 
@@ -334,11 +331,11 @@ pool.getConnection(function(err,connection){
         
         console.log('connected as id ' + connection.threadId);
         
-        connection.query('SELECT * FROM threshold_table WHERE ?',condition,function(err,data){
+        connection.query('SELECT * FROM threshold_table WHERE ?',condition,function(err,rows){
 
-        console.log("log as :",data[0]);
-        //console.log(data[0].temperature_value);
-        //console.log(data[0].inclination_value);
+        console.log("log as :",rows[0]);
+        //console.log(rows[0].temperature_value);
+        //console.log(rows[0].inclination_value);
         var mail_settime;
         var mail_tempvalue;
         var mail_inclivalue;
@@ -347,12 +344,12 @@ pool.getConnection(function(err,connection){
             }       
             else{
               //res.json({"error": false});
-              mail_settime=data[0].date_time
-              mail_tempvalue=data[0].temperature_value;
-              mail_inclivalue=data[0].inclination_value
-        console.log("1",mail_settime);
-        console.log("1",mail_tempvalue);
-        console.log("1",mail_inclivalue);
+              mail_settime=rows[0].date_time
+              mail_tempvalue=rows[0].temperature_value;
+              mail_inclivalue=rows[0].inclination_value
+        //console.log("1",mail_settime);
+        //console.log("1",mail_tempvalue);
+        //console.log("1",mail_inclivalue);
 
             }
             connection.release();    
@@ -363,8 +360,10 @@ pool.getConnection(function(err,connection){
 
         //sendMail(mail_settime,mail_tempvalue,mail_inclivalue)
 
-        //getCriteria holds the logic for filtering the sensor_data with thresholds
-        getCriteria(mail_settime,mail_tempvalue,mail_inclivalue)
+                                  //getCriteria holds the logic for filtering the sensor_data with thresholds
+
+        //getCriteria(mail_settime,mail_tempvalue,mail_inclivalue)
+        //getCriteriaTemp(mail_tempvalue)
 
 
         });
@@ -372,40 +371,49 @@ pool.getConnection(function(err,connection){
         
   });
 
+                                 //getCriteria holds the logic for filtering the sensor_data with thresholds
 
 
-function getCriteria(mail_settime,mail_tempvalue,mail_inclivalue){
+//function getCriteria(mail_settime,mail_tempvalue,mail_inclivalue){
+function getCriteriaTemp(mail_tempvalue){
+            console.log("in getCriteriaTemp");
 
-pool.getConnection(function(err,connection){
+        var Temp = mail_tempvalue;
+
+ pool.getConnection(function(err,connection){
         
         var condition1=mail_tempvalue;
         var condition2=mail_tempvalue+1;
-        console.log('condition1',condition1);
-        console.log('condition2',condition2);
+        //console.log('condition1',condition1);
+        //console.log('condition2',condition2);
          //let a =parseFloat(condition1)
-        console.log('connected as id ' + connection.threadId);
-        
-        connection.query('SELECT * FROM sensor_data_table WHERE temperature_data >= ? and temperature_data <=?',[condition1,condition2],function(err,data){
+        //console.log('connected as id ' + connection.threadId);
+       var queryString='SELECT * FROM sensor_data_table WHERE temperature_data >= ? and temperature_data <= ?';
+       connection.query(queryString,[condition1,condition2],function(err,rows){
 
-         //console.log("log as :",data);      
+         //console.log("log as :",rows);      
+        var Temp_notif = rows.length;
+        console.log("start 1: ",Temp_notif);
 
          if(err) {
-                JSON.stringify(err);
+                 console.log(JSON.stringify(err));
             }
 
-            else{
-              //res.json({"error": false});
-             
-              console.log("log as :",data);
+            else {
+         
+               console.log("start 2: ",Temp_notif);
+               return Temp_notif;
             }
 
-          connection.release();   
+
+          connection.release();  
 
            });
 
-        
   });
 
+console.log("end 1:",Temp);
+return console.log("end 2:",Temp);
 
 }
 
