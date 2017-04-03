@@ -1,10 +1,11 @@
-/// for thresholds
+///***********create table for threshold_table*********************
 
 CREATE table threshold_table(
 id_value INT(11) NOT NULL primary key 
 temperature_value float NOT NULL
 inclination_value float NOT NULL
 date_time DATETIME NOT NULL //shuould also be unique
+
 
 INSERT INTO threshold_table(id_value,temperature_value,inclination_value,date_time) 
 VALUES ("1", "23", "34","2017-02-02 22:04:05");
@@ -13,7 +14,7 @@ VALUES ("1", "23", "34","2017-02-02 22:04:05");
 SELECT * from threshold_table WHERE id_value=1
 
 
-/// for sensor data table
+///***************** create table for sensor_data_table*****************
 
 CREATE table sensor_data_table(
 task_id INT(11) NOT NULL primary key AUTO_INCREMENT, 
@@ -21,7 +22,7 @@ mac_id varchar(45) NOT NULL
 temperature_data varchar(45) NOT NULL,
 inclination_data varchar(45) NOT NULL,
 time_stamp DATETIME NOT NULL 
-epoch_time_stamp BIGINT(16) NOT NULL // should be primary and also unique
+epoch_time_stamp BIGINT(16) NOT NULL // should also be primary and also unique
 );
 
 
@@ -31,7 +32,7 @@ SELECT * from sensor_data_table WHERE temperature_data >= 2 and temperature_data
 
 /// deletion of tables and Data base
 
-tuncate table threshold_table;
+truncate table threshold_table;
 
 CREATE DATABASE IF NOT EXISTS SMIP;
 SHOW DATABASES;
@@ -41,24 +42,13 @@ DROP DATABASE IF EXISTS SMIP;
 /// Mysql handling events 
 
 SHOW PROCESSLIST
+
 SET GLOBAL event_scheduler='ON'
+
 SHOW EVENTS FROM SMIP;
 
 /// to destroy event
 DROP EVENT event_01;
-
-CREATE EVENT event_01
-ON SCHEDULE 
-EVERY 1 minute_second
-COMMENT 'event_01 created'
-DO
-SELECT mac_id,temperature_data,time_stamp,epoch_time_stamp,temperature_value,
-date_time
-FROM sensor_data_table T1
-INNER JOIN threshold_table T2 ON T1.temperature_data >= T2.temperature_value
-AND T1.temperature_data <=T2.temperature_value+1;
-
-
 
 
 
@@ -73,15 +63,14 @@ AND T1.temperature_data <=T2.temperature_value+1;
 
 /// for counting number of rows
 
+SHOW count(*) table
 
 
 
 
 
 
-
-
-//////// for creating filter_temperature_table (ftemp:filter temperature)
+///******* for creating filter_temperature_table (ftemp:filter temperature)**************
 
 
 CREATE TABLE `SMIP`.`filter_temperature_table` (
@@ -91,10 +80,10 @@ CREATE TABLE `SMIP`.`filter_temperature_table` (
   `time_stamp_ftemp` VARCHAR(45) NULL,
   `epoch_time_stamp_ftemp` VARCHAR(45) NULL,
   `ftemp_value` FLOAT NULL,
-  `set_time_value_ftemp` VARCHAR(45) NULL);
+  `set_time_value_ftemp` DATETIME NULL);
 
 
-///creating event for filtering tempertaure and adding data into tables
+///**********creating event for filtering tempertaure and adding data into tables***********
 
 delimiter |
 
@@ -121,7 +110,7 @@ delimiter ;
 
 
 
-//////// for creating filter_inclination_table (ftemp:filter inclination)
+///***********for creating filter_inclination_table (fincli:filter inclination)*************
 
 CREATE TABLE `SMIP`.`filter_inclination_table` (
   `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
@@ -130,10 +119,10 @@ CREATE TABLE `SMIP`.`filter_inclination_table` (
   `time_stamp_fincli` VARCHAR(45) NULL,
   `epoch_time_stamp_fincli` VARCHAR(45) NULL,
   `fincli_value` FLOAT NULL,
-  `set_time_value_fincli` VARCHAR(45) NULL);
+  `set_time_value_fincli` DATETIME NULL);
    
 
-///creating event for filtering inclination and adding data into tables
+///**********creating event for filtering inclination and adding data into tables***********
 
    delimiter |
 
@@ -154,3 +143,15 @@ DO
   END |
   
 delimiter ;  
+
+
+///************** for creating table notify_email_table******************************
+
+CREATE TABLE `SMIP`.`notify_email_table` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+  `notify_temp_value` FLOAT NULL,
+  `notify_temp_length` INT(11) NULL,
+  `notify_incli_value` FLOAT NULL,
+  `notify_incli_length` INT(11) NULL,
+  `repeat_flag` INT(11) NOT NULL PRIMARY KEY,
+  `set_time_threshold_value` DATETIME NULL);
