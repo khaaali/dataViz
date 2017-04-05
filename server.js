@@ -327,38 +327,58 @@ function getSetThresholds() {
 
 pool.getConnection(function(err,connection){
         
-        var condition={id_value:"1"};
+        var condition={id:"1"};
         
         console.log('connected as id ' + connection.threadId);
         
-        connection.query('SELECT * FROM threshold_table WHERE ?',condition,function(err,rows){
+        connection.query('SELECT * FROM notify_email_table WHERE ?',condition,function(err,rows){
 
         console.log("log as :",rows[0]);
         //console.log(rows[0].temperature_value);
         //console.log(rows[0].inclination_value);
-        var mail_settime;
-        var mail_tempvalue;
-        var mail_inclivalue;
+        
+
+        var mail_notify_temp_value;
+        var mail_notify_temp_length;
+        var mail_notify_reachedtime_temp;
+        var mail_notify_incli_value;
+        var mail_notify_incli_length;
+        var mail_notify_reachedtime_incli;
+        var mail_notify_setThreshold_time;
+
             if(err) {
                 JSON.stringify(err);
             }       
             else{
               //res.json({"error": false});
-              mail_settime=rows[0].date_time
-              mail_tempvalue=rows[0].temperature_value;
-              mail_inclivalue=rows[0].inclination_value
-        //console.log("1",mail_settime);
-        //console.log("1",mail_tempvalue);
-        //console.log("1",mail_inclivalue);
+              mail_notify_temp_value=rows[0].notify_temp_value;
+              mail_notify_temp_length=rows[0].notify_temp_length;
+              mail_notify_reachedtime_temp=rows[0].notify_reachedtime_temp;
+              mail_notify_incli_value=rows[0].notify_incli_value;
+              mail_notify_incli_length=rows[0].notify_incli_length;
+              mail_notify_reachedtime_incli=rows[0].notify_reachedtime_incli;
+              mail_notify_setThreshold_time=rows[0].notify_setThreshold_time;
 
-            }
+             
+                 }
             connection.release();    
 
-        //console.log("2",mail_settime);
-        //console.log("2",mail_tempvalue);
-        //console.log("2",mail_inclivalue);    
+        if(mail_notify_temp_length==0 && mail_notify_incli_length==0){
 
-        //sendMail(mail_settime,mail_tempvalue,mail_inclivalue)
+          console.log("no mail");
+          console.log(mail_notify_temp_length==0 && mail_notify_incli_length==0);
+
+        }
+        else{
+          sendMail(mail_notify_temp_value,
+                 mail_notify_temp_length,
+                 mail_notify_reachedtime_temp,
+                 mail_notify_incli_value,
+                 mail_notify_incli_length,
+                 mail_notify_reachedtime_incli,
+                 mail_notify_setThreshold_time)
+        }
+        
 
                                   //getCriteria holds the logic for filtering the sensor_data with thresholds
 
@@ -371,7 +391,92 @@ pool.getConnection(function(err,connection){
         
   });
 
-                                 //getCriteria holds the logic for filtering the sensor_data with thresholds
+
+                //**********function to setup mail payload via sendgrid*************//
+
+
+function sendMail(mail_notify_temp_value,
+                  mail_notify_temp_length,
+                  mail_notify_reachedtime_temp,
+                  mail_notify_incli_value,
+                  mail_notify_incli_length,
+                  mail_notify_reachedtime_incli,
+                  mail_notify_setThreshold_time) {
+
+        
+var send_mail = require('sendgrid').mail;
+from_email = new send_mail.Email("astrose.enas@gmail.com");
+to_email = new send_mail.Email("sairamaaaa@gmail.com");
+
+subject = "Astrose Notifications";
+
+content = new send_mail.Content("text/html", 
+          "<h1 align='center'><font color='#008b46'> ASTROSE Wirless Sensor Network </font></h1>"+"<br>"+
+          "<h2 align='center'><font color='#008b46'>Threshold Limits Fulfilled</font></h2>"+"<br>"
+          
+          +"<h3 align='center' >Set Temperature : "+" "+ "<font color='#e02e00'>"+mail_notify_temp_value+"°C </font>"+" "+
+          "fulfilled with"+" " +"<font color='#e02e00'>"+mail_notify_temp_length+ "</font>"+" notifications "+" " 
+          + mail_notify_reachedtime_temp+"<br>"+
+
+          "Set Inclination  :"+" "+" <font color='#e02e00'>"+mail_notify_incli_value +"</font>"+" "+
+        "fulfilled with"+" "+"<font color='#e02e00'>" +mail_notify_incli_length+"</font>"+
+        " notifications "+" " + mail_notify_reachedtime_incli+"<br>"+
+         
+          "Set Threshold Time: "+" "+" <font color='#e02e00'>"+mail_notify_setThreshold_time+"</font>"+" "+"<br>"
+          +"</h3>");
+
+mail = new send_mail.Mail(from_email, subject, to_email, content);
+
+var _sendgrid = require('sendgrid')(process.env.SENDGRID_API_KEY);
+
+        
+
+var request = _sendgrid.emptyRequest({
+          method: 'POST',
+          path: '/v3/mail/send',
+          body: mail.toJSON()
+        });
+
+      _sendgrid.API(request, function(error, response) {
+      //console.log("sg1",response.statusCode);
+      //console.log("sg2",response.body);
+      //console.log("sg3",response.headers);
+      })
+      console.log('The answer to life, the universe, and everything!',mail_notify_temp_value,mail_notify_incli_value);
+}
+
+
+
+
+}
+
+
+
+function redirectRouter(req,res){
+  res.sendFile(__dirname+'/dist/index.html');
+}
+
+app.use(redirectRouter);
+
+
+
+app.listen(port);
+
+console.log('Listening on localhost port '+port);
+
+
+module.exports = app;//added
+
+
+//USE SMIP;
+//select * from Temperature_table WHERE mac='3s-ds-23-sf-23-ce-32';
+
+//WHERE mac='3s-ds-23-sf-23-ce-32'
+
+//INSERT INTO threshold_table(id_value,temperature_value,inclination_value,date_time) VALUES ("1", "23", "34","2017-02-02 22:04:05");
+
+/*
+                                //getCriteria holds the logic for filtering the sensor_data with thresholds
 
 
 //function getCriteria(mail_settime,mail_tempvalue,mail_inclivalue){
@@ -416,90 +521,4 @@ console.log("end 1:",Temp);
 return console.log("end 2:",Temp);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-//function to setup mail payload via sendgrid
-
-
-function sendMail(mail_settime,mail_tempvalue,mail_inclivalue) {
-
-        
-var send_mail = require('sendgrid').mail;
-from_email = new send_mail.Email("astrose.enas@gmail.com");
-to_email = new send_mail.Email("sairamaaaa@gmail.com");
-
-subject = "Astrose Notifications";
-
-content = new send_mail.Content("text/html", 
-          "<h1 align='center'><font color='#008b46'> ASTROSE Wirless Sensor Network </font></h1>"+"<br>"+
-          "<h2 align='center'><font color='#008b46'>Threshold Limits Fulfilled</font></h2>"+"<br>"
-          +"<h3 align='center' >Temperature : "+" "+ "<font color='#e02e00'>"+mail_tempvalue+"</font>"+"<br>"+
-          "Inclination  :"+" "+" <font color='#e02e00'>"+mail_inclivalue +"</font>"+"<br>"+
-          "Time: "+" "+" <font color='#e02e00'>"+mail_settime+"</font>"+"<br>"
-          +"</h3>");
-
-mail = new send_mail.Mail(from_email, subject, to_email, content);
-
-var _sendgrid = require('sendgrid')(process.env.SENDGRID_API_KEY);
-
-        
-
-var request = _sendgrid.emptyRequest({
-          method: 'POST',
-          path: '/v3/mail/send',
-          body: mail.toJSON()
-        });
-
-      _sendgrid.API(request, function(error, response) {
-      //console.log("sg1",response.statusCode);
-      //console.log("sg2",response.body);
-      //console.log("sg3",response.headers);
-      })
-      console.log('The answer to life, the universe, and everything!',mail_tempvalue);
-}
-
-
-
-
-}
-
-
-
-function redirectRouter(req,res){
-  res.sendFile(__dirname+'/dist/index.html');
-}
-
-app.use(redirectRouter);
-
-
-
-app.listen(port);
-
-console.log('Listening on localhost port '+port);
-
-
-module.exports = app;//added
-
-
-//USE SMIP;
-//select * from Temperature_table WHERE mac='3s-ds-23-sf-23-ce-32';
-
-//WHERE mac='3s-ds-23-sf-23-ce-32'
-
-//INSERT INTO threshold_table(id_value,temperature_value,inclination_value,date_time) VALUES ("1", "23", "34","2017-02-02 22:04:05");
+*/
