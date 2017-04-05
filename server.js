@@ -333,7 +333,7 @@ pool.getConnection(function(err,connection){
         
         connection.query('SELECT * FROM notify_email_table WHERE ?',condition,function(err,rows){
 
-        console.log("log as :",rows[0]);
+        //console.log("log as :",rows[0]);
         //console.log(rows[0].temperature_value);
         //console.log(rows[0].inclination_value);
         
@@ -345,6 +345,7 @@ pool.getConnection(function(err,connection){
         var mail_notify_incli_length;
         var mail_notify_reachedtime_incli;
         var mail_notify_setThreshold_time;
+        var mail_notify_send_mail_flag;
 
             if(err) {
                 JSON.stringify(err);
@@ -358,17 +359,24 @@ pool.getConnection(function(err,connection){
               mail_notify_incli_length=rows[0].notify_incli_length;
               mail_notify_reachedtime_incli=rows[0].notify_reachedtime_incli;
               mail_notify_setThreshold_time=rows[0].notify_setThreshold_time;
-
+              mail_notify_send_mail_flag=rows[0].send_mail_flag
              
                  }
             connection.release();    
 
         if(mail_notify_temp_length==0 && mail_notify_incli_length==0){
 
-          console.log("no mail");
+          console.log("lenggth of notification  Zero :no mail");
           console.log(mail_notify_temp_length==0 && mail_notify_incli_length==0);
 
         }
+        /// mail_notify_send_mail_flag = "True"...... no mail will be sent
+        else if (mail_notify_send_mail_flag=="True"){
+           console.log("repeated notifications :no mail");
+           console.log(mail_notify_send_mail_flag);
+
+        }
+        
         else{
           sendMail(mail_notify_temp_value,
                  mail_notify_temp_length,
@@ -378,7 +386,6 @@ pool.getConnection(function(err,connection){
                  mail_notify_reachedtime_incli,
                  mail_notify_setThreshold_time)
         }
-        
 
                                   //getCriteria holds the logic for filtering the sensor_data with thresholds
 
@@ -415,12 +422,12 @@ content = new send_mail.Content("text/html",
           "<h2 align='center'><font color='#008b46'>Threshold Limits Fulfilled</font></h2>"+"<br>"
           
           +"<h3 align='center' >Set Temperature : "+" "+ "<font color='#e02e00'>"+mail_notify_temp_value+"°C </font>"+" "+
-          "fulfilled with"+" " +"<font color='#e02e00'>"+mail_notify_temp_length+ "</font>"+" notifications "+" " 
+          "has fulfilled with"+" " +"<font color='#e02e00'>"+mail_notify_temp_length+ "</font>"+" notifications, latest at "+" " 
           + mail_notify_reachedtime_temp+"<br>"+
 
           "Set Inclination  :"+" "+" <font color='#e02e00'>"+mail_notify_incli_value +"</font>"+" "+
-        "fulfilled with"+" "+"<font color='#e02e00'>" +mail_notify_incli_length+"</font>"+
-        " notifications "+" " + mail_notify_reachedtime_incli+"<br>"+
+          "fulfilled with"+" " +"<font color='#e02e00'>" +mail_notify_incli_length+"</font>"+" "+
+          "notifications, latest at "+" " + mail_notify_reachedtime_incli+"<br>"+
          
           "Set Threshold Time: "+" "+" <font color='#e02e00'>"+mail_notify_setThreshold_time+"</font>"+" "+"<br>"
           +"</h3>");

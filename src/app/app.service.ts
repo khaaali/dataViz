@@ -166,16 +166,15 @@ getThresholds():Observable<setThreshold[]>{
 setTemperatures(id: String): Observable<MyData[]> {
     const url = this._Url+'/senor_data';              // should change here
     //console.log(url);
-    let filter= `${id}`;
-    let filtered=parseFloat(filter);
-    //console.log("mac at temps "+ filtered);
+    let filter1= `${id}`;
+    let filtered1=parseFloat(filter1);
     return this._http.get(url)
                .map(res =>{
                 let data=res.json();
                 console.log(data);
                 let parsedData = [];
-                console.log("setvalue at temps again "+ filtered);
-               data.filter(function(el){ return el.temperature_data >=filtered})
+                //console.log("setvalue at incli again "+ filtered1);
+               data.filter(function(el){ return el.temperature_data >=filtered1 && el.temperature_data <=filtered1+1 })
                 .forEach(function(item){ parsedData.push(item);  });
                           console.log(parsedData);
                 return parsedData; })
@@ -186,16 +185,16 @@ setTemperatures(id: String): Observable<MyData[]> {
 setInclination(id: String): Observable<MyData[]> {
     const url = this._Url+'/senor_data';              // should change here
     //console.log(url);
-    let filter= `${id}`;
-    let filtered=parseFloat(filter);
+    let filter2= `${id}`;
+    let filtered2=parseFloat(filter2);
     //console.log("mac at temps "+ filtered);
     return this._http.get(url)
                .map(res =>{
                 let data=res.json();
                 console.log(data);
                 let parsedData = [];
-                console.log("setvalue at temps again "+ filtered);
-               data.filter(function(el){ return el.inclination_data >=filtered})
+               // console.log("setvalue at incli again "+ filtered2);
+               data.filter(function(el){ return (el.inclination_data >=filtered2 && el.inclination_data <=filtered2+1)})
                 .forEach(function(item){ parsedData.push(item);  });
                           console.log(parsedData);
                 return parsedData; })
