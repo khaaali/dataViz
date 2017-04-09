@@ -275,3 +275,82 @@ CONCAT(
 
 PREPARE snapshot from @export_file;
 EXECUTE snapshot;
+
+
+SHOW VARIABLES LIKE 'secure_file_priv';
+
+
+
+
+
+
+/*********** created trigger dosent work***************////
+DELIMITER //
+
+CREATE TRIGGER send_mail BEFORE UPDATE ON SMIP.notify_email_table
+FOR EACH ROW
+
+BEGIN
+
+	IF (NEW.notify_temp_length <=> OLD.notify_temp_length) THEN 
+		SET notify_email_table.send_mail_flag:="TRUE" WHERE notify_email_table.id="1" ;
+    ELSEIF(NEW.notify_incli_length<=>OLD.notify_incli_length) THEN
+		SET notify_email_table.send_mail_flag:="TRUE" WHERE notify_email_table.id="1" ;
+	END IF; 
+
+END //
+
+DELIMITER ;
+
+/////////////*****************works maybe??????????////////////***********************//
+
+
+DELIMITER //
+
+CREATE TRIGGER send_mail BEFORE UPDATE ON notify_email_table
+FOR EACH ROW
+
+BEGIN
+	 UPDATE SMIP.notify_email_table
+	 SET notify_email_table.send_mail_flag = "true" 
+     where notify_email_table.id="1"   ;
+	 
+
+END //
+
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+
+/******************Table for creating configurations_mean_table************////////////
+
+CREATE TABLE `Astrose_smart_meshIP`.`configurations_mean_table` (
+  `config_id` INT NOT NULL AUTO_INCREMENT,
+  `config_macid` VARCHAR(25) NOT NULL,
+  `temperature_mean_value` FLOAT NOT NULL,
+  `inclination_mean_value_X` FLOAT NOT NULL,
+  `inclination_mean_value_Y` FLOAT NOT NULL,
+  `config_time` DATETIME NOT NULL,
+  PRIMARY KEY (`config_id`),
+  UNIQUE INDEX `config_macid_UNIQUE` (`config_macid` ASC));
+
+
+INSERT INTO Astrose_smart_meshIP.configurations_mean_table
+ (
+				`config_macid`,
+				`temperature_mean_value`,
+				`inclination_mean_value_X`,
+				`inclination_mean_value_Y`,
+				`config_time`)
+ VALUES ("00-17-0D-00-00-30-4D-94",'15.75','7.39','4.04',"2017-04-08 23:29:38");
+
+
+

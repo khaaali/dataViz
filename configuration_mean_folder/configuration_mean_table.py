@@ -1,3 +1,6 @@
+
+""" This script is to load the mean values of temperature and inclination data for differentmac ids."""
+
 import sys
 import logging
 import time 
@@ -11,15 +14,15 @@ from watchdog.events import PatternMatchingEventHandler
 
 today_time_now=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-_src='/home/sairam/Desktop/Untitled/Angular-cli/FTP_folder/SMIP_testdata.txt'
-_dst='/home/sairam/Desktop/Untitled/Angular-cli/logs/'
+_src='/home/sairam/Desktop/Untitled/Angular-cli/configuration_mean_folder/configuration_mean_data.txt'
+_dst='/home/sairam/Desktop/Untitled/Angular-cli/configuration_mean_folder/configuration_logs/'
 
 class Database:
 
     host = 'localhost'
     user = 'root'
     password = 'sairam'
-    db = 'SMIP'
+    db = 'Astrose_smart_meshIP'
 
     def __init__(self):
         self.connection = MySQLdb.connect(self.host, self.user, self.password, self.db)
@@ -32,6 +35,12 @@ class Database:
         except:
             self.connection.rollback()
 
+    def truncate(self, query):
+        try:
+            self.cursor.execute(query)
+            self.connection.commit()
+        except:
+            self.connection.rollback()    
 
 
     def query(self, query):
@@ -66,19 +75,36 @@ class MyHandler(PatternMatchingEventHandler):
     def on_created(self, event):
         self.process(event)
         db = Database()
-        print "FTP_folder receivedd .txt file"
+        print "configuaration file received "
         file_content= csv.reader(file(_src,'r'))
 
+        print "deleteing old configurations"    
+
+        delete_query="""
+                DELETE FROM Astrose_smart_meshIP.configurations_mean_table
+                """
+        db.truncate(delete_query)        
+
         for line in file_content:
+            time_now=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             print line
+            liest= line
+            print type(liest)
+            print liest.insert(5,time_now)
     # Data Insert into the table
             insert_query = """
-                INSERT INTO sensor_data_table
-                (`mac_id`, `temperature_data`,`inclination_data`,`time_stamp`,`epoch_time_stamp`)
-                VALUES (%s,%s,%s,%s,%s)"""
+                INSERT INTO configurations_mean_table
+                (`config_id`,
+				`config_macid`,
+				`temperature_mean_value`,
+				`inclination_mean_value_X`,
+				`inclination_mean_value_Y`,
+				`config_time`)
+                VALUES (%s,%s,%s,%s,%s,%s)"""
 
     # db.query(insert_query)
-            db.insert(insert_query,line)
+            print liest
+            db.insert(insert_query,liest)
 
         print "data inserted to MySqlDB"
         print today_time_now
@@ -86,7 +112,7 @@ class MyHandler(PatternMatchingEventHandler):
 # moving and renaming file to another directory
 
         shutil.move(_src,_dst+today_time_now+".txt")
-        print "file has been renamed and moved to /home/sairam/Desktop/Untitled/Angular-cli/logs/"
+        print "file has been renamed and moved to /home/sairam/Desktop/Untitled/Angular-cli/configuration_mean_folder/configuration_logs"
 
 
 if __name__ == '__main__':
