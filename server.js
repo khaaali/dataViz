@@ -15,7 +15,7 @@ var pool      =    mysql.createPool({
     host     : 'localhost',
     user     : 'root',
     password : 'sairam',
-    database : 'SMIP',
+    database : 'Astrose_smart_meshIP',
     debug    :  false
 });
 
@@ -106,7 +106,8 @@ app.get("/",function(req,res){
 app.get("/senor_data",function(req,res){
 
         console.log(this.mail_tempvalue);
-        console.log(this.mail_inclivalue);
+       // console.log(this.mail_inclivalue_X);
+        //console.log(this.mail_inclivalue_Y);
         
         pool.getConnection(function(err,connection){
         if (err) {
@@ -176,11 +177,12 @@ app.get("/setting",function(req,res){
 
 app.put("/setting/edit",function(req,res){
 
-        //console.log("1 from put");
+        console.log("1 from put");
 
         this.mail_settime= time();
         this.mail_tempvalue=req.body.tempValue;
-        this.mail_inclivalue=req.body.incliValue;
+        this.mail_inclivaluex=req.body.incliValue_X;
+        this.mail_inclivaluey=req.body.incliValue_Y;
 
          //console.log("2 from mail_settime",this.mail_settime);
          //console.log("3 from mail_tempvalue",this.mail_tempvalue);
@@ -189,11 +191,13 @@ app.put("/setting/edit",function(req,res){
 
         var settime= time();
         var tempvalue=req.body.tempValue;
-        var inclivalue=req.body.incliValue;
+        var inclivalue_x=req.body.incliValuex;
+        var inclivalue_y=req.body.incliValuey;
         var condition={id_value:"1"};
 
         var tempValue= ''+ tempvalue +'' ;
-        var incliValue= ''+ inclivalue + '' ;
+        var incliValueX= ''+ inclivalue_x + '' ;
+        var incliValueY= ''+ inclivalue_y + '' ;
         
         //var tempValue=tempvalue;
         //var incliValue=inclivalue;
@@ -205,12 +209,13 @@ app.put("/setting/edit",function(req,res){
         var createThreshold={
         id_value:1,
         temperature_value:tempValue,
-        inclination_value:incliValue,
+        inclination_value_X:incliValueX,
+        inclination_value_Y:incliValueY,
         date_time: settime
 
       }
 
-        //console.log("7 showing created threshold",createThreshold);
+        console.log("7 showing created threshold",createThreshold);
 
         pool.getConnection(function(err,connection){
         if (err) {
@@ -272,7 +277,7 @@ app.post("/setting",function(req,res){
         var createThreshold={
         id_value:1,
         temperature_value:tempValue,
-        inclination_value:incliValue,
+        inclination_value_X:incliValue,
         date_time: settime
 
       }
@@ -319,7 +324,7 @@ app.post("/setting",function(req,res){
 
 
 //runs every minute 10th second
-var job = schedule.scheduleJob('10 * * * * *', getSetThresholds);
+//var job = schedule.scheduleJob('10 * * * * *', getSetThresholds);
 
 
 //getThresholds will query data base for the current values of thresholds.

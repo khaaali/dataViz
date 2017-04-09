@@ -1,4 +1,4 @@
-import { Component, OnInit,Input,Output,EventEmitter } from '@angular/core';
+/*import { Component, OnInit,Input,Output,EventEmitter } from '@angular/core';
 import { HttpModule }    from '@angular/http';
 import { ActivatedRoute, Params,Router } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
@@ -42,4 +42,4 @@ export class SettingsDisplayComponent implements OnInit {
 
 
 }
-}
+}*/

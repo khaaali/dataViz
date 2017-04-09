@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+/*import { Component, OnInit } from '@angular/core';
 import { HttpModule }    from '@angular/http';
 import { ActivatedRoute, Params,Router } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
@@ -36,7 +36,7 @@ onUpdate(){
 
   this.submitted = false;
   let formTemp=this.model.TemperatureValue;
-  let formIncli=this.model.InclinationValue;
+  let formIncli=this.model.InclinationValue_X;
   console.log(formTemp);
   console.log(formIncli);
 
@@ -80,7 +80,7 @@ ngOnInit() {
 }
 
 
-
+*/
 
 
 

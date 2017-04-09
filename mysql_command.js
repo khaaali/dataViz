@@ -147,9 +147,9 @@ delimiter ;
 
 ?????????*****************CREATING SINGLE EVENT TO UPDATE TEMPERATURE AND INCLINATION TABLES***************************????????????????
 
-
+SET GLOBAL event_scheduler='ON'
 delimiter |
-CREATE EVENT filter_temperature_event_01
+CREATE EVENT filter_event_temperature_inclination_00
 ON SCHEDULE EVERY 1 minute
 DO
   BEGIN
@@ -177,7 +177,7 @@ DO
 
 
 
-	UPDATE notify_email_table
+	UPDATE SMIP.notify_email_table
 	SET  notify_email_table.notify_temp_value=(SELECT max(ftemp_value) from filter_temperature_table),
     	 notify_email_table.notify_temp_length=(SELECT COUNT(ftemperature_data) from filter_temperature_table),
      	 notify_email_table.notify_reachedtime_temp=(SELECT max(time_stamp_ftemp) from filter_temperature_table),
@@ -200,7 +200,7 @@ delimiter ;
 
 
 
-///************** for creating table notify_email_table******************************
+///************************** for creating table notify_email_table******************************
 
 CREATE TABLE `SMIP`.`notify_email_table` (
   `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY , 
@@ -214,7 +214,7 @@ CREATE TABLE `SMIP`.`notify_email_table` (
 
 
 
-///**********creating  notify_email_table and adding data into tables***********
+///**************creating  notify_email_table and adding data into tables******************************
 
 This is important step to do after creating table 
 fill table with values and use update script below using event scheduler 
@@ -233,12 +233,12 @@ SELECT * FROM
 
 
 
-///*************to update the notify_email_table regularly*************************************
+///***************to update the notify_email_table regularly*************************************
 
 
 
 
-UPDATE notify_email_table
+UPDATE SMIP.notify_email_table
 
 SET  notify_email_table.notify_temp_value=(SELECT max(ftemp_value) from filter_temperature_table),
      notify_email_table.notify_temp_length=(SELECT COUNT(ftemperature_data) from filter_temperature_table),
@@ -251,10 +251,27 @@ Where notify_email_table.id="1";
 
 
 
-
-
 UPDATE notify_email_table
 
 SET  notify_email_table.send_mail_flag="True"
      
 Where notify_email_table.id="1";
+
+
+
+
+
+
+
+
+
+///****************Download mysql data as CSV Snapshot********************************* 
+
+SET @export_file=
+CONCAT(
+	"SELECT * FROM SMIP.sensor_data_table INTO OUTFILE '/var/lib/mysql-files/snapshot_"
+    ,date_format(now(),'%d-%m-%y %h:%i:%s')
+    ,".csv'");
+
+PREPARE snapshot from @export_file;
+EXECUTE snapshot;

@@ -67,6 +67,7 @@ export class TemperatureComponent implements OnInit {
        text: "Temperature", 
        fontSize: 30,
        },
+       exportEnabled: true,
        subtitles:[
         {
             //text: "Mac-ID: ce-35",
@@ -92,6 +93,7 @@ export class TemperatureComponent implements OnInit {
         title: "Temperature(°C)",
         tickLength: 15,
         titleFontSize: 20,
+        includeZero: false,
         //tickColor: "DarkSlateBlue" ,
         tickThickness: 2,
         gridDashType:"dot"

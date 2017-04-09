@@ -75,7 +75,7 @@ getInclination(id: String): Observable<MyData[]> {
                // let f=this.filteredMac;
                 data.filter(function(el){ return el.mac_id==filtered})
                 .forEach(function(item){ parsedData.push({ 
-                          x:item.epoch_time_stamp, y:parseFloat(item.inclination_data) });  });
+                          x:item.epoch_time_stamp, y:parseFloat(item.inclination_data_X) });  });
                          // console.log(parsedData);
                 return parsedData; })
                .catch(this.handleError);
@@ -127,13 +127,15 @@ createThresholds(formTemp:string,formIncli:string): Observable<Thresholds[]> {
                 }
 
 
-updateThresholds(formTemp:string,formIncli:string): Observable<Thresholds[]> {
+updateThresholds(formTemp:string,formIncli_X:string,formIncli_Y:string): Observable<Thresholds[]> {
     const url = this._Url+'/setting'+'/edit';              // should change here
     console.log(url);
 
     var formData={
       tempValue:formTemp,
-      incliValue:formIncli
+      incliValuex:formIncli_X,
+      incliValuey:formIncli_Y
+
     }
     console.log("from service",formData);
 
@@ -194,7 +196,7 @@ setInclination(id: String): Observable<MyData[]> {
                 console.log(data);
                 let parsedData = [];
                // console.log("setvalue at incli again "+ filtered2);
-               data.filter(function(el){ return (el.inclination_data >=filtered2 && el.inclination_data <=filtered2+1)})
+               data.filter(function(el){ return (el.inclination_data_X >=filtered2 && el.inclination_data_X <=filtered2+1)})
                 .forEach(function(item){ parsedData.push(item);  });
                           console.log(parsedData);
                 return parsedData; })

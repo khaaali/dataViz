@@ -2,7 +2,7 @@
 <form class="navbar-form">
 	<div class="fixedContainerMacid">
         <div class="btn-group">
-             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Select Mac-Id<span class="caret"></span>
+             <button type="button" align="left" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Select Mac-Id<span class="caret"></span>
              </button>
      		     <ul class="dropdown-menu scrollable-menu" role="menu">
 	                  <li *ngFor= "let address of macAddress">
@@ -19,27 +19,25 @@
 
 
 
-<div class="fixedContainerMacid" style= "top:12%;" >
 	<h3 align="center"> Results for : {{macIdTitle}}</h3>
-</div>
 <div>
   
 </div>
 
+
+
 <div class="row">
-	<div class="col-xs-6 well ">
+	<div class="col-xs-12 well ">
 			<app-temperature-component></app-temperature-component>
    	</div>
-
-   	<div class="col-xs-6 well">
-      <app-inclination-component></app-inclination-component>
-  </div>
-
 </div>
 
 <div class="row">
-    <div class="col-xs-12 well">
-<app-temperature-inclination-component></app-temperature-inclination-component>
-        </div>
-    </div>
+   	<div class="col-xs-12 well">
+      <app-inclination-component></app-inclination-component>
+  </div>
+</div>
+
+
+
 

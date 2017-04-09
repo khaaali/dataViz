@@ -61,9 +61,10 @@ export class InclinationComponent implements OnInit {
 
 
       title:{
-       text: "Inclination", 
+       text: "Inclination[X]", 
        fontSize: 30,
        },
+       exportEnabled: true,
        subtitles:[
         {
             //text: "Mac-ID: ce-35",
@@ -86,9 +87,10 @@ export class InclinationComponent implements OnInit {
         interlacedColor: "#F1F1F1" 
       },
       axisY:{
-        title: "Inclination",
+        title: "Inclination[X]",
         tickLength: 15,
         titleFontSize: 20,
+        includeZero: false,
         //tickColor: "DarkSlateBlue" ,
         tickThickness: 2,
         gridDashType:"dot"
@@ -102,7 +104,7 @@ export class InclinationComponent implements OnInit {
       //type: "line",
       lineThickness: 1,
       showInLegend: true,
-      legendText: "Inclination",
+      legendText: "Inclination[X]",
       xValueType: "dateTime",
       dataPoints: dataIncli
                     

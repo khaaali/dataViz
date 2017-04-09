@@ -13,15 +13,11 @@ import { HomeComponent } from './home/home.component';
 import { SettingsComponent } from './settings/settings.component';
 import { HelpComponent } from './help/help.component';
 import { DataVisualizationComponent } from './data-visualization/data-visualization.component';
-import { SettingsEditComponent } from './settings-edit/settings-edit.component';
-import { SettingsDisplayComponent } from './settings-display/settings-display.component';
-
 
 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'settings',component: SettingsComponent },
-  { path: 'settings/:id',component: SettingsEditComponent },
   { path: 'help',component: HelpComponent },
   { path: 'dataVisualization',component: DataVisualizationComponent },
   { path: 'mac/:id',component: DataVisualizationComponent },
@@ -40,9 +36,7 @@ const appRoutes: Routes = [
     HomeComponent,
     SettingsComponent,
     HelpComponent,
-    DataVisualizationComponent,
-    SettingsEditComponent,
-    SettingsDisplayComponent
+    DataVisualizationComponent
   ],
   imports: [
     BrowserModule,

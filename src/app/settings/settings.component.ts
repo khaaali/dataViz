@@ -64,11 +64,14 @@ onUpdate(){
 
 this.SetThreshold = false;
   let formTemp=this.model.TemperatureValue;
-  let formIncli=this.model.InclinationValue;
-  console.log("from client set temp",formTemp);
-  console.log("from client set incli",formIncli);
+  let formIncli_X=this.model.InclinationValue_X;
+  let formIncli_Y=this.model.InclinationValue_Y;
 
-this._MySqlService.updateThresholds(formTemp,formIncli)
+  console.log("from client set temp",formTemp);
+  console.log("from client set incli",formIncli_X);
+  console.log("from client set incli",formIncli_Y);
+
+this._MySqlService.updateThresholds(formTemp,formIncli_X,formIncli_Y)
       .subscribe(Data => console.log(Data));
 
  // this._router.navigate(['/settings']);
@@ -81,7 +84,7 @@ this._MySqlService.setTemperatures(formTemp)
                     //console.log(myDataTemp)
                   })
 
-this._MySqlService.setInclination(formIncli)
+this._MySqlService.setInclination(formIncli_X)
                   .subscribe(myDataIncli =>{ 
                     this.myDataIncli=myDataIncli;
                    // console.log(myDataIncli)
