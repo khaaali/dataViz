@@ -11,8 +11,8 @@ from watchdog.events import PatternMatchingEventHandler
 
 today_time_now=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-_src='/home/sairam/Desktop/Untitled/Angular-cli/FTP_folder/SMIP_testdata.txt'
-_dst='/home/sairam/Desktop/Untitled/Angular-cli/FTP_folder/FTP_logs/'
+_src='/home/sairam/Desktop/Untitled/Angular-cli/dataVisz/FTP_folder/SMIP_testdata.txt'
+_dst='/home/sairam/Desktop/Untitled/Angular-cli/dataVisz/FTP_folder/FTP_logs/'
 
 class Database:
 
@@ -86,7 +86,7 @@ class MyHandler(PatternMatchingEventHandler):
 # moving and renaming file to another directory
 
         shutil.move(_src,_dst+today_time_now+".txt")
-        print "file has been renamed and moved to /home/sairam/Desktop/Untitled/Angular-cli/FTP_folder/FTP_logs/"
+        print "file has been renamed and moved to /home/sairam/Desktop/Untitled/Angular-cli/dataVisz/FTP_folder/FTP_logs/"
 
 
 if __name__ == '__main__':
