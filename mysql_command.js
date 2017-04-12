@@ -354,3 +354,12 @@ INSERT INTO Astrose_smart_meshIP.configurations_mean_table
 
 
 
+					**********some example*********
+
+SELECT mac_id, ROUND(AVG(temperature_data),3),
+	   max(temperature_data),min(temperature_data)
+FROM Astrose_smart_meshIP.sensor_data_table
+group by  mac_id
+having mac_id="00-17-0D-00-00-58-2F-F2" 
+;
+
