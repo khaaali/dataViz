@@ -1,3 +1,4 @@
+// class  with sensor data properties from mysql database (original data )
 export class MyData {
 	
  task_id: string;

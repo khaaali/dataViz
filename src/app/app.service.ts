@@ -18,6 +18,7 @@ public  filteredMac;
 
   private headers = new Headers({'Content-Type': 'application/json'});
   private _Url = 'http://localhost:3000';  // URL to web api
+  myData:MyData[];
 
   constructor(
     private _http: Http,
@@ -111,12 +112,13 @@ getTemperatureInclination(id: String): Observable<MyData[]> {
                         ///Handlers for Thresholds///
 
 
+//////////     THIS CREATE THRESHOLD IS NOT IN USE(first set in loaded into data base manually and edited from the update threshold(). ////////////////
 
 createThresholds(formTemp:string,formIncli:string): Observable<Thresholds[]> {
-    const url = this._Url+'/setting';              // should change here
+    const url = this._Url+'/setting';              // should change here 
     console.log(url);
     var formData={
-      tempValue:formTemp,
+      tempValue:formTemp,             
       incliValue:formIncli
     }
     console.log(formData);
@@ -127,13 +129,20 @@ createThresholds(formTemp:string,formIncli:string): Observable<Thresholds[]> {
                 }
 
 
-updateThresholds(formTemp:string,formIncli_X:string,formIncli_Y:string): Observable<Thresholds[]> {
+updateThresholds(formTemp_add:string,formTemp_sub:string,
+                 formIncli_X_add:string,formIncli_X_sub:string,
+                 formIncli_Y:string): Observable<Thresholds[]> {
     const url = this._Url+'/setting'+'/edit';              // should change here
     console.log(url);
 
     var formData={
-      tempValue:formTemp,
-      incliValuex:formIncli_X,
+
+      tempValue_add:formTemp_add,
+      tempValue_sub:formTemp_sub,
+
+      incliValuex_add:formIncli_X_add,
+      incliValuex_sub:formIncli_X_sub,
+      
       incliValuey:formIncli_Y
 
     }
@@ -146,9 +155,20 @@ updateThresholds(formTemp:string,formIncli_X:string,formIncli_Y:string): Observa
 
 
 
-
 getThresholds():Observable<setThreshold[]>{
   const url = this._Url+'/setting'; 
+  console.log(url);
+  return this._http.get(url)
+             .map(res =>res.json())
+             .catch(this.handleError);
+                
+}
+
+              /// getting data from configurations mean table has similar data type with the sensor data
+              // in config.component
+
+getConfigs():Observable<MyData[]>{
+  const url = this._Url+'/config'; 
   console.log(url);
   return this._http.get(url)
              .map(res =>res.json())
@@ -161,22 +181,59 @@ getThresholds():Observable<setThreshold[]>{
 
 
 
-                      //////getting thresholds and filtering/////////////
+                      ////// Getting thresholds and filtering data to show in html tables////////////
+
+
+DownloadData(): Observable<MyData[]> {
+const url = this._Url+'/senor_data'; 
+return this._http.get(url)
+           .map(res =>res.json())
+           .catch(this.handleError);
+
+}
+
+
+DisplayData(): Observable<MyData[]> {
+const url = this._Url+'/senor_data';              // should change here
+return this._http.get(url)
+           .map(res =>res.json())
+           .catch(this.handleError);
+               }  
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // returns temperature data greater than or equal to the filtered temperature data
-setTemperatures(id: String): Observable<MyData[]> {
+
+
+/*
+DisplayTemperatures(): Observable<MyData[]> {
     const url = this._Url+'/senor_data';              // should change here
     //console.log(url);
-    let filter1= `${id}`;
-    let filtered1=parseFloat(filter1);
+    //let filter1= `${id}`;
+    //let filtered1=parseFloat(filter1);
+    
     return this._http.get(url)
                .map(res =>{
                 let data=res.json();
                 console.log(data);
                 let parsedData = [];
+
+
                 //console.log("setvalue at incli again "+ filtered1);
-               data.filter(function(el){ return el.temperature_data >=filtered1 && el.temperature_data <=filtered1+1 })
+               //data.filter(function(el){ return el.temperature_data >=filtered1 && el.temperature_data <=filtered1+1 })
+               data.filter(function(el){ return el.temperature_data })
                 .forEach(function(item){ parsedData.push(item);  });
                           console.log(parsedData);
                 return parsedData; })
@@ -184,11 +241,11 @@ setTemperatures(id: String): Observable<MyData[]> {
                }  
 
 // returns inclination data greater than or equal to the filtered nclination data
-setInclination(id: String): Observable<MyData[]> {
+DisplayInclinationX(): Observable<MyData[]> {
     const url = this._Url+'/senor_data';              // should change here
     //console.log(url);
-    let filter2= `${id}`;
-    let filtered2=parseFloat(filter2);
+    //let filter2= `${id}`;
+    //let filtered2=parseFloat(filter2);
     //console.log("mac at temps "+ filtered);
     return this._http.get(url)
                .map(res =>{
@@ -196,12 +253,41 @@ setInclination(id: String): Observable<MyData[]> {
                 console.log(data);
                 let parsedData = [];
                // console.log("setvalue at incli again "+ filtered2);
-               data.filter(function(el){ return (el.inclination_data_X >=filtered2 && el.inclination_data_X <=filtered2+1)})
+               //data.filter(function(el){ return (el.inclination_data_X >=filtered2 && el.inclination_data_X <=filtered2+1)})
+               data.filter(function(el){ return el.inclination_data_X})
                 .forEach(function(item){ parsedData.push(item);  });
                           console.log(parsedData);
                 return parsedData; })
                .catch(this.handleError);
                }  
+
+
+DisplayInclinationY(): Observable<MyData[]> {
+    const url = this._Url+'/senor_data';              // should change here
+    //console.log(url);
+    //let filter2= `${id}`;
+    //let filtered2=parseFloat(filter2);
+    //console.log("mac at temps "+ filtered);
+    return this._http.get(url)
+               .map(res =>{
+                let data=res.json();
+                console.log(data);
+                let parsedData = [];
+               // console.log("setvalue at incli again "+ filtered2);
+               //data.filter(function(el){ return (el.inclination_data_X >=filtered2 && el.inclination_data_X <=filtered2+1)})
+               data.filter(function(el){ return el.inclination_data_Y})
+                .forEach(function(item){ parsedData.push(item);  });
+                          console.log(parsedData);
+                return parsedData; })
+               .catch(this.handleError);
+               }                 
+
+*/
+
+
+
+
+
 
 
 

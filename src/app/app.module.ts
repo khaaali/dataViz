@@ -11,14 +11,14 @@ import { TemperatureComponent } from './graphComponents/temperature-component/te
 import { InclinationComponent } from './graphComponents/inclination-component/inclination.component';
 import { HomeComponent } from './home/home.component';
 import { SettingsComponent } from './settings/settings.component';
-import { HelpComponent } from './help/help.component';
+import { ConfigComponent } from './config/config.component';
 import { DataVisualizationComponent } from './data-visualization/data-visualization.component';
 
 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'settings',component: SettingsComponent },
-  { path: 'help',component: HelpComponent },
+  { path: 'configs',component: ConfigComponent },
   { path: 'dataVisualization',component: DataVisualizationComponent },
   { path: 'mac/:id',component: DataVisualizationComponent },
   { path: '**',component: HomeComponent },
@@ -35,7 +35,7 @@ const appRoutes: Routes = [
     InclinationComponent,
     HomeComponent,
     SettingsComponent,
-    HelpComponent,
+    ConfigComponent,
     DataVisualizationComponent
   ],
   imports: [

@@ -138,11 +138,79 @@ app.get("/senor_data",function(req,res){
 });
 
 
+app.get("/config",function(req,res){
+
+        console.log("from get config");
+
+        pool.getConnection(function(err,connection){
+        if (err) {
+          res.json({"code" : 100, "status" : "Error in connection database"});
+          return;
+        }   
+
+        console.log('connected as id ' + connection.threadId);
+        
+        connection.query('select * from configurations_mean_table ',function(err,rows){
+        console.log(rows);
+            
+            if(err) {
+                res.json(err);
+            }       
+            else{
+              //res.json({"error": false});
+              res.json(rows);
+            }
+            connection.release();    
+        });
+        connection.on('error', function(err) {      
+              res.json({"code" : 100, "status" : "Error in connection database"});
+              return;     });
+  });
+        res.setHeader('Content-Type', 'text/plain');
+        //res.end('Something broke');
+        //res.sendFile(__dirname+'/public/index.html');
+});
+
+app.get("/download_data",function(req,res){
+
+        console.log("from get download_data");
+
+        pool.getConnection(function(err,connection){
+        if (err) {
+          res.json({"code" : 100, "status" : "Error in connection database"});
+          return;
+        }   
+
+        console.log('connected as id ' + connection.threadId);
+        
+        //var download_query = 'SET @export_file= CONCAT( "SELECT * FROM Astrose_smart_meshIP.sensor_data_table INTO OUTFILE '/var/lib/mysql-files/sensorData_",date_format(now(),'%d-%m-%y %h:%i:%s'),".csv'");PREPARE snapshot from @export_file;EXECUTE snapshot;'
+
+        connection.query(download_query,function(err,rows){
+        console.log(rows);
+            
+            if(err) {
+                res.json(err);
+            }       
+            else{
+              console.log("downloaded to: /var/lib/mysql-files/" );
+              res.json(rows);
+            }
+            connection.release();    
+        });
+        connection.on('error', function(err) {      
+              res.json({"code" : 100, "status" : "Error in connection database"});
+              return;     });
+  });
+        res.setHeader('Content-Type', 'text/plain');
+        //res.end('Something broke');
+        //res.sendFile(__dirname+'/public/index.html');
+});
+
 
 
 app.get("/setting",function(req,res){
 
-        console.log("from get");
+        console.log("from get setting");
 
         var condition={id_value:"1"};
         pool.getConnection(function(err,connection){
@@ -180,8 +248,15 @@ app.put("/setting/edit",function(req,res){
         console.log("1 from put");
 
         this.mail_settime= time();
-        this.mail_tempvalue=req.body.tempValue;
-        this.mail_inclivaluex=req.body.incliValue_X;
+
+            // check app.service.ts 148 for data properties in assigning variables to update threshold values to database
+        
+        this.mail_tempvalue_add=req.body.tempValue_add;
+        this.mail_tempvalue_sub=req.body.tempValue_sub;
+        
+        this.mail_inclivaluex_add=req.body.incliValue_X_add;
+        this.mail_inclivaluex_sub=req.body.incliValue_X_sub;
+
         this.mail_inclivaluey=req.body.incliValue_Y;
 
          //console.log("2 from mail_settime",this.mail_settime);
@@ -190,14 +265,27 @@ app.put("/setting/edit",function(req,res){
 
 
         var settime= time();
-        var tempvalue=req.body.tempValue;
-        var inclivalue_x=req.body.incliValuex;
+
+        var tempvalue_add=req.body.tempValue_add;
+        var tempvalue_sub=req.body.tempValue_sub;
+        
+        var inclivalue_xadd=req.body.incliValuex_add;
+        var inclivalue_xsub=req.body.incliValuex_sub;
+
         var inclivalue_y=req.body.incliValuey;
+
+        
+        /// payload to put data into mysql 
+        
         var condition={id_value:"1"};
 
-        var tempValue= ''+ tempvalue +'' ;
-        var incliValueX= ''+ inclivalue_x + '' ;
-        var incliValueY= ''+ inclivalue_y + '' ;
+        var _tempValueadd= ''+ tempvalue_add +'' ;
+        var _tempValuesub= ''+ tempvalue_sub +'' ;
+        
+        var _incliValueXadd= ''+ inclivalue_xadd + '' ;
+        var _incliValueXsub= ''+ inclivalue_xsub + '' ;
+        
+        var _incliValueY= ''+ inclivalue_y + '' ;
         
         //var tempValue=tempvalue;
         //var incliValue=inclivalue;
@@ -207,10 +295,17 @@ app.put("/setting/edit",function(req,res){
 
 
         var createThreshold={
+        
         id_value:1,
-        temperature_value:tempValue,
-        inclination_value_X:incliValueX,
-        inclination_value_Y:incliValueY,
+
+        temperature_value_add:_tempValueadd,
+        temperature_value_sub:_tempValuesub,
+
+        inclination_value_X_add:_incliValueXadd,
+        inclination_value_X_sub:_incliValueXsub,
+        
+        inclination_value_Y:_incliValueY,
+
         date_time: settime
 
       }
