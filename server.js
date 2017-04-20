@@ -21,7 +21,6 @@ var pool      =    mysql.createPool({
 
 
 
-
 var app       =    express();
 
 app.use(logger('dev'));
