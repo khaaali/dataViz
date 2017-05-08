@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { SettingsDisplayComponent } from './settings-display.component';
+import { SignalStrengthComponent } from './signal-strength.component';
 
-describe('SettingsDisplayComponent', () => {
-  let component: SettingsDisplayComponent;
-  let fixture: ComponentFixture<SettingsDisplayComponent>;
+describe('SignalStrengthComponent', () => {
+  let component: SignalStrengthComponent;
+  let fixture: ComponentFixture<SignalStrengthComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SettingsDisplayComponent ]
+      declarations: [ SignalStrengthComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SettingsDisplayComponent);
+    fixture = TestBed.createComponent(SignalStrengthComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

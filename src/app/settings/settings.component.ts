@@ -29,7 +29,10 @@ export class SettingsComponent implements OnInit {
   model = new Thresholds(); 
   setValues:setThreshold[]; // from data base shows set values for data base.
   mysensData:MyData[];
-  mysensDataDownload:MyData[];
+  mysensDataDownload_1:MyData[];
+  myHealthDataDownload_2:MyData[];
+
+ 
  // myDataIncliX:MyData[];
  // myDataIncliY:MyData[];
 
@@ -99,12 +102,12 @@ onDisplayTables(){
 this._MySqlService.DisplayData()
                   .subscribe(mysensData =>{ 
                     this.mysensData=mysensData;
-                    //console.log(myDataTemp)
+                    console.log(mysensData)
                   })
                 }
 
 
-onDownloadData(){
+onDownloadSensorData(){
 
   var options = { 
     fieldSeparator: ',',
@@ -117,17 +120,44 @@ onDownloadData(){
 //        console.log(date);
 
 
-    this._MySqlService.DownloadData()
-                  .subscribe(mysensDataDownload =>{ 
-                    this.mysensDataDownload=mysensDataDownload;
+    this._MySqlService.DownloadSensorData()
+                  .subscribe(mysensDataDownload_1 =>{ 
+                    this.mysensDataDownload_1=mysensDataDownload_1;
     
-      new Angular2Csv(this.mysensDataDownload, 'SensorData_'+date, options);
+      new Angular2Csv(this.mysensDataDownload_1, 'SensorData_'+date, options);
 
 
                   })
 
 
                  }
+
+onDownloadHealthData(){
+
+  var options = { 
+    fieldSeparator: ',',
+    quoteStrings: '"',
+    decimalseparator: '.',
+    showLabels: true, 
+    showTitle: false 
+  };
+        var date= (new Date()).toJSON();
+//        console.log(date);
+
+
+    this._MySqlService.DownloadHealthData()
+                  .subscribe(myHealthDataDownload_2 =>{ 
+                    this.myHealthDataDownload_2=myHealthDataDownload_2;
+    
+      new Angular2Csv(this.myHealthDataDownload_2, 'HealthData_'+date, options);
+
+
+                  })
+
+
+                 }
+
+
 
 }
 

@@ -45,7 +45,7 @@ export class TemperatureComponent implements OnInit {
 
 
 
-  const chart = new CanvasJS.Chart("chartContainer1", 
+  const chart = new CanvasJS.Chart("Temperature", 
             
         {
       animationEnabled: true,      
@@ -81,7 +81,7 @@ export class TemperatureComponent implements OnInit {
 
       dataPointMaxWidth: 10, 
       axisX:{
-        title: "Time(sec)",     
+        title: "Time",     
         //tickColor: "red",
         //tickLength: 5,
         titleFontSize: 20,
@@ -90,7 +90,7 @@ export class TemperatureComponent implements OnInit {
         interlacedColor: "#F1F1F1" 
       },
       axisY:{
-        title: "Temperature(°C)",
+        title: "Temperature (°C)",
         tickLength: 15,
         titleFontSize: 20,
         includeZero: false,
@@ -106,7 +106,7 @@ export class TemperatureComponent implements OnInit {
       //type: "line",
       lineThickness: 1,
       showInLegend: true,
-      legendText: "Temperature",
+      legendText: "Temperature (°C)",
       xValueType: "dateTime",
       dataPoints: dataTemp              
                            

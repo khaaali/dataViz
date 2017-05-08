@@ -50,13 +50,13 @@ getTemperatures(id: String): Observable<MyData[]> {
     return this._http.get(url)
                .map(res =>{
                 let data=res.json();
-                console.log(data);
+                //console.log(data);
                 let parsedData = [];
-                console.log("mac at temps again "+ filtered);
+                //console.log("mac at temps again "+ filtered);
                 data.filter(function(el){ return el.mac_id== filtered })
                 .forEach(function(item){ parsedData.push({ 
                           x:item.epoch_time_stamp, y:parseFloat(item.temperature_data) });  });
-                          //console.log(parsedData);
+                          console.log(parsedData);
                 return parsedData; })
                .catch(this.handleError);
                }  
@@ -77,33 +77,87 @@ getInclination(id: String): Observable<MyData[]> {
                 data.filter(function(el){ return el.mac_id==filtered})
                 .forEach(function(item){ parsedData.push({ 
                           x:item.epoch_time_stamp, y:parseFloat(item.inclination_data_X) });  });
-                         // console.log(parsedData);
+                         console.log(parsedData);
                 return parsedData; })
                .catch(this.handleError);
                }   
 
-
-
-getTemperatureInclination(id: String): Observable<MyData[]> {
-    const url = this._Url+'/senor_data';      //should change here
+  
+getVoltageLevels(id: String): Observable<MyData[]> {
+    const url = this._Url+'/energy';      //should change here
     //console.log(url);
     let filter= `${id}`;
     let filtered=String(filter);
-    console.log("mac at both "+ filtered);
+    //console.log("mac at both "+ filtered);
     return this._http.get(url)
                .map(res =>{
                 let data=res.json();
+                //console.log(data);
                 let parsedData = []; 
                 //let f=this.filteredMac;
-                data.filter(function(el){ return el.mac_id==filtered})
+                data.filter(function(el){ return el.hr_macid==filtered})
                 .forEach(function(item){ parsedData.push({ 
-                          x:item.epoch_time_stamp, y:parseFloat(item.temperature_data) });  });
-                         // console.log(parsedData);
+                          x:item.hr_epochStamp, y:parseFloat(item.hr_batt_voltage) });  });
+                         console.log(parsedData);
                 return parsedData; })
                .catch(this.handleError);
-               }  
+               } 
 
-  
+
+getSignalStrength(id: String): Observable<MyData[]> {
+    const url = this._Url+'/avg_rssi';      //should change here
+    //console.log(url);
+    let filter= `${id}`;
+    let filtered=String(filter);
+    //console.log("mac at both "+ filtered);
+    return this._http.get(url)
+               .map(res =>{
+                let data=res.json();
+                //console.log(data);
+                let parsedData = []; 
+                //let f=this.filteredMac;
+                data.filter(function(el){ return el.hr_macid==filtered})
+                .forEach(function(item){ parsedData.push({ 
+                          x:item.hr_epochStamp, y:parseInt(item.hr_avg_rssi) });  });
+                         console.log(parsedData);
+                return parsedData; })
+               .catch(this.handleError);
+               } 
+
+getPacketLoss(id: String): Observable<MyData[]> {
+    const url = this._Url+'/packet_loss';      //should change here
+    //console.log(url);
+    let filter= `${id}`;
+    let filtered=String(filter);
+    //console.log("mac at both "+ filtered);
+    return this._http.get(url)
+               .map(res =>{
+                let data=res.json();
+                //console.log(data);
+                let parsedData = []; 
+                //let f=this.filteredMac;
+                data.filter(function(el){ return el.hr_macid==filtered})
+                .forEach(function(item){ parsedData.push({ 
+                          x:item.hr_epochStamp, y:parseInt(item.hr_packetloss) });  });
+                         console.log(parsedData);
+                return parsedData; })
+               .catch(this.handleError);
+               } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -178,14 +232,19 @@ getConfigs():Observable<MyData[]>{
 
 
 
-
-
-
                       ////// Getting thresholds and filtering data to show in html tables////////////
 
 
-DownloadData(): Observable<MyData[]> {
+DownloadSensorData(): Observable<MyData[]> {
 const url = this._Url+'/senor_data'; 
+return this._http.get(url)
+           .map(res =>res.json())
+           .catch(this.handleError);
+
+}
+
+DownloadHealthData(): Observable<MyData[]> {
+const url = this._Url+'/health_report_table'; 
 return this._http.get(url)
            .map(res =>res.json())
            .catch(this.handleError);
@@ -215,6 +274,35 @@ return this._http.get(url)
 
 
 // returns temperature data greater than or equal to the filtered temperature data
+
+
+
+/*
+getTemperatureInclination(id: String): Observable<MyData[]> {
+    const url = this._Url+'/senor_data';      //should change here
+    //console.log(url);
+    let filter= `${id}`;
+    let filtered=String(filter);
+    console.log("mac at both "+ filtered);
+    return this._http.get(url)
+               .map(res =>{
+                let data=res.json();
+                let parsedData = []; 
+                //let f=this.filteredMac;
+                data.filter(function(el){ return el.mac_id==filtered})
+                .forEach(function(item){ parsedData.push({ 
+                          x:item.hr_epochStamp, y:parseFloat(item.hr_batt_voltage) });  });
+                         // console.log(parsedData);
+                return parsedData; })
+               .catch(this.handleError);
+               }  */
+
+
+
+
+
+
+
 
 
 /*

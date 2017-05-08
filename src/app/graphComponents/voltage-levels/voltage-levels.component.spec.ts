@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { SettingsEditComponent } from './settings-edit.component';
+import { VoltageLevelsComponent } from './voltage-levels.component';
 
-describe('SettingsEditComponent', () => {
-  let component: SettingsEditComponent;
-  let fixture: ComponentFixture<SettingsEditComponent>;
+describe('VoltageLevelsComponent', () => {
+  let component: VoltageLevelsComponent;
+  let fixture: ComponentFixture<VoltageLevelsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SettingsEditComponent ]
+      declarations: [ VoltageLevelsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SettingsEditComponent);
+    fixture = TestBed.createComponent(VoltageLevelsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

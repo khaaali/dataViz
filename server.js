@@ -117,7 +117,7 @@ app.get("/senor_data",function(req,res){
         console.log('connected as id ' + connection.threadId);
         
         connection.query("SELECT * from sensor_data_table ",function(err,rese){
-            //console.log(rese);
+            console.log(rese);
             
             if(!err) {
                 res.send(JSON.stringify(rese));
@@ -405,6 +405,160 @@ app.post("/setting",function(req,res){
         //res.end('Something broke');
         //res.sendFile(__dirname+'/public/index.html');
 });
+
+
+
+
+                  // health report data
+                   
+
+app.get("/health_report_table",function(req,res){
+
+        console.log("from get health_report_table");
+
+        pool.getConnection(function(err,connection){
+        if (err) {
+          res.json({"code" : 100, "status" : "Error in connection database"});
+          return;
+        }   
+
+        console.log('connected as id ' + connection.threadId);
+        
+        connection.query('SELECT * FROM health_report_table ',function(err,rows){
+        //console.log(rows);
+            
+            if(err) {
+                res.json(err);
+            }       
+            else{
+              //res.json({"error": false});
+              res.json(rows);
+            }
+            connection.release();    
+        });
+        connection.on('error', function(err) {      
+              res.json({"code" : 100, "status" : "Error in connection database"});
+              return;     });
+  });
+        res.setHeader('Content-Type', 'text/plain');
+        //res.end('Something broke');
+        //res.sendFile(__dirname+'/public/index.html');
+});
+
+
+
+
+
+app.get("/energy",function(req,res){
+
+        console.log("from get voltage");
+
+        pool.getConnection(function(err,connection){
+        if (err) {
+          res.json({"code" : 100, "status" : "Error in connection database"});
+          return;
+        }   
+
+        console.log('connected as id ' + connection.threadId);
+        
+        connection.query('SELECT hr_macid,hr_timeStamp,hr_epochStamp,hr_batt_voltage FROM health_report_table where hr_batt_voltage IS NOT NULL',function(err,rows){
+        console.log(rows);
+            
+            if(err) {
+                res.json(err);
+            }       
+            else{
+              //res.json({"error": false});
+              res.json(rows);
+            }
+            connection.release();    
+        });
+        connection.on('error', function(err) {      
+              res.json({"code" : 100, "status" : "Error in connection database"});
+              return;     });
+  });
+        res.setHeader('Content-Type', 'text/plain');
+        //res.end('Something broke');
+        //res.sendFile(__dirname+'/public/index.html');
+});
+
+app.get("/avg_rssi",function(req,res){
+
+        console.log("from get avg_rssi");
+
+        pool.getConnection(function(err,connection){
+        if (err) {
+          res.json({"code" : 100, "status" : "Error in connection database"});
+          return;
+        }   
+
+        console.log('connected as id ' + connection.threadId);
+        
+        connection.query('SELECT hr_macid,hr_timeStamp,hr_epochStamp,hr_avg_rssi FROM health_report_table where hr_avg_rssi IS NOT NULL',function(err,rows){
+        console.log(rows);
+            
+            if(err) {
+                res.json(err);
+            }       
+            else{
+              //res.json({"error": false});
+              res.json(rows);
+            }
+            connection.release();    
+        });
+        connection.on('error', function(err) {      
+              res.json({"code" : 100, "status" : "Error in connection database"});
+              return;     });
+  });
+        res.setHeader('Content-Type', 'text/plain');
+        //res.end('Something broke');
+        //res.sendFile(__dirname+'/public/index.html');
+});
+
+app.get("/packet_loss",function(req,res){
+
+        console.log("from get voltage");
+
+        pool.getConnection(function(err,connection){
+        if (err) {
+          res.json({"code" : 100, "status" : "Error in connection database"});
+          return;
+        }   
+
+        console.log('connected as id ' + connection.threadId);
+        
+        connection.query('SELECT hr_macid,hr_timeStamp,hr_epochStamp,hr_packetloss FROM health_report_table where hr_packetloss IS NOT NULL',function(err,rows){
+        console.log(rows);
+            
+            if(err) {
+                res.json(err);
+            }       
+            else{
+              //res.json({"error": false});
+              res.json(rows);
+            }
+            connection.release();    
+        });
+        connection.on('error', function(err) {      
+              res.json({"code" : 100, "status" : "Error in connection database"});
+              return;     });
+  });
+        res.setHeader('Content-Type', 'text/plain');
+        //res.end('Something broke');
+        //res.sendFile(__dirname+'/public/index.html');
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

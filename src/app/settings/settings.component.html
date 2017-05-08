@@ -50,8 +50,10 @@ show threshold values, criteria used to sort the data to send mail notifications
             <h4>Display Tables:</h4>
             <button class="btn btn-primary" (click)="onDisplayTables()">Display Data </button>
             <br>
-            <h4>Download Data:</h4>
-            <button class="btn btn-primary" (click)="onDownloadData()">Download Data </button>
+            <h4>Download Sensor/health Data:</h4>
+            <button class="btn btn-primary" (click)="onDownloadSensorData()">Sensor Data </button>
+            <button class="btn btn-primary" (click)="onDownloadHealthData()">Health Data </button>
+
         </div>
     </div>
     <!-- Form to edit the threshold values in threshlold table -->
@@ -106,7 +108,7 @@ show threshold values, criteria used to sort the data to send mail notifications
                 <td>{{ data.temperature_data }}</td>
                 <td>{{ data.inclination_data_X }}</td>
                 <td>{{ data.inclination_data_Y }}</td>
-                <td>{{ data.time_stamp }}</td>
+                <td>{{ data.time_stamp | date:'medium' }}</td>
         </table>
     </div>
 </div>

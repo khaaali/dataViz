@@ -1,13 +1,27 @@
+angular commands
+-ng build && node server.js
+
+-ng generate component my-new-component
+-ng g component my-new-component # using the alias
+
+# components support relative path generation
+# if in the directory src/app/feature/ and you run
+-ng g component new-cmp
+# your component will be generated in src/app/feature/new-cmp
+# but if you were to run
+-ng g component ../newer-cmp
+# your component will be generated in src/app/newer-cmp
+
 files with shit test.js,bootstrap.html,untitled.css,
 
 
 [
-{x:1486257208633,y:34}
-{x:1486257211963,y:12},
-{x:1486257216966,y:45},
-{x:1486257221989,y:76},
-{x:1486257242011,y:46},
-{x:1486257247017,y:35},
+{x:1494005071,y:34},
+{x:1494005971,y:12},
+{x:1494087499,y:45},
+{x:1494090200,y:76},
+{x:1494091099,y:46},
+{x:1494091999,y:35},
 {x:1486257257025,y:34},
 {x:1486257272041,y:77},
 {x:1486257277050,y:57},
@@ -19,6 +33,12 @@ files with shit test.js,bootstrap.html,untitled.css,
 {x:1486257709034,y:36},
 {x:1486257719046,y:27}
 ]
+1494005071
+1494005971
+1494087499
+1494090200
+1494091099
+1494091999
 
 
 var chart = new CanvasJS.Chart("chartContainer",

@@ -5,7 +5,6 @@ import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router'; 
 
 import { AppComponent } from './app.component';
-import { TemperatureAndInclinationComponent } from './graphComponents/tempIncli-component/tempIncliComponent';
 import { MySqlService }   from './app.service';
 import { TemperatureComponent } from './graphComponents/temperature-component/temperature.component';
 import { InclinationComponent } from './graphComponents/inclination-component/inclination.component';
@@ -13,6 +12,9 @@ import { HomeComponent } from './home/home.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ConfigComponent } from './config/config.component';
 import { DataVisualizationComponent } from './data-visualization/data-visualization.component';
+import { VoltageLevelsComponent } from './graphComponents/voltage-levels/voltage-levels.component';
+import { SignalStrengthComponent } from './graphComponents/signal-strength/signal-strength.component';
+import { PacketLossComponent } from './graphComponents/packet-loss/packet-loss.component';
 
 
 const appRoutes: Routes = [
@@ -30,13 +32,15 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    TemperatureAndInclinationComponent,
     TemperatureComponent,
     InclinationComponent,
     HomeComponent,
     SettingsComponent,
     ConfigComponent,
-    DataVisualizationComponent
+    DataVisualizationComponent,
+    VoltageLevelsComponent,
+    SignalStrengthComponent,
+    PacketLossComponent
   ],
   imports: [
     BrowserModule,

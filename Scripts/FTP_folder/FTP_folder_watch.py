@@ -11,8 +11,12 @@ from watchdog.events import PatternMatchingEventHandler
 
 today_time_now=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-_src='/home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/FTP_folder/SMIP_testdata.txt'
-_dst='/home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/FTP_folder/FTP_logs/'
+sensordata_src='/home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/FTP_folder/SMIP_sensordata.txt'
+sensordata_dst='/home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/FTP_folder/FTP_logs/'
+
+confiMean_src='/home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/configuration_mean_folder/configuration_mean_data.txt'
+confiMean_dst='/home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/configuration_mean_folder/configuration_logs/'
+
 
 class Database:
 
@@ -67,26 +71,75 @@ class MyHandler(PatternMatchingEventHandler):
         self.process(event)
         db = Database()
         print "FTP_folder received .txt file"
-        file_content= csv.reader(file(_src,'r'))
 
-        for line in file_content:
-            print line
+        if (sensordata_src):
+            file_content= csv.reader(file(sensordata_src,'r'))
+
+            for line in file_content:
+                    print line
     # Data Insert into the table
-            insert_query = """
-                INSERT INTO sensor_data_table
-                (`mac_id`, `temperature_data`,`inclination_data_X`,`inclination_data_Y`,`time_stamp`,`epoch_time_stamp`)
-                VALUES (%s,%s,%s,%s,%s,%s)"""
+                    insert_query = """
+                    INSERT INTO sensor_data_table
+                    (`mac_id`, `temperature_data`,`inclination_data_X`,`inclination_data_Y`,`time_stamp`,`epoch_time_stamp`)
+                    VALUES (%s,%s,%s,%s,%s,%s)"""
 
     # db.query(insert_query)
-            db.insert(insert_query,line)
+                    db.insert(insert_query,line)
 
-        print "data inserted to MySqlDB"
-        print today_time_now
+            print "data inserted to MySqlDB"
+            print today_time_now
 
 # moving and renaming file to another directory
 
-        shutil.move(_src,_dst+today_time_now+".txt")
-        print "file has been renamed and moved to /home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/FTP_folder/FTP_logs/"
+            shutil.move(sensordata_src,sensordata_dst+today_time_now+".txt")
+            print "file has been renamed and moved to /home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/FTP_folder/FTP_logs/"
+        
+        elif (confiMean_src):
+            print "configuaration file received "
+            file_content= csv.reader(file(confiMean_src,'r'))
+
+            print "deleteing old configurations"    
+
+            delete_query="""
+                DELETE FROM Astrose_smart_meshIP.configurations_mean_table
+                """
+            db.truncate(delete_query)        
+
+            for line in file_content:
+                time_now=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                print line
+                liest= line
+                print type(liest)
+                print liest.insert(5,time_now)
+    # Data Insert into the table
+                insert_query = """
+                INSERT INTO configurations_mean_table
+                (`config_id`,
+                `config_macid`,
+                `temperature_mean_value`,
+                `inclination_mean_value_X`,
+                `inclination_mean_value_Y`,
+                `config_time`)
+                VALUES (%s,%s,%s,%s,%s,%s)"""
+
+    # db.query(insert_query)
+                print liest
+                db.insert(insert_query,liest)
+
+            print "data inserted to MySqlDB"
+            print today_time_now
+            shutil.move(confiMean_src,confiMean_dst+today_time_now+".txt")
+            print "file has been renamed and moved to /home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/configuration_mean_folder/configuration_logs/"
+
+        
+        
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':

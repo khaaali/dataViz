@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Input,Output,EventEmitter } from '@angular/core';
 import { HttpModule }    from '@angular/http';
 import { ActivatedRoute, Params,Router } from '@angular/router';
 import { MySqlService } from '../../app.service';
@@ -8,42 +8,43 @@ import {MyData} from '../../StructData';
 declare const CanvasJS: any;
 
 @Component({
-  selector: 'app-inclination-component',
-  templateUrl: './inclination-component.html',
-  styleUrls: ['./inclination-component.css'],
-  providers: [ HttpModule,MySqlService ]
+  selector: 'app-signal-strength',
+  templateUrl: './signal-strength.component.html',
+  styleUrls: ['./signal-strength.component.css']
 })
 
+export class SignalStrengthComponent implements OnInit {
+ 
 
-
-export class InclinationComponent implements OnInit {
-
-  public dataIncli;
-
-   myData:MyData[];
+  public dataSignalStrength ;
+ 
+ myData:MyData[];
 
   
-  constructor(private _MySqlService: MySqlService,
+  
+  constructor(
+    private _MySqlService: MySqlService,
     private route: ActivatedRoute, 
-    private router:Router) { }
+    private router:Router ) { }
 
+
+  //@Input() macid:String;
+
+  
     ngOnInit(): any {
         
-        
-  this.route.params 
-       .switchMap((params: Params) => this._MySqlService.getInclination(String(params['id'])))
-       .subscribe(myData => {this.myData=myData;
-                               
-                               //console.log(testings);
-          let dataIncli  = myData;
-          this.dataIncli= myData;
+        this.route.params 
+       .switchMap((params: Params) => this._MySqlService.getSignalStrength(String(params['id'])))
+       .subscribe(myData => {
+         this.myData=myData;
 
- // console.log(this.datasetIncli);
+        let dataSignalStrength  = myData;
+         console.log(dataSignalStrength);
 
-  
-//let dataIncli=this.datasetIncli;
-  const chart = new CanvasJS.Chart("Inclination", 
 
+
+  const chart = new CanvasJS.Chart("SignalStrength", 
+            
         {
       animationEnabled: true,      
       zoomEnabled: true,
@@ -61,7 +62,7 @@ export class InclinationComponent implements OnInit {
 
 
       title:{
-       text: "Inclination [X]", 
+       text: "Signal Strength", 
        fontSize: 30,
        },
        exportEnabled: true,
@@ -76,7 +77,7 @@ export class InclinationComponent implements OnInit {
 
 
 
-      dataPointMaxWidth: 10, 
+      dataPointMaxWidth: 20, 
       axisX:{
         title: "Time",     
         //tickColor: "red",
@@ -87,40 +88,37 @@ export class InclinationComponent implements OnInit {
         interlacedColor: "#F1F1F1" 
       },
       axisY:{
-        title: "Inclination [X]",
+        title: "Rssi (db)",
         tickLength: 15,
         titleFontSize: 20,
         includeZero: false,
+        reversed: true,
         //tickColor: "DarkSlateBlue" ,
         tickThickness: 2,
         gridDashType:"dot"
       },
 
      data: [
-             {   
-      type: "line",   
-      //color: "lightcoral",
-      color: "rgba(255,12,32,.5)",         
+             {  
+      type: "column",
+      color: "rgba(132,32,91,.6)",             
       //type: "line",
       lineThickness: 1,
       showInLegend: true,
-      legendText: "Inclination [X]",
+      legendText: "Rssi (db)",
       xValueType: "dateTime",
-      dataPoints: dataIncli
-                    
+      dataPoints: dataSignalStrength              
                            
               }]
       });
+  chart.render();
 
-    chart.render();
+  function rangeChange(e) {
+      console.log(e);
+    }  
 
 
-		function rangeChange(e) {
-			console.log(e);
-		}	
-    });
+});
 }
-
+ 
 }
-
-
