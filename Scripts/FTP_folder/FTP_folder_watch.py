@@ -1,4 +1,4 @@
-import sys
+import sys,os
 import logging
 import time 
 
@@ -12,11 +12,13 @@ from watchdog.events import PatternMatchingEventHandler
 today_time_now=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 sensordata_src='/home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/FTP_folder/SMIP_sensordata.txt'
-sensordata_dst='/home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/FTP_folder/FTP_logs/'
+sensordata_dst='/home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/FTP_folder/FTP_logs/SMIP_sensorDataLogs/'
 
-confiMean_src='/home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/configuration_mean_folder/configuration_mean_data.txt'
-confiMean_dst='/home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/configuration_mean_folder/configuration_logs/'
+confiMean_src='/home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/FTP_folder/config_mean_data.txt'
+confiMean_dst='/home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/FTP_folder/FTP_logs/ConfigMeanLogs/'
 
+hr_report_src='/home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/FTP_folder/health_report_data.txt'
+hr_report_dst='/home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/FTP_folder/FTP_logs/HealReaportLogs/'
 
 class Database:
 
@@ -36,7 +38,12 @@ class Database:
         except:
             self.connection.rollback()
 
-
+    def truncate(self, query):
+        try:
+            self.cursor.execute(query)
+            self.connection.commit()
+        except:
+            self.connection.rollback() 
 
     def query(self, query):
         cursor = self.connection.cursor( MySQLdb.cursors.DictCursor )
@@ -69,39 +76,44 @@ class MyHandler(PatternMatchingEventHandler):
 
     def on_created(self, event):
         self.process(event)
-        db = Database()
-        print "FTP_folder received .txt file"
+        
 
-        if (sensordata_src):
+
+        if(os.path.isfile('SMIP_sensordata.txt')):
             file_content= csv.reader(file(sensordata_src,'r'))
-
+            print "FTP_folder received SMIP_sensordata.txt file"
+            db = Database()
             for line in file_content:
-                    print line
+                print line
     # Data Insert into the table
-                    insert_query = """
-                    INSERT INTO sensor_data_table
+                insert_query = """
+                    INSERT INTO Astrose_smart_meshIP.sensor_data_table
                     (`mac_id`, `temperature_data`,`inclination_data_X`,`inclination_data_Y`,`time_stamp`,`epoch_time_stamp`)
                     VALUES (%s,%s,%s,%s,%s,%s)"""
 
     # db.query(insert_query)
-                    db.insert(insert_query,line)
+                db.insert(insert_query,line)
 
             print "data inserted to MySqlDB"
             print today_time_now
 
 # moving and renaming file to another directory
 
-            shutil.move(sensordata_src,sensordata_dst+today_time_now+".txt")
-            print "file has been renamed and moved to /home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/FTP_folder/FTP_logs/"
+            shutil.move(sensordata_src,sensordata_dst+'SMIP_sensorData_log_'+today_time_now+".txt")
+            print "file has been renamed as (SMIP_sensorData_log_) and moved to /home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/FTP_folder/FTP_logs/"
         
-        elif (confiMean_src):
-            print "configuaration file received "
-            file_content= csv.reader(file(confiMean_src,'r'))
+                
+                ## config_mean data to database
 
+        elif (os.path.isfile('config_mean_data.txt')):
+
+            print "config_mean_data.txt file received "
+            file_content= csv.reader(file(confiMean_src,'r'))
+            db = Database()
             print "deleteing old configurations"    
 
             delete_query="""
-                DELETE FROM Astrose_smart_meshIP.configurations_mean_table
+                TRUNCATE table Astrose_smart_meshIP.configs_mean_table
                 """
             db.truncate(delete_query)        
 
@@ -109,18 +121,12 @@ class MyHandler(PatternMatchingEventHandler):
                 time_now=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 print line
                 liest= line
-                print type(liest)
+                #print type(liest)
                 print liest.insert(5,time_now)
     # Data Insert into the table
                 insert_query = """
-                INSERT INTO configurations_mean_table
-                (`config_id`,
-                `config_macid`,
-                `temperature_mean_value`,
-                `inclination_mean_value_X`,
-                `inclination_mean_value_Y`,
-                `config_time`)
-                VALUES (%s,%s,%s,%s,%s,%s)"""
+                    INSERT INTO Astrose_smart_meshIP.configs_mean_table(`config_id`,`config_macid`,`temperature_mean_value`,`inclination_mean_value_X`,`inclination_mean_value_Y`,`config_time`)
+                    VALUES (%s,%s,%s,%s,%s,%s)"""
 
     # db.query(insert_query)
                 print liest
@@ -128,17 +134,33 @@ class MyHandler(PatternMatchingEventHandler):
 
             print "data inserted to MySqlDB"
             print today_time_now
-            shutil.move(confiMean_src,confiMean_dst+today_time_now+".txt")
-            print "file has been renamed and moved to /home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/configuration_mean_folder/configuration_logs/"
+            shutil.move(confiMean_src,confiMean_dst+'configMean_log'+today_time_now+".txt")
+            print "file has been renamed as (configMean_log) and moved to /home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/FTP_folder/FTP_logs/"
+            
 
+
+                ## health report file to database
+
+        elif (os.path.isfile('health_report_data.txt')):
         
-        
+            print "health_report_data.txt file received "
+            file_content= csv.reader(file(hr_report_src,'r'))   
+            db = Database()
+            for line in file_content:
+                print line
+    # Data Insert into the table
+                insert_query = """
+                    INSERT INTO Astrose_smart_meshIP.health_report_table(`hr_macid`,`hr_timeStamp`,`hr_epochStamp`,`hr_avg_rssi`,`hr_packetloss`,`hr_batt_voltage`)
+                    VALUES (%s,%s,%s,%s,%s,%s)"""
 
+    # db.query(insert_query)
+                db.insert(insert_query,line)
 
-
-
-
-
+            print "data inserted to MySqlDB"
+            print today_time_now
+            shutil.move(hr_report_src,hr_report_dst+'health_data_log'+today_time_now+".txt")
+            print "file has been renamed as (health_data_log) and moved to /home/sairam/Desktop/Untitled/Angular-cli/dataVisz/Scripts/FTP_folder/FTP_logs/"
+            
 
 
 

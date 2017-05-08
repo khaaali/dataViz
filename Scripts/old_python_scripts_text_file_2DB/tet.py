@@ -7,7 +7,7 @@ import shutil,datetime
 
 from watchdog.observers import Observer  
 from watchdog.events import PatternMatchingEventHandler 
-
+# for testing purpose can be deleted!!!
 
 today_time_now=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 

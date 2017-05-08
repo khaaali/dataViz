@@ -9,7 +9,10 @@ date_time DATETIME NOT NULL //shuould also be unique
 
 INSERT INTO threshold_table(id_value,temperature_value,inclination_value,date_time) 
 VALUES ("1", "23", "34","2017-02-02 22:04:05");
-
+## new table
+INSERT INTO Astrose_smart_meshIP.threshold_table(id_value, temperature_value_add, 
+ temperature_value_sub, inclination_value_X_add, inclination_value_X_sub,  inclination_value_Y,
+ date_time) VALUES ('1','2','3','4.5','3','2','2017-05-08 04:56:12')
 
 SELECT * from threshold_table WHERE id_value=1
 

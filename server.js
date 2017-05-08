@@ -149,7 +149,7 @@ app.get("/config",function(req,res){
 
         console.log('connected as id ' + connection.threadId);
         
-        connection.query('select * from configurations_mean_table ',function(err,rows){
+        connection.query('select * from configs_mean_table ',function(err,rows){
         console.log(rows);
             
             if(err) {
@@ -458,10 +458,10 @@ app.get("/energy",function(req,res){
           res.json({"code" : 100, "status" : "Error in connection database"});
           return;
         }   
-
+        var condition="null";
         console.log('connected as id ' + connection.threadId);
         
-        connection.query('SELECT hr_macid,hr_timeStamp,hr_epochStamp,hr_batt_voltage FROM health_report_table where hr_batt_voltage IS NOT NULL',function(err,rows){
+        connection.query('SELECT hr_macid,hr_timeStamp,hr_epochStamp,hr_batt_voltage FROM health_report_table where hr_batt_voltage != ?',condition,function(err,rows){
         console.log(rows);
             
             if(err) {
@@ -491,10 +491,11 @@ app.get("/avg_rssi",function(req,res){
           res.json({"code" : 100, "status" : "Error in connection database"});
           return;
         }   
+        var condition="null";
 
         console.log('connected as id ' + connection.threadId);
         
-        connection.query('SELECT hr_macid,hr_timeStamp,hr_epochStamp,hr_avg_rssi FROM health_report_table where hr_avg_rssi IS NOT NULL',function(err,rows){
+        connection.query('SELECT hr_macid,hr_timeStamp,hr_epochStamp,hr_avg_rssi FROM health_report_table where hr_avg_rssi != ?',condition,function(err,rows){
         console.log(rows);
             
             if(err) {
@@ -524,10 +525,11 @@ app.get("/packet_loss",function(req,res){
           res.json({"code" : 100, "status" : "Error in connection database"});
           return;
         }   
+        var condition="null";
 
         console.log('connected as id ' + connection.threadId);
         
-        connection.query('SELECT hr_macid,hr_timeStamp,hr_epochStamp,hr_packetloss FROM health_report_table where hr_packetloss IS NOT NULL',function(err,rows){
+        connection.query('SELECT hr_macid,hr_timeStamp,hr_epochStamp,hr_packetloss FROM health_report_table where hr_packetloss != ?',condition,function(err,rows){
         console.log(rows);
             
             if(err) {

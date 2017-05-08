@@ -304,4 +304,63 @@ inclination_data_X <= (select inclination_mean_value_X from configurations_mean_
 	END |
 
 delimiter ;
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------Above code is old and new code is available as mysql event "sensor_data_filteredTables.sql"-----------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+								##########################		creating notify_mail_table	############################################
+								#########################   code is available as mysql event "sensor_data_filteredTables.sql"			##################
+
+ CREATE TABLE Astrose_smart_meshIP.notify_mail_table(
+	`notify_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	`temp_thres_add` FLOAT NULL, 
+	`temp_thres_sub` FLOAT NULL,
+	`incli_thres_add` FLOAT NULL,
+	`incli_thres_sub` FLOAT NULL,
+	`mac_4d94` VARCHAR(45) NULL,
+	`temp_mean_4d94` FLOAT NULL,
+	`incli_mean_4d94` FLOAT NULL,
+	`temp_count_4d94_add` INT(11) NULL,
+	`temp_lastupdate_4d94_add` VARCHAR(45) NULL,
+	`temp_count_4d94_sub` INT(11) NULL,
+	`temp_lastupdate_4d94_sub` VARCHAR(45) NULL,
+	`incli_count_4d94_add` INT(11) NULL,
+	`incli_lastupdate_4d94_add` VARCHAR(45) NULL,
+	`incli_count_4d94_sub` INT(11) NULL,
+	`incli_lastupdate_4d94_sub` VARCHAR(45) NULL,
+	`mac_47fa` VARCHAR(45) NULL,
+	`temp_mean_47fa` FLOAT NULL,
+	`incli_mean_47fa` FLOAT NULL,
+	`temp_count_47fa_add` INT(11) NULL,
+	`temp_lastupdate_47fa_add` VARCHAR(45) NULL,
+	`temp_count_47fa_sub` INT(11) NULL,
+	`temp_lastupdate_47fa_sub` VARCHAR(45) NULL,
+	`incli_count_47fa_add` INT(11) NULL,
+	`incli_lastupdate_47fa_add` VARCHAR(45) NULL,
+	`incli_count_47fa_sub` INT(11) NULL,
+	`incli_lastupdate_47fa_sub` VARCHAR(45) NULL,
+	`mac_4818` VARCHAR(45) NULL,
+	`temp_mean_4818` FLOAT NULL,
+	`incli_mean_4818` FLOAT NULL,
+	`temp_count_4818_add` INT(11) NULL,
+	`temp_lastupdate_4818_add` VARCHAR(45) NULL,
+	`temp_count_4818_sub` INT(11) NULL,
+	`temp_lastupdate_4818_sub` VARCHAR(45) NULL,
+	`incli_count_4818_add` INT(11) NULL,
+	`incli_lastupdate_4818_add` VARCHAR(45) NULL,
+	`incli_count_4818_sub` INT(11) NULL,
+	`incli_lastupdate_4818_sub` VARCHAR(45) NULL,
+	`mac_4958` VARCHAR(45) NULL,
+	`temp_mean_4958` FLOAT NULL,
+	`incli_mean_4958` FLOAT NULL,
+	`temp_count_4958_add` INT(11) NULL,
+	`temp_lastupdate_4958_add` VARCHAR(45) NULL,
+	`temp_count_4958_sub` INT(11) NULL,
+	`temp_lastupdate_4958_sub` VARCHAR(45) NULL,
+	`incli_count_4958_add` INT(11) NULL,
+	`incli_lastupdate_4958_add` VARCHAR(45) NULL,
+	`incli_count_4958_sub` INT(11) NULL,	
+	`incli_lastupdate_4958_sub` VARCHAR(45) NULL
+	);
