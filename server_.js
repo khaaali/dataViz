@@ -687,55 +687,58 @@ pool.getConnection(function(err,connection)
       });
 
 }
-                //**********function to setup mail payload via sendgrid*************//
+                //**********function to setup mail payload via nodemailer*************//
 
 
 
 function sendMail(TUL,TLL,IUL,ILL) 
                 {
-
+var mailer = require("nodemailer");
+var Transport = mailer.createTransport({
+    service: "Gmail",
+    auth: {
+        user: "astrose.enas@gmail.com",
+        pass: "sairamaaaa4"
+    }
+});
         
-var send_mail = require('sendgrid').mail;
-from_email = new send_mail.Email("astrose.enas@gmail.com");
-to_email = new send_mail.Email("sairamaaaa@gmail.com");
 
 subject = "Astrose Notifications";
 
-content = new send_mail.Content("text/html", 
+content =  
           "<h1 align='center'><font color='#008b46'> ASTROSE Wirless Sensor Network </font></h1>"+"<br>"+
           "<h2 align='center'><font color='#008b46'>Threshold Limits Fulfilled</font></h2>"+"<br>"
-          
-          +"<h3 align='center' >Temperature Upper Limit: "+" "+ "<font color='#e02e00'>"+TUL
+
+          +"<h3 align='left' >Temperature Upper Limit: "+" "+ "<font color='#e02e00'>"+"</h3>"+TUL
           +"<br>"
-          +"<h3 align='center' >Temperature Lower Limit: "+" "+ "<font color='#e02e00'>"+TLL
+          +"<h3 align='left' >Temperature Lower Limit: "+" "+ "<font color='#e02e00'>"+"</h3>"+TLL
           +"<br>"
-          +"<h3 align='center' >Inclination Upper Limit: "+" "+ "<font color='#e02e00'>"+IUL
+          +"<h3 align='left' >Inclination Upper Limit: "+" "+ "<font color='#e02e00'>"+"</h3>"+IUL
           +"<br>"
-          +"<h3 align='center' >Inclination Upper Limit: "+" "+ "<font color='#e02e00'>"+IUL
+          +"<h3 align='left' >Inclination Lower Limit: "+" "+ "<font color='#e02e00'>"+"</h3>"+ILL
           +"<br>"
-          +"</h3>");
 
-      console.log(content);
+      //console.log(content);
 
-mail = new send_mail.Mail(from_email, subject, to_email, content);
+var mail = {
+    from: "astrose.enas@gmail.com",
+    to: "sairamaaaa@gmail.com",
+    subject: subject,
+    text: "Astrose Notifications",
+    html: content
+}
 
-              var _sendgrid = require('sendgrid')(process.env.SENDGRID_API_KEY);
+Transport.sendMail(mail, function(error, response){
+    if(error){
+        console.log(error);
+    }else{
+        console.log("Message sent: " + response.message);
+    }
 
-              var request = _sendgrid.emptyRequest({
-                        method: 'POST',
-                        path: '/v3/mail/send',
-                        body: mail.toJSON()
-                      });
+    Transport.close();
+});
 
-              _sendgrid.API(request, function(error, response) {
-
-      console.log("sg1",response.statusCode);
-      console.log("sg2",response.body);
-      console.log("sg3",response.headers);
-
-                    })
-
-                    console.log('The answer to life, the universe, and everything!',TUL[0],TUL[0]);
+                    console.log('The answer to life, the universe, and everything!',mail);
                   }
   
 
