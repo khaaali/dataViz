@@ -245,7 +245,7 @@ class notifClient(object):
                     voltage=hr['Device']['batteryVoltage']
            # Db_array.append(voltage)
                     print 'voltage',voltage/1000 
-                    packetloss=hr['Device']['numTxOk'] - hr['Device']['numRxOk'] 
+                    packetloss=hr['Device']['numRxLost'] 
     #send to Db_array     and reset Db_array 
                
                     Db_array.append(mac)

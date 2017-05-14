@@ -9,6 +9,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var schedule = require('node-schedule');
+var _=require('lodash');
+
+var diff = require('deep-diff').diff;
+var observableDiff = require('deep-diff').observableDiff,
+ applyChange        = require('deep-diff').applyChange;
 
 var pool      =    mysql.createPool({
     connectionLimit : 100, //important
@@ -529,7 +534,8 @@ app.get("/packet_loss",function(req,res){
 
         console.log('connected as id ' + connection.threadId);
         
-        connection.query('SELECT hr_macid,hr_timeStamp,hr_epochStamp,hr_packetloss FROM health_report_table where hr_packetloss != ?',condition,function(err,rows){
+        connection.query('SELECT hr_macid,hr_timeStamp,hr_epochStamp,hr_packetloss \
+          FROM health_report_table where hr_packetloss != ?',condition,function(err,rows){
         console.log(rows);
             
             if(err) {
@@ -574,96 +580,119 @@ app.get("/packet_loss",function(req,res){
 
 
 //runs every minute 10th second
-//var job = schedule.scheduleJob('10 * * * * *', getSetThresholds);
+var job = schedule.scheduleJob('10 * * * * *', getSetThresholds);
 
 
 //getThresholds will query data base for the current values of thresholds.
-function getSetThresholds() {
+function getSetThresholds() 
+  {
 
-pool.getConnection(function(err,connection){
+pool.getConnection(function(err,connection)
+      {
         
-        var condition={id:"1"};
         
         console.log('connected as id ' + connection.threadId);
-        
-        connection.query('SELECT * FROM notify_email_table WHERE ?',condition,function(err,rows){
+       
+        connection.query('SELECT TempUpLimit_a1,TempLowLimit_a2,IncliUpLimit_a3,IncliLowLimit_a4,\
+                          TempUpLimit_b1,TempLowLimit_b2,IncliUpLimit_b3,IncliLowLimit_b4,\
+                          TempUpLimit_c1,TempLowLimit_c2,IncliUpLimit_c3,IncliLowLimit_c4,\
+                          TempUpLimit_d1,TempLowLimit_d2,IncliUpLimit_d3,IncliLowLimit_d4 \
+                          FROM payload_mail_table'
+                          ,function(err,rows)
+        {
+        console.log("from payload_mail_table");    
+        //console.log("log as :",rows);
+        console.log("length :",rows.length);
 
-        //console.log("log as :",rows[0]);
-        //console.log(rows[0].temperature_value);
-        //console.log(rows[0].inclination_value);
         
+          _Last=rows.length-1 ;
+          _Previous=rows.length-2;
+          _First=(rows.length)- (rows.length);
+          var l=rows[_Last];
+          var f=rows[_First];
+          var p=rows[_Previous];
+          
+          //console.log("last",_Last,rows[_Last]);
+          //console.log("_Previous",_Previous,rows[_Previous]);
+          //console.log("first",_First,rows[_First]);
+          console.log("_Last",_Last);
+          console.log("_Previous",_Previous);
+          console.log("_First",_First);
+          console.log("check",_.isEqual(rows[_Last],rows[_First]));
 
-        var mail_notify_temp_value;
-        var mail_notify_temp_length;
-        var mail_notify_reachedtime_temp;
-        var mail_notify_incli_value;
-        var mail_notify_incli_length;
-        var mail_notify_reachedtime_incli;
-        var mail_notify_setThreshold_time;
-        var mail_notify_send_mail_flag;
+       
 
             if(err) {
                 JSON.stringify(err);
             }       
-            else{
-              //res.json({"error": false});
-              mail_notify_temp_value=rows[0].notify_temp_value;
-              mail_notify_temp_length=rows[0].notify_temp_length;
-              mail_notify_reachedtime_temp=rows[0].notify_reachedtime_temp;
-              mail_notify_incli_value=rows[0].notify_incli_value;
-              mail_notify_incli_length=rows[0].notify_incli_length;
-              mail_notify_reachedtime_incli=rows[0].notify_reachedtime_incli;
-              mail_notify_setThreshold_time=rows[0].notify_setThreshold_time;
-              mail_notify_send_mail_flag=rows[0].send_mail_flag
+            else if (_.isEqual(rows[_Last],rows[_Previous]))
+             {
+              //only valid when it is true;
+                console.log("equal");
+              }
+              
+              
+            else {
+              console.log("youth");
+
+              
+              var payload = [];
+              var TempUpLimt = [];
+              var TempLowLimit=[];
+              var IncliUpLimit=[];
+              var IncliLowLimit=[];
+              
+              var differences = diff(l,f);
+              var dif=JSON.stringify(differences);
+              var differ=JSON.parse(dif);
+
+              //console.log(differences);
+              //console.log(dif);
+              //console.log(differ);
+              //list.push(item.path[0],item.lhs);// givis array of values
+
+              _.each(differ, function(item) {
+               payload.push(_.pick(item, 'path','lhs')); });
+                //console.log("payload",payload);
+                
+              _.each(payload, function(item) {
+
+                 var path =item.path[0]
+        
+                 var temp_up_limit = new RegExp(/\bTempUpLimit\w\w\w/i);
+                 var temp_low_limit = new RegExp(/\bTempLowLimit\w\w\w/i);
+                 var incli_up_limit = new RegExp(/\bIncliUpLimit\w\w\w/i);
+                 var incli_low_limit = new RegExp(/\bIncliLowLimit\w\w\w/i);
+       
+                  if(temp_up_limit.test(path) ){
+                          TempUpLimt.push(item.lhs) }
+                
+                  else if(temp_low_limit.test(path)){
+                          TempLowLimit.push(item.lhs) }
+         
+                  else if(incli_up_limit.test(path)){
+                          IncliUpLimit.push(item.lhs) }
+                
+                  else if(incli_low_limit.test(path)){
+                          IncliLowLimit.push(item.lhs) }    });
+
+
+          sendMail(TempUpLimt,TempLowLimit,IncliUpLimit,IncliLowLimit);
+
+            }  
              
-                 }
             connection.release();    
 
-        if(mail_notify_temp_length==0 && mail_notify_incli_length==0){
-
-          console.log("lenggth of notification  Zero :no mail");
-          console.log(mail_notify_temp_length==0 && mail_notify_incli_length==0);
-
-        }
-        /// mail_notify_send_mail_flag = "True"...... no mail will be sent
-        else if (mail_notify_send_mail_flag=="True"){
-           console.log("repeated notifications :no mail");
-           console.log(mail_notify_send_mail_flag);
-
-        }
-        
-        else{
-          sendMail(mail_notify_temp_value,
-                 mail_notify_temp_length,
-                 mail_notify_reachedtime_temp,
-                 mail_notify_incli_value,
-                 mail_notify_incli_length,
-                 mail_notify_reachedtime_incli,
-                 mail_notify_setThreshold_time)
-        }
-
-                                  //getCriteria holds the logic for filtering the sensor_data with thresholds
-
-        //getCriteria(mail_settime,mail_tempvalue,mail_inclivalue)
-        //getCriteriaTemp(mail_tempvalue)
-
-
         });
+      });
 
-        
-  });
-
-
+}
                 //**********function to setup mail payload via sendgrid*************//
 
 
-function sendMail(mail_notify_temp_value,
-                  mail_notify_temp_length,
-                  mail_notify_reachedtime_temp,
-                  mail_notify_incli_value,
-                  mail_notify_incli_length,
-                  mail_notify_reachedtime_incli,
-                  mail_notify_setThreshold_time) {
+
+function sendMail(TUL,TLL,IUL,ILL) 
+                {
 
         
 var send_mail = require('sendgrid').mail;
@@ -676,41 +705,39 @@ content = new send_mail.Content("text/html",
           "<h1 align='center'><font color='#008b46'> ASTROSE Wirless Sensor Network </font></h1>"+"<br>"+
           "<h2 align='center'><font color='#008b46'>Threshold Limits Fulfilled</font></h2>"+"<br>"
           
-          +"<h3 align='center' >Set Temperature : "+" "+ "<font color='#e02e00'>"+mail_notify_temp_value+"°C </font>"+" "+
-          "has fulfilled with"+" " +"<font color='#e02e00'>"+mail_notify_temp_length+ "</font>"+" notifications, latest at "+" " 
-          + mail_notify_reachedtime_temp+"<br>"+
-
-          "Set Inclination  :"+" "+" <font color='#e02e00'>"+mail_notify_incli_value +"</font>"+" "+
-          "fulfilled with"+" " +"<font color='#e02e00'>" +mail_notify_incli_length+"</font>"+" "+
-          "notifications, latest at "+" " + mail_notify_reachedtime_incli+"<br>"+
-         
-          "Set Threshold Time: "+" "+" <font color='#e02e00'>"+mail_notify_setThreshold_time+"</font>"+" "+"<br>"
+          +"<h3 align='center' >Temperature Upper Limit: "+" "+ "<font color='#e02e00'>"+TUL
+          +"<br>"
+          +"<h3 align='center' >Temperature Lower Limit: "+" "+ "<font color='#e02e00'>"+TLL
+          +"<br>"
+          +"<h3 align='center' >Inclination Upper Limit: "+" "+ "<font color='#e02e00'>"+IUL
+          +"<br>"
+          +"<h3 align='center' >Inclination Lower Limit: "+" "+ "<font color='#e02e00'>"+ILL
+          +"<br>"
           +"</h3>");
+
+      console.log(content);
 
 mail = new send_mail.Mail(from_email, subject, to_email, content);
 
-var _sendgrid = require('sendgrid')(process.env.SENDGRID_API_KEY);
+              var _sendgrid = require('sendgrid')(process.env.SENDGRID_API_KEY);
 
-        
+              var request = _sendgrid.emptyRequest({
+                        method: 'POST',
+                        path: '/v3/mail/send',
+                        body: mail.toJSON()
+                      });
 
-var request = _sendgrid.emptyRequest({
-          method: 'POST',
-          path: '/v3/mail/send',
-          body: mail.toJSON()
-        });
+              _sendgrid.API(request, function(error, response) {
 
-      _sendgrid.API(request, function(error, response) {
-      //console.log("sg1",response.statusCode);
-      //console.log("sg2",response.body);
-      //console.log("sg3",response.headers);
-      })
-      console.log('The answer to life, the universe, and everything!',mail_notify_temp_value,mail_notify_incli_value);
-}
+      console.log("sg1",response.statusCode);
+      console.log("sg2",response.body);
+      console.log("sg3",response.headers);
 
+                    })
 
-
-
-}
+                    console.log('The answer to life, the universe, and everything!',TUL[0],TUL[0]);
+                  }
+  
 
 
 

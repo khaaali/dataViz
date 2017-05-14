@@ -619,3 +619,10 @@ inclination_data_X <= (select inclination_mean_value_X from configurations_mean_
                             ;
 
 
+********************************************************************************************************************
+SET @sql = CONCAT('SELECT ', (SELECT REPLACE(GROUP_CONCAT(COLUMN_NAME),  'notify_id,', '') 
+    FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'notify_mail_table'   AND
+    TABLE_SCHEMA = 'Astrose_smart_meshIP'), ' FROM notify_mail_table');
+
+PREPARE stmt1 FROM @sql;
+EXECUTE stmt1;

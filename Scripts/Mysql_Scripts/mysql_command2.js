@@ -308,6 +308,8 @@ delimiter ;
 ---------------------------------------------Above code is old and new code is available as mysql event "sensor_data_filteredTables.sql"-----------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+# notify_id, temp_thres_add, temp_thres_sub, incli_thres_add, incli_thres_sub, mac_4d94, temp_mean_4d94, incli_mean_4d94, temp_count_4d94_add, temp_lastupdate_4d94_add, temp_count_4d94_sub, temp_lastupdate_4d94_sub, incli_count_4d94_add, incli_lastupdate_4d94_add, incli_count_4d94_sub, incli_lastupdate_4d94_sub, mac_47fa, temp_mean_47fa, incli_mean_47fa, temp_count_47fa_add, temp_lastupdate_47fa_add, temp_count_47fa_sub, temp_lastupdate_47fa_sub, incli_count_47fa_add, incli_lastupdate_47fa_add, incli_count_47fa_sub, incli_lastupdate_47fa_sub, mac_4818, temp_mean_4818, incli_mean_4818, temp_count_4818_add, temp_lastupdate_4818_add, temp_count_4818_sub, temp_lastupdate_4818_sub, incli_count_4818_add, incli_lastupdate_4818_add, incli_count_4818_sub, incli_lastupdate_4818_sub, mac_4958, temp_mean_4958, incli_mean_4958, temp_count_4958_add, temp_lastupdate_4958_add, temp_count_4958_sub, temp_lastupdate_4958_sub, incli_count_4958_add, incli_lastupdate_4958_add, incli_count_4958_sub, incli_lastupdate_4958_sub
+'1', '4', '0', '0', '0', '00-17-0d-00-00-30-4d-94', '13.0561', '7.3696', '41', '2017-05-08 06:25:51.392724', '0', NULL, '7', '2017-05-08 06:25:09.346391', '34', '2017-05-08 06:25:51.392724', '00-17-0d-00-00-30-47-fa', '13.0458', '7.3663', '26', '2017-05-08 06:25:55.394897', '0', NULL, '5', '2017-05-08 06:25:39.380462', '21', '2017-05-08 06:25:55.394897', '00-17-0d-00-00-30-48-18', '13.2452', '7.3719', '38', '2017-05-08 06:25:49.390442', '0', NULL, '6', '2017-05-08 06:25:19.357656', '32', '2017-05-08 06:25:49.390442', '00-17-0d-00-00-30-49-58', '10.2452', '7.3663', '39', '2017-05-08 06:25:53.394401', '0', NULL, '12', '2017-05-08 06:25:53.394401', '27', '2017-05-08 06:25:47.388610'
 
 
 								##########################		creating notify_mail_table	############################################
@@ -315,13 +317,13 @@ delimiter ;
 
  CREATE TABLE Astrose_smart_meshIP.notify_mail_table(
 	`notify_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-	`temp_thres_add` FLOAT NULL, 
-	`temp_thres_sub` FLOAT NULL,
-	`incli_thres_add` FLOAT NULL,
-	`incli_thres_sub` FLOAT NULL,
+	`temp_thres_add` VARCHAR(10) NULL, 
+	`temp_thres_sub` VARCHAR(10) NULL,
+	`incli_thres_add` VARCHAR(10) NULL,
+	`incli_thres_sub` VARCHAR(10) NULL,
 	`mac_4d94` VARCHAR(45) NULL,
-	`temp_mean_4d94` FLOAT NULL,
-	`incli_mean_4d94` FLOAT NULL,
+	`temp_mean_4d94` VARCHAR(10) NULL,
+	`incli_mean_4d94` VARCHAR(10) NULL,
 	`temp_count_4d94_add` INT(11) NULL,
 	`temp_lastupdate_4d94_add` VARCHAR(45) NULL,
 	`temp_count_4d94_sub` INT(11) NULL,
@@ -331,8 +333,8 @@ delimiter ;
 	`incli_count_4d94_sub` INT(11) NULL,
 	`incli_lastupdate_4d94_sub` VARCHAR(45) NULL,
 	`mac_47fa` VARCHAR(45) NULL,
-	`temp_mean_47fa` FLOAT NULL,
-	`incli_mean_47fa` FLOAT NULL,
+	`temp_mean_47fa` VARCHAR(10) NULL,
+	`incli_mean_47fa` VARCHAR(10) NULL,
 	`temp_count_47fa_add` INT(11) NULL,
 	`temp_lastupdate_47fa_add` VARCHAR(45) NULL,
 	`temp_count_47fa_sub` INT(11) NULL,
@@ -342,8 +344,8 @@ delimiter ;
 	`incli_count_47fa_sub` INT(11) NULL,
 	`incli_lastupdate_47fa_sub` VARCHAR(45) NULL,
 	`mac_4818` VARCHAR(45) NULL,
-	`temp_mean_4818` FLOAT NULL,
-	`incli_mean_4818` FLOAT NULL,
+	`temp_mean_4818` VARCHAR(10) NULL,
+	`incli_mean_4818` VARCHAR(10) NULL,
 	`temp_count_4818_add` INT(11) NULL,
 	`temp_lastupdate_4818_add` VARCHAR(45) NULL,
 	`temp_count_4818_sub` INT(11) NULL,
@@ -353,8 +355,8 @@ delimiter ;
 	`incli_count_4818_sub` INT(11) NULL,
 	`incli_lastupdate_4818_sub` VARCHAR(45) NULL,
 	`mac_4958` VARCHAR(45) NULL,
-	`temp_mean_4958` FLOAT NULL,
-	`incli_mean_4958` FLOAT NULL,
+	`temp_mean_4958` VARCHAR(10) NULL,
+	`incli_mean_4958` VARCHAR(10) NULL,
 	`temp_count_4958_add` INT(11) NULL,
 	`temp_lastupdate_4958_add` VARCHAR(45) NULL,
 	`temp_count_4958_sub` INT(11) NULL,
