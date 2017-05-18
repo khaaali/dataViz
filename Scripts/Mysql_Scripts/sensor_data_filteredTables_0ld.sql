@@ -1,3 +1,9 @@
+old
+
+INSERT INTO payload_mail_table (TempUpLimit_a1,TempLowLimit_a2,IncliUpLimit_a3,IncliLowLimit_a4,TempUpLimit_b1,
+TempLowLimit_b2,IncliUpLimit_b3,IncliLowLimit_b4,TempUpLimit_c1,TempLowLimit_c2,IncliUpLimit_c3,IncliLowLimit_c4,
+TempUpLimit_d1,TempLowLimit_d2,IncliUpLimit_d3,IncliLowLimit_d4)
+
 SET GLOBAL event_scheduler='ON';
 delimiter |
 CREATE EVENT notify_mail_table_event

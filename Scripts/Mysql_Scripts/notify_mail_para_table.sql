@@ -1,12 +1,12 @@
 SET GLOBAL event_scheduler='ON';
 delimiter |
-CREATE EVENT notify_mail_table_event
+CREATE EVENT notify_mail_para_table_event
 ON SCHEDULE EVERY 1 minute
 DO
   BEGIN
 
 
-      Insert into Astrose_smart_meshIP.notify_mail_table(
+      Insert into Astrose_smart_meshIP.notify_mail_para_table(
 
 temp_thres_add,temp_thres_sub,incli_thres_add,incli_thres_sub,
 

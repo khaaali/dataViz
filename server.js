@@ -571,7 +571,7 @@ app.get("/packet_loss",function(req,res){
 
 
 
-                    ///////////for sending mail///////////////////
+                    ///////////for sending mail using nodemailer///////////////////
 
 
 
@@ -597,10 +597,10 @@ pool.getConnection(function(err,connection)
                           TempUpLimit_b1,TempLowLimit_b2,IncliUpLimit_b3,IncliLowLimit_b4,\
                           TempUpLimit_c1,TempLowLimit_c2,IncliUpLimit_c3,IncliLowLimit_c4,\
                           TempUpLimit_d1,TempLowLimit_d2,IncliUpLimit_d3,IncliLowLimit_d4 \
-                          FROM payload_mail_table'
+                          FROM nodemailer_table'
                           ,function(err,rows)
         {
-        console.log("from payload_mail_table");    
+        console.log("from nodemailer_table");    
         //console.log("log as :",rows);
         console.log("length :",rows.length);
 
@@ -608,13 +608,16 @@ pool.getConnection(function(err,connection)
           _Last=rows.length-1 ;
           _Previous=rows.length-2;
           _First=(rows.length)- (rows.length);
+
           var l=rows[_Last];
           var f=rows[_First];
           var p=rows[_Previous];
+          var T=true;
           
           //console.log("last",_Last,rows[_Last]);
           //console.log("_Previous",_Previous,rows[_Previous]);
           //console.log("first",_First,rows[_First]);
+
           console.log("_Last",_Last);
           console.log("_Previous",_Previous);
           console.log("_First",_First);
@@ -625,10 +628,10 @@ pool.getConnection(function(err,connection)
             if(err) {
                 JSON.stringify(err);
             }       
-            else if (_.isEqual(rows[_Last],rows[_Previous]))
+            else if (T ==_.isEqual(rows[_Last],rows[_Previous]))
              {
               //only valid when it is true;
-                console.log("equal");
+                console.log("data is equal and no mail");
               }
               
               
@@ -687,55 +690,58 @@ pool.getConnection(function(err,connection)
       });
 
 }
-                //**********function to setup mail payload via sendgrid*************//
+                //**********function to setup mail payload via nodemailer*************//
 
 
 
 function sendMail(TUL,TLL,IUL,ILL) 
                 {
-
+var mailer = require("nodemailer");
+var Transport = mailer.createTransport({
+    service: "Gmail",
+    auth: {
+        user: "astrose.enas@gmail.com",
+        pass: "sairamaaaa4"
+    }
+});
         
-var send_mail = require('sendgrid').mail;
-from_email = new send_mail.Email("astrose.enas@gmail.com");
-to_email = new send_mail.Email("sairamaaaa@gmail.com");
 
 subject = "Astrose Notifications";
 
-content = new send_mail.Content("text/html", 
+content =  
           "<h1 align='center'><font color='#008b46'> ASTROSE Wirless Sensor Network </font></h1>"+"<br>"+
           "<h2 align='center'><font color='#008b46'>Threshold Limits Fulfilled</font></h2>"+"<br>"
-          
-          +"<h3 align='center' >Temperature Upper Limit: "+" "+ "<font color='#e02e00'>"+TUL
+
+          +"<h3 align='left' >Temperature Upper Limit: "+" "+ "<font color='#e02e00'>"+"</h3>"+TUL
           +"<br>"
-          +"<h3 align='center' >Temperature Lower Limit: "+" "+ "<font color='#e02e00'>"+TLL
+          +"<h3 align='left' >Temperature Lower Limit: "+" "+ "<font color='#e02e00'>"+"</h3>"+TLL
           +"<br>"
-          +"<h3 align='center' >Inclination Upper Limit: "+" "+ "<font color='#e02e00'>"+IUL
+          +"<h3 align='left' >Inclination [X] Upper Limit: "+" "+ "<font color='#e02e00'>"+"</h3>"+IUL
           +"<br>"
-          +"<h3 align='center' >Inclination Upper Limit: "+" "+ "<font color='#e02e00'>"+IUL
+          +"<h3 align='left' >Inclination [X] Lower Limit: "+" "+ "<font color='#e02e00'>"+"</h3>"+ILL
           +"<br>"
-          +"</h3>");
 
-      console.log(content);
+      //console.log(content);
 
-mail = new send_mail.Mail(from_email, subject, to_email, content);
+var mail = {
+    from: "astrose.enas@gmail.com",
+    to: "sairamaaaa@gmail.com",
+    subject: subject,
+    text: "Astrose Notifications",
+    html: content
+}
 
-              var _sendgrid = require('sendgrid')(process.env.SENDGRID_API_KEY);
+Transport.sendMail(mail, function(error, response){
+    if(error){
+        console.log(error);
+    }else{
+        console.log("Message sent: " + response.message);
+    }
 
-              var request = _sendgrid.emptyRequest({
-                        method: 'POST',
-                        path: '/v3/mail/send',
-                        body: mail.toJSON()
-                      });
+    Transport.close();
+});
 
-              _sendgrid.API(request, function(error, response) {
-
-      console.log("sg1",response.statusCode);
-      console.log("sg2",response.body);
-      console.log("sg3",response.headers);
-
-                    })
-
-                    console.log('The answer to life, the universe, and everything!',TUL[0],TUL[0]);
+                    console.log('The answer to life, the universe, and everything!',mail);
                   }
   
 
