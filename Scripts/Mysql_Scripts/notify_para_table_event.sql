@@ -1,12 +1,17 @@
+# "notify_para_table_event" event utilises the data from threshold_table,configs_mean_table on sensor_data_table 
+# handles the logic and populates the Astrose_smart_meshIP.notify_para_table table with parameters required 
+# to create payload for `Astrose_smart_meshIP`.`nodemailer_table` and  this event 
+
+
 SET GLOBAL event_scheduler='ON';
 delimiter |
-CREATE EVENT notify_mail_para_table_event
+CREATE EVENT notify_para_table_event
 ON SCHEDULE EVERY 1 minute
 DO
   BEGIN
 
 
-      Insert into Astrose_smart_meshIP.notify_mail_para_table(
+      Insert into Astrose_smart_meshIP.notify_para_table(
 
 temp_thres_add,temp_thres_sub,incli_thres_add,incli_thres_sub,
 
@@ -340,11 +345,6 @@ inclination_data_X <= (select inclination_mean_value_X from configs_mean_table
   						
   
   
-  
-
-
-
- 
 	END |
 
 delimiter ;

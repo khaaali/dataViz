@@ -155,7 +155,7 @@ app.get("/config",function(req,res){
         console.log('connected as id ' + connection.threadId);
         
         connection.query('select * from configs_mean_table ',function(err,rows){
-        console.log(rows);
+        //console.log(rows);
             
             if(err) {
                 res.json(err);
@@ -558,24 +558,7 @@ app.get("/packet_loss",function(req,res){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
                     ///////////for sending mail using nodemailer///////////////////
-
-
-
-
 
 
 
@@ -651,12 +634,12 @@ pool.getConnection(function(err,connection)
 
               //console.log(differences);
               //console.log(dif);
-              //console.log(differ);
+              console.log(differ);
               //list.push(item.path[0],item.lhs);// givis array of values
 
               _.each(differ, function(item) {
                payload.push(_.pick(item, 'path','lhs')); });
-                //console.log("payload",payload);
+                console.log("payload",payload);
                 
               _.each(payload, function(item) {
 
@@ -680,6 +663,8 @@ pool.getConnection(function(err,connection)
                           IncliLowLimit.push(item.lhs) }    });
 
 
+          console.log(TempUpLimt,TempLowLimit,IncliUpLimit,IncliLowLimit);
+
           sendMail(TempUpLimt,TempLowLimit,IncliUpLimit,IncliLowLimit);
 
             }  
@@ -696,6 +681,12 @@ pool.getConnection(function(err,connection)
 
 function sendMail(TUL,TLL,IUL,ILL) 
                 {
+
+var TUL_len =TUL.length
+var TLL_len =TLL.length
+var IUL_len =IUL.length
+var ILL_len =ILL.length
+
 var mailer = require("nodemailer");
 var Transport = mailer.createTransport({
     service: "Gmail",
@@ -712,13 +703,13 @@ content =
           "<h1 align='center'><font color='#008b46'> ASTROSE Wirless Sensor Network </font></h1>"+"<br>"+
           "<h2 align='center'><font color='#008b46'>Threshold Limits Fulfilled</font></h2>"+"<br>"
 
-          +"<h3 align='left' >Temperature Upper Limit: "+" "+ "<font color='#e02e00'>"+"</h3>"+TUL
+          +"<h3 align='left' >Temperature Upper Limit:"+" "+"</h3>"+TUL
           +"<br>"
-          +"<h3 align='left' >Temperature Lower Limit: "+" "+ "<font color='#e02e00'>"+"</h3>"+TLL
+          +"<h3 align='left' >Temperature Lower Limit:" +" "+"</h3>"+TLL
           +"<br>"
-          +"<h3 align='left' >Inclination [X] Upper Limit: "+" "+ "<font color='#e02e00'>"+"</h3>"+IUL
+          +"<h3 align='left' >Inclination [X] Upper Limit:"+" "+"</h3>"+IUL
           +"<br>"
-          +"<h3 align='left' >Inclination [X] Lower Limit: "+" "+ "<font color='#e02e00'>"+"</h3>"+ILL
+          +"<h3 align='left' >Inclination [X] Lower Limit:"+" "+"</h3>"+ILL
           +"<br>"
 
       //console.log(content);
@@ -763,57 +754,3 @@ console.log('Listening on localhost port '+port);
 module.exports = app;//added
 
 
-//USE SMIP;
-//select * from Temperature_table WHERE mac='3s-ds-23-sf-23-ce-32';
-
-//WHERE mac='3s-ds-23-sf-23-ce-32'
-
-//INSERT INTO threshold_table(id_value,temperature_value,inclination_value,date_time) VALUES ("1", "23", "34","2017-02-02 22:04:05");
-
-/*
-                                //getCriteria holds the logic for filtering the sensor_data with thresholds
-
-
-//function getCriteria(mail_settime,mail_tempvalue,mail_inclivalue){
-function getCriteriaTemp(mail_tempvalue){
-            console.log("in getCriteriaTemp");
-
-        var Temp = mail_tempvalue;
-
- pool.getConnection(function(err,connection){
-        
-        var condition1=mail_tempvalue;
-        var condition2=mail_tempvalue+1;
-        //console.log('condition1',condition1);
-        //console.log('condition2',condition2);
-         //let a =parseFloat(condition1)
-        //console.log('connected as id ' + connection.threadId);
-       var queryString='SELECT * FROM sensor_data_table WHERE temperature_data >= ? and temperature_data <= ?';
-       connection.query(queryString,[condition1,condition2],function(err,rows){
-
-         //console.log("log as :",rows);      
-        var Temp_notif = rows.length;
-        console.log("start 1: ",Temp_notif);
-
-         if(err) {
-                 console.log(JSON.stringify(err));
-            }
-
-            else {
-         
-               console.log("start 2: ",Temp_notif);
-               return Temp_notif;
-            }
-
-
-          connection.release();  
-
-           });
-
-  });
-
-console.log("end 1:",Temp);
-return console.log("end 2:",Temp);
-
-}
-*/

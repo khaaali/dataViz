@@ -1,3 +1,4 @@
+# used to to sent noftif time
 #!/usr/bin/python
 
 #============================ adjust path =====================================

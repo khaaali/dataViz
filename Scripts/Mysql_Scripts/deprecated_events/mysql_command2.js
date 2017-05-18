@@ -366,3 +366,24 @@ delimiter ;
 	`incli_count_4958_sub` INT(11) NULL,	
 	`incli_lastupdate_4958_sub` VARCHAR(45) NULL
 	);
+
+
+
+CREATE table nodemailer_table(
+payload_id INT(11) NOT NULL primary key,
+TempUpLimit_a1 LONGTEXT  NULL,
+TempLowLimit_a2 LONGTEXT  NULL,
+IncliUpLimit_a3 LONGTEXT  NULL,
+IncliLowLimit_a4 LONGTEXT  NULL,
+TempUpLimit_b1 LONGTEXT  NULL,
+TempLowLimit_b2 LONGTEXT  NULL,
+IncliUpLimit_b3 LONGTEXT  NULL,
+IncliLowLimit_b4 LONGTEXT  NULL,
+TempUpLimit_c1 LONGTEXT  NULL,
+TempLowLimit_c2 LONGTEXT  NULL,
+IncliUpLimit_c3 LONGTEXT  NULL,
+IncliLowLimit_c4 LONGTEXT  NULL,
+TempUpLimit_d1 LONGTEXT  NULL,
+TempLowLimit_d2 LONGTEXT  NULL,
+IncliUpLimit_d3 LONGTEXT  NULL,
+IncliLowLimit_d4 LONGTEXT  NULL);

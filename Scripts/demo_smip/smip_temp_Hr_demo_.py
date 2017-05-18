@@ -1,6 +1,8 @@
 #!/usr/bin/python
-## This programme uses python Smartmesh SDK for data acquasition of temperature and health reports data and store them in MySQL data base 
+## This programme uses python Smartmesh SDK for data acquasition of temperature and health reports data and 
+# stored in MySQL data base 
 # Ideal for demonstration purposes.
+
 #============================ adjust path =====================================
 
 import sys
