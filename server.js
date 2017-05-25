@@ -589,8 +589,8 @@ pool.getConnection(function(err,connection)
 
         
           _Last=rows.length-1 ;
-          _Previous=rows.length-2;
-          _First=(rows.length)- (rows.length);
+          _Previous=_Last-1;
+          _First=0;
 
           var l=rows[_Last];
           var f=rows[_First];
@@ -628,7 +628,7 @@ pool.getConnection(function(err,connection)
               var IncliUpLimit=[];
               var IncliLowLimit=[];
               
-              var differences = diff(l,f);
+              var differences = diff(l,p);
               var dif=JSON.stringify(differences);
               var differ=JSON.parse(dif);
 
