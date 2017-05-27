@@ -284,6 +284,8 @@ EXECUTE snapshot;
 
 SHOW VARIABLES LIKE 'secure_file_priv';
 
+'/var/lib/mysql-files/'
+
 
 
 

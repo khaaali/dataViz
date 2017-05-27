@@ -387,3 +387,23 @@ TempUpLimit_d1 LONGTEXT  NULL,
 TempLowLimit_d2 LONGTEXT  NULL,
 IncliUpLimit_d3 LONGTEXT  NULL,
 IncliLowLimit_d4 LONGTEXT  NULL);
+
+for exporting database:
+
+mysqldump -u root -p Astrose_smart_meshIP > Astrose_smart_meshIP.sql
+
+check in directory where command is executed.
+
+SET @export_file=
+CONCAT(
+	"SELECT * FROM SMIP.sensor_data_table INTO OUTFILE '/var/lib/mysql-files/sensorData_"
+    ,date_format(now(),'%d-%m-%y %h:%i:%s')
+    ,".csv'");
+
+PREPARE snapshot from @export_file;
+EXECUTE snapshot;
+
+
+SHOW VARIABLES LIKE 'secure_file_priv';
+
+'/var/lib/mysql-files/'
