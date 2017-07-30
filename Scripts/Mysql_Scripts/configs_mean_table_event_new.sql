@@ -1,4 +1,5 @@
-# "configs_mean_table_event" event runs every 5 minutes (ideally) to update the `Astrose_smart_meshIP`.`configs_mean_table` table 
+# "configs_mean_table_event" event runs every 5 minutes (ideally) to update the 
+#`Astrose_smart_meshIP`.`configs_mean_table` table 
 # logic will do average/mean of 10 values in decesending order 
 # from `Astrose_smart_meshIP`.`sensor_data_table table` 
 ######## Edidted as mote-id #########
