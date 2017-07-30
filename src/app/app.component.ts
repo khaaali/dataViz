@@ -16,11 +16,8 @@ import {MyData} from './StructData';
 
 export class AppComponent  { 
 	
- //macAddress:Array<String>=["3s-ds-23-sf-23-ce-33", "3s-ds-23-sf-23-ce-34", "3s-ds-23-sf-23-ce-35"];
  myData:MyData[];
- //macIdTitle:String;
 
-// @Output() notify:EventEmitter<string>= new EventEmitter<string>();
   
   constructor(
     private _MySqlService: MySqlService,

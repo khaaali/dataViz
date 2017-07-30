@@ -1,0 +1,11 @@
+/
+/sensor_data
+/config
+/download_data (remove has alternative in angular/client side)  
+get /setting
+put /settings/edit
+post /setting
+/health_report_table
+/energy
+/avg_rssi
+/packet_loss

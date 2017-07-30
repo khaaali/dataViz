@@ -48,6 +48,7 @@ const appRoutes: Routes = [
     HttpModule,
     RouterModule.forRoot(appRoutes)
   ],
+  exports:[AppComponent],
   providers: [MySqlService],
   bootstrap: [AppComponent]
 })
