@@ -1,7 +1,7 @@
 # "configs_mean_table_event" event runs every 5 minutes (ideally) to update the `Astrose_smart_meshIP`.`configs_mean_table` table 
 # logic will do average/mean of 10 values in decesending order 
 # from `Astrose_smart_meshIP`.`sensor_data_table table` 
-
+######## Edidted as mote-id #########
 SET GLOBAL event_scheduler='ON';
 delimiter |
 CREATE EVENT configs_mean_table_event
@@ -9,7 +9,7 @@ ON SCHEDULE EVERY 5 minute
 
 DO
   BEGIN
-# for mac_id = '00-17-0d-00-00-30-4d-94'
+# for mote_id = '001'
 UPDATE `Astrose_smart_meshIP`.`configs_mean_table` 
 SET 
 
@@ -22,7 +22,7 @@ FROM (
     FROM 
       Astrose_smart_meshIP.sensor_data_table
       WHERE 
-      mac_id = '00-17-0d-00-00-30-4d-94'
+      mote_id = '001'
       ORDER BY 
       task_id DESC
     LIMIT 10 )
@@ -37,7 +37,7 @@ FROM (
     FROM 
       Astrose_smart_meshIP.sensor_data_table
       WHERE 
-      mac_id = '00-17-0d-00-00-30-4d-94'
+      mote_id = '001'
       ORDER BY 
       task_id DESC
     LIMIT 10 )
@@ -52,7 +52,7 @@ FROM (
     FROM 
       Astrose_smart_meshIP.sensor_data_table
       WHERE 
-      mac_id = '00-17-0d-00-00-30-4d-94'
+      mote_id = '001'
       ORDER BY 
       task_id DESC
     LIMIT 10 ) 
@@ -65,7 +65,7 @@ WHERE `configs_mean_table`.`config_id`='1';
 
 
 
-# for mac_id = '00-17-0d-00-00-30-47-fa'
+# for mote_id = '002'
 UPDATE `Astrose_smart_meshIP`.`configs_mean_table` 
 SET 
 `temperature_mean_value`=
@@ -77,7 +77,7 @@ FROM (
     FROM 
       Astrose_smart_meshIP.sensor_data_table
       WHERE 
-      mac_id = '00-17-0d-00-00-30-47-fa'
+      mote_id = '002'
       ORDER BY 
       task_id DESC
     LIMIT 10 )
@@ -92,7 +92,7 @@ FROM (
     FROM 
       Astrose_smart_meshIP.sensor_data_table
       WHERE 
-      mac_id = '00-17-0d-00-00-30-47-fa'
+      mote_id = '002'
       ORDER BY 
       task_id DESC
     LIMIT 10 )
@@ -107,7 +107,7 @@ FROM (
     FROM 
       Astrose_smart_meshIP.sensor_data_table
       WHERE 
-      mac_id = '00-17-0d-00-00-30-47-fa'
+      mote_id = '002'
       ORDER BY 
       task_id DESC
     LIMIT 10 ) 
@@ -120,7 +120,7 @@ WHERE `configs_mean_table`.`config_id`='2';
 
 
       
-# for mac_id = '00-17-0d-00-00-30-48-18'
+# for mote_id = '003'
 UPDATE `Astrose_smart_meshIP`.`configs_mean_table` 
 SET 
 `temperature_mean_value`=
@@ -132,7 +132,7 @@ FROM (
     FROM 
       Astrose_smart_meshIP.sensor_data_table
       WHERE 
-      mac_id = '00-17-0d-00-00-30-48-18'
+      mote_id = '003'
       ORDER BY 
       task_id DESC
     LIMIT 10 )
@@ -147,7 +147,7 @@ FROM (
     FROM 
       Astrose_smart_meshIP.sensor_data_table
       WHERE 
-      mac_id = '00-17-0d-00-00-30-48-18'
+      mote_id = '003'
       ORDER BY 
       task_id DESC
     LIMIT 10 )
@@ -162,7 +162,7 @@ FROM (
     FROM 
       Astrose_smart_meshIP.sensor_data_table
       WHERE 
-      mac_id = '00-17-0d-00-00-30-48-18'
+      mote_id = '003'
       ORDER BY 
       task_id DESC
     LIMIT 10 ) 
@@ -175,7 +175,7 @@ WHERE `configs_mean_table`.`config_id`='3';
 
 
       
-# for  mac_id = '00-17-0d-00-00-30-49-58'
+# for  mote_id = '004'
 UPDATE `Astrose_smart_meshIP`.`configs_mean_table` 
 SET 
 `temperature_mean_value`=
@@ -187,7 +187,7 @@ FROM (
     FROM 
       Astrose_smart_meshIP.sensor_data_table
       WHERE 
-      mac_id = '00-17-0d-00-00-30-49-58'
+      mote_id = '004'
       ORDER BY 
       task_id DESC
     LIMIT 10 )
@@ -202,7 +202,7 @@ FROM (
     FROM 
       Astrose_smart_meshIP.sensor_data_table
       WHERE 
-      mac_id = '00-17-0d-00-00-30-49-58'
+      mote_id = '004'
       ORDER BY 
       task_id DESC
     LIMIT 10 )
@@ -217,7 +217,7 @@ FROM (
     FROM 
       Astrose_smart_meshIP.sensor_data_table
       WHERE 
-      mac_id = '00-17-0d-00-00-30-49-58'
+      mote_id = '004'
       ORDER BY 
       task_id DESC
     LIMIT 10 ) 

@@ -53,7 +53,7 @@ getTemperatures(id: String): Observable<MyData[]> {
                 //console.log(data);
                 let parsedData = [];
                 //console.log("mac at temps again "+ filtered);
-                data.filter(function(el){ return el.mac_id== filtered })
+                data.filter(function(el){ return el.mote_id== filtered })
                 .forEach(function(item){ parsedData.push({ 
                           x:item.epoch_time_stamp, y:parseFloat(item.temperature_data) });  });
                           console.log(parsedData);
@@ -74,7 +74,7 @@ getInclination(id: String): Observable<MyData[]> {
                 let data=res.json();
                 let parsedData = []; 
                // let f=this.filteredMac;
-                data.filter(function(el){ return el.mac_id==filtered})
+                data.filter(function(el){ return el.mote_id==filtered})
                 .forEach(function(item){ parsedData.push({ 
                           x:item.epoch_time_stamp, y:parseFloat(item.inclination_data_X) });  });
                          console.log(parsedData);
@@ -95,7 +95,7 @@ getVoltageLevels(id: String): Observable<MyData[]> {
                 //console.log(data);
                 let parsedData = []; 
                 //let f=this.filteredMac;
-                data.filter(function(el){ return el.hr_macid==filtered})
+                data.filter(function(el){ return el.hr_mote_id==filtered})
                 .forEach(function(item){ parsedData.push({ 
                           x:item.hr_epochStamp, y:parseFloat(item.hr_batt_voltage) });  });
                          console.log(parsedData);
@@ -116,7 +116,7 @@ getSignalStrength(id: String): Observable<MyData[]> {
                 //console.log(data);
                 let parsedData = []; 
                 //let f=this.filteredMac;
-                data.filter(function(el){ return el.hr_macid==filtered})
+                data.filter(function(el){ return el.hr_mote_id==filtered})
                 .forEach(function(item){ parsedData.push({ 
                           x:item.hr_epochStamp, y:parseInt(item.hr_avg_rssi) });  });
                          console.log(parsedData);
@@ -136,7 +136,7 @@ getPacketLoss(id: String): Observable<MyData[]> {
                 //console.log(data);
                 let parsedData = []; 
                 //let f=this.filteredMac;
-                data.filter(function(el){ return el.hr_macid==filtered})
+                data.filter(function(el){ return el.hr_mote_id==filtered})
                 .forEach(function(item){ parsedData.push({ 
                           x:item.hr_epochStamp, y:parseInt(item.hr_packetloss) });  });
                          console.log(parsedData);
