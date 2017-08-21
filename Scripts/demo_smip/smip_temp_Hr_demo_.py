@@ -70,7 +70,7 @@ class Database:
     host = 'localhost'
     user = 'root'
     password = 'sairam'
-    db = 'Astrose_smart_meshIP'
+    db = 'Astrose_smart_meshIP_'
 
     def __init__(self):
         self.connection = MySQLdb.connect(self.host, self.user, self.password, self.db)
@@ -149,24 +149,25 @@ def incli_random():
 
 def handle_oap_data(mac,notif):
     
-    if isinstance(notif,OAPNotif.OAPTempSample):
-        temp_data = float(notif.samples[0])/100
-        mac_id  = FormatUtils.formatMacString(mac)
-        Db_array=[]
+    
+    print "im in"
+    mac_id  = FormatUtils.formatMacString(notifParams.macAddress)
+    payload= notifParams
+    print mac_id, payload
 
-        Db_array.append(mac_id)
-        Db_array.append(temp_data)
-        Db_array.append(incli_random()) #for inclination_x
-        Db_array.append(incli_random()) #for inclination_y
-        Db_array.append(timeStamp())
-        Db_array.append(epochTimeStamp())
-        print temp_data,mac_id
-        db = Database()
-
-        insert_query = """ INSERT INTO sensor_data_table (`mac_id`, `temperature_data`, `inclination_data_X`, `inclination_data_Y`, `time_stamp`, `epoch_time_stamp`) VALUES (%s,%s,%s,%s,%s,%s)"""
-        
-        print insert_query,Db_array
-        db.insert(insert_query,Db_array)
+    Db_array=[]
+    Db_array.append(mac_id)
+    Db_array.append(temp_data)
+    Db_array.append(incli_random()) #for inclination_x
+    Db_array.append(incli_random()) #for inclination_y
+    Db_array.append(timeStamp())
+    Db_array.append(epochTimeStamp())
+    print temp_data,mac_id
+    db = Database()
+    insert_query = """ INSERT INTO sensor_data_table (`mac_id`, `temperature_data`, `inclination_data_X`, `inclination_data_Y`, `time_stamp`, `epoch_time_stamp`) VALUES (%s,%s,%s,%s,%s,%s)"""
+    
+    print insert_query,Db_array
+    db.insert(insert_query,Db_array)
                 
 
 
@@ -285,12 +286,17 @@ class notifClient(object):
 
 
             elif(notifName==IpMgrSubscribe.IpMgrSubscribe.NOTIFDATA):
-                #print notifName
-                #print notifParams
-                oapdispatcher = OAPDispatcher.OAPDispatcher()
-                oapdispatcher.register_notif_handler(handle_oap_data)
 
-                oapdispatcher.dispatch_pkt(notifName, notifParams)
+                subscriber = IpMgrSubscribe.IpMgrSubscribe(mgrconnector)
+                print "in elsif of notifdata"
+                subscriber.start()
+                subscriber.subscribe(
+                    notifTypes =    [
+                                        IpMgrSubscribe.IpMgrSubscribe.NOTIFDATA,
+                        ],
+                    fun =           handle_oap_data,
+                    isRlbl =        False,
+                    )
 
              
         except Exception as err:

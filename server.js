@@ -213,7 +213,7 @@ app.get("/download_data",function(req,res){
 
 
 app.get("/setting",function(req,res){
-
+// method  used to get threshold values from the database with condition id=1
         console.log("from get setting");
 
         var condition={id_value:"1"};
@@ -248,12 +248,12 @@ app.get("/setting",function(req,res){
 
 
 app.put("/setting/edit",function(req,res){
-
+// endpoint to update or edit the threshold values
         console.log("1 from put");
 
         this.mail_settime= time();
 
-            // check app.service.ts 148 for data properties in assigning variables to update threshold values to database
+// check app.service.ts 148 for data properties in assigning variables to update threshold values to database
         
         this.mail_tempvalue_add=req.body.tempValue_add;
         this.mail_tempvalue_sub=req.body.tempValue_sub;
@@ -279,7 +279,7 @@ app.put("/setting/edit",function(req,res){
         var inclivalue_y=req.body.incliValuey;
 
         
-        /// payload to put data into mysql 
+        /// creating payload for updating data into mysql 
         
         var condition={id_value:"1"};
 
@@ -298,12 +298,12 @@ app.put("/setting/edit",function(req,res){
         //console.log("6 from put inclivalue",incliValue);
 
 
-        var createThreshold={
+        var updateThreshold={
         
         id_value:1,
 
-        temperature_value_add:_tempValueadd,
-        temperature_value_sub:_tempValuesub,
+        temperature1_value_add:_tempValueadd,
+        temperature1_value_sub:_tempValuesub,
 
         inclination_value_X_add:_incliValueXadd,
         inclination_value_X_sub:_incliValueXsub,
@@ -314,7 +314,7 @@ app.put("/setting/edit",function(req,res){
 
       }
 
-        console.log("7 showing created threshold",createThreshold);
+        console.log("7 showing updated threshold",updateThreshold);
 
         pool.getConnection(function(err,connection){
         if (err) {
@@ -324,7 +324,7 @@ app.put("/setting/edit",function(req,res){
 
         //console.log('8 connected as id ' + connection.threadId);
         
-        connection.query('UPDATE threshold_table set ? WHERE ?', [createThreshold,condition],function(err,rows){
+        connection.query('UPDATE threshold_table set ? WHERE ?', [updateThreshold,condition],function(err,rows){
         //console.log(rows);
             
             if(err) {
@@ -354,7 +354,7 @@ app.put("/setting/edit",function(req,res){
 
 
 app.post("/setting",function(req,res){
-//this reuest is not implemented with angular only 'put' method is used to update the data
+//this reuest is not implemented with angular only 'put' method is used to post the data
         console.log("from post");
         
 
@@ -375,7 +375,7 @@ app.post("/setting",function(req,res){
 
         var createThreshold={
         id_value:1,
-        temperature_value:tempValue,
+        temperature1_value:tempValue,
         inclination_value_X:incliValue,
         date_time: settime
 
@@ -466,7 +466,7 @@ app.get("/energy",function(req,res){
         var condition="null";
         console.log('connected as id ' + connection.threadId);
         
-        connection.query('SELECT hr_macid,hr_timeStamp,hr_epochStamp,hr_batt_voltage FROM health_report_table where hr_batt_voltage != ?',condition,function(err,rows){
+        connection.query('SELECT hr_macid,hr_mote_id,hr_timeStamp,hr_epochStamp,hr_batt_voltage FROM health_report_table where hr_batt_voltage != ?',condition,function(err,rows){
         console.log(rows);
             
             if(err) {
@@ -500,7 +500,7 @@ app.get("/avg_rssi",function(req,res){
 
         console.log('connected as id ' + connection.threadId);
         
-        connection.query('SELECT hr_macid,hr_timeStamp,hr_epochStamp,hr_avg_rssi FROM health_report_table where hr_avg_rssi != ?',condition,function(err,rows){
+        connection.query('SELECT hr_macid,hr_mote_id,hr_timeStamp,hr_epochStamp,hr_avg_rssi FROM health_report_table where hr_avg_rssi != ?',condition,function(err,rows){
         console.log(rows);
             
             if(err) {
@@ -534,7 +534,7 @@ app.get("/packet_loss",function(req,res){
 
         console.log('connected as id ' + connection.threadId);
         
-        connection.query('SELECT hr_macid,hr_timeStamp,hr_epochStamp,hr_packetloss \
+        connection.query('SELECT hr_macid,hr_mote_id,hr_timeStamp,hr_epochStamp,hr_packetloss \
           FROM health_report_table where hr_packetloss != ?',condition,function(err,rows){
         console.log(rows);
             

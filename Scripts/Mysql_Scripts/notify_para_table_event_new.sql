@@ -34,11 +34,11 @@ select * from
 			########## below statements are constant for all the mac ids, which are threshold values ########
 
 # joining the threshold value from threshold table
-(select temperature_value_add as temp_thres_add from threshold_table
+(select temperature1_value_add as temp_thres_add from threshold_table
 							where id_value=1 ) as temp_threshold_add                           
 join
 # joining the threshold value from threshold table
-(select temperature_value_sub as temp_thres_sub from threshold_table
+(select temperature1_value_sub as temp_thres_sub from threshold_table
 							where id_value=1 ) as temp_threshold_sub 
  join
 (select inclination_value_X_add as incli_thres_add from threshold_table
@@ -54,24 +54,24 @@ join
 
 
 
-									########### for macid:001 ############
+									########### for moteid:001 ############
                             
 join
 # sub query yeilds table corresponding macid:001
 (select mote_id as moteid_001 from sensor_data_table
 group by  mote_id 
-having mote_id="001")as t1
+having mote_id="564")as t1
 
 
 
 # configuration values from mean tables
 join
 # joining the mean value from temperature mean table for  mote_id="001")
-(select temperature_mean_value as temp_mean_001 from configs_mean_table
-							where config_id=1) as mean_temp_001
+(select temperature1_mean_value as temp_mean_001 from configs_mean_table
+							where config_id=001) as mean_temp_001
 join
 (select inclination_mean_value_X as incli_mean_001 from configs_mean_table
-							where config_id=1) as mean_incli_001  
+							where config_id=001) as mean_incli_001  
 
 
 
@@ -81,22 +81,22 @@ join
 # join tables
 # The adding(UP LIMIT) part of algorithm with respect to threshold_table and configs_mean_table
 join
-(select count(temperature_data) as temp_count_add_001, max(time_stamp) as temp_lastupdate_add_001
+(select count(temperature1_data) as temp_count_add_001, max(time_stamp) as temp_lastupdate_add_001
 from sensor_data_table 
-where temperature_data >= (select temperature_mean_value from configs_mean_table
-							  where config_id=1 )+
-						  (select temperature_value_add from threshold_table
-							  where id_value=1 ) and mote_id="001")as temp_001_add
+where temperature1_data >= (select temperature1_mean_value from configs_mean_table
+							  where config_id=001 )+
+						  (select temperature1_value_add from threshold_table
+							  where id_value=1 ) and mote_id="564")as temp_001_add
 join
 # The subtracting(DOWN LIMIT) part of algorithm with respect to threshold_table and configs_mean_table
-(select count(temperature_data) as temp_count_sub_001, max(time_stamp) as temp_lastupdate_sub_001
+(select count(temperature1_data) as temp_count_sub_001, max(time_stamp) as temp_lastupdate_sub_001
 from sensor_data_table 
 where
 # operators used for filtering the data from threshold_table and configs_mean_table
-temperature_data <= (select temperature_mean_value from configs_mean_table
-							where config_id=1 )-
-					 (select temperature_value_sub from threshold_table
-							where id_value=1 ) and  mote_id="001")as temp_001_sub                              						                           
+temperature1_data <= (select temperature1_mean_value from configs_mean_table
+							where config_id=001 )-
+					 (select temperature1_value_sub from threshold_table
+							where id_value=1 ) and  mote_id="564")as temp_001_sub                              						                           
                            
                            
                            
@@ -109,9 +109,9 @@ join
 from sensor_data_table
 where 
 inclination_data_X >= (select inclination_mean_value_X from configs_mean_table
-							where config_id=1 )+
+							where config_id=001 )+
 					 (select inclination_value_X_add from threshold_table
-							where id_value=1 ) and mote_id="001")as incli_001_add
+							where id_value=1 ) and mote_id="564")as incli_001_add
 join
 # The subtracting(DOWN LIMIT) part of algorithm with respect to threshold_table and configs_mean_table
 (select count(inclination_data_X) as incli_count_sub_001, max(time_stamp) as incli_lastupdate_sub_001
@@ -119,56 +119,56 @@ from sensor_data_table
 where
 # operators used for filtering the data from threshold_table and configs_mean_table
 inclination_data_X <= (select inclination_mean_value_X from configs_mean_table
-							where config_id=1 )-
+							where config_id=001 )-
 					 (select inclination_value_X_sub from threshold_table
-							where id_value=1 ) and  mote_id="001")as incli_001_sub 
+							where id_value=1 ) and  mote_id="564")as incli_001_sub 
                             
 
 
 
 
 
-								############# For macid:002 ########################
+								############# For moteid:002 ########################
 join
 (select mote_id as moteid_002 from sensor_data_table
 group by  mote_id 
-having mote_id="002")as t2
+having mote_id="565")as t2
 
 
 
 # configuration values from mean tables
 join
 # joining the mean value from temperature mean table for  mote_id="002")
-(select temperature_mean_value as temp_mean_002 from configs_mean_table
-							where config_id=2) as mean_temp_002
+(select temperature1_mean_value as temp_mean_002 from configs_mean_table
+							where config_id=002) as mean_temp_002
 join
 (select inclination_mean_value_X as incli_mean_002 from configs_mean_table
-							where config_id=2 ) as mean_incli_002                            
+							where config_id=002 ) as mean_incli_002                            
 
 
 
 
-					############ temperature part of algorithm  mote_id="00-17-0D-00-00-58-2F-F2") ##################
+					############ temperature part of algorithm  mote_id="002") ##################
 join
 # The adding(UP LIMIT) part of algorithm with respect to threshold_table and configs_mean_table
-(select count(temperature_data) as temp_count_add_002, max(time_stamp) as temp_lastupdate_add_002
+(select count(temperature1_data) as temp_count_add_002, max(time_stamp) as temp_lastupdate_add_002
 from sensor_data_table 
 where
 # operators used for filtering the data from threshold_table and configs_mean_table
-temperature_data >= (select temperature_mean_value from configs_mean_table
-							where config_id=2 )+
-					 (select temperature_value_add from threshold_table
-							where id_value=1 ) and  mote_id="002")as temp_002_add
+temperature1_data >= (select temperature1_mean_value from configs_mean_table
+							where config_id=002 )+
+					 (select temperature1_value_add from threshold_table
+							where id_value=1 ) and  mote_id="565")as temp_002_add
 join
 # The subtracting(DOWN LIMIT) part of algorithm with respect to threshold_table and configs_mean_table
-(select count(temperature_data) as temp_count_sub_002, max(time_stamp) as temp_lastupdate_sub_002
+(select count(temperature1_data) as temp_count_sub_002, max(time_stamp) as temp_lastupdate_sub_002
 from sensor_data_table 
 where
 # operators used for filtering the data from threshold_table and configs_mean_table
-temperature_data <= (select temperature_mean_value from configs_mean_table
-							where config_id=2 )-
-					 (select temperature_value_sub from threshold_table
-							where id_value=1 )	and  mote_id="002")as temp_002_sub                         
+temperature1_data <= (select temperature1_mean_value from configs_mean_table
+							where config_id=002 )-
+					 (select temperature1_value_sub from threshold_table
+							where id_value=1 )	and  mote_id="565")as temp_002_sub                         
                            
                            
 
@@ -180,9 +180,9 @@ join
 from sensor_data_table
 where 
 inclination_data_X >= (select inclination_mean_value_X from configs_mean_table
-							where config_id=2 )+
+							where config_id=002 )+
 					 (select inclination_value_X_add from threshold_table
-							where id_value=1 ) and  mote_id="002")as incli_002_add       
+							where id_value=1 ) and  mote_id="565")as incli_002_add       
 join
 # The subtracting(DOWN LIMIT) part of algorithm with respect to threshold_table and configs_mean_table
 (select count(inclination_data_X) as incli_count_sub_002, max(time_stamp) as incli_lastupdate_sub_002
@@ -190,9 +190,9 @@ from sensor_data_table
 where
 # operators used for filtering the data from threshold_table and configs_mean_table
 inclination_data_X <= (select inclination_mean_value_X from configs_mean_table
-							where config_id=2 )-
+							where config_id=002 )-
 					 (select inclination_value_X_sub from threshold_table
-							where id_value=1 ) and  mote_id="002")as incli_002_sub
+							where id_value=1 ) and  mote_id="565")as incli_002_sub
                             
  
   
@@ -204,18 +204,18 @@ join
 # sub query yeilds table corresponding mote_id:003
 (select mote_id as moteid_003 from sensor_data_table
 group by  mote_id 
-having mote_id="003")as t3
+having mote_id="566")as t3
 
 
 
 # configuration values from mean tables
 join
 # joining the mean value from temperature mean table for  mote_id="003")
-(select temperature_mean_value as temp_mean_003 from configs_mean_table
-							where config_id=3) as mean_temp_003
+(select temperature1_mean_value as temp_mean_003 from configs_mean_table
+							where config_id=003) as mean_temp_003
 join
 (select inclination_mean_value_X as incli_mean_003 from configs_mean_table
-							where config_id=3 ) as mean_incli_003  
+							where config_id=003 ) as mean_incli_003  
 
 
 
@@ -228,22 +228,22 @@ join
 # join tables
 join
 # The adding(UP LIMIT) part of algorithm with respect to threshold_table and configs_mean_table
-(select count(temperature_data) as temp_count_add_003,max(time_stamp) as temp_lastupdate_add_003
+(select count(temperature1_data) as temp_count_add_003,max(time_stamp) as temp_lastupdate_add_003
 from sensor_data_table 
-where temperature_data >= (select temperature_mean_value from configs_mean_table
-							  where config_id=3 )+
-						  (select temperature_value_add from threshold_table
-							  where id_value=1 ) and  mote_id="003")as temp_003_add
+where temperature1_data >= (select temperature1_mean_value from configs_mean_table
+							  where config_id=003 )+
+						  (select temperature1_value_add from threshold_table
+							  where id_value=1 ) and  mote_id="566")as temp_003_add
 join
 # The subtracting(DOWN LIMIT) part of algorithm with respect to threshold_table and configs_mean_table
-(select count(temperature_data) as temp_count_sub_003, max(time_stamp) as temp_lastupdate_sub_003
+(select count(temperature1_data) as temp_count_sub_003, max(time_stamp) as temp_lastupdate_sub_003
 from sensor_data_table 
 where
 # operators used for filtering the data from threshold_table and configs_mean_table
-temperature_data <= (select temperature_mean_value from configs_mean_table
-							where config_id=3 )-
-					 (select temperature_value_sub from threshold_table
-							where id_value=1 ) and  mote_id="003")as temp_003_sub
+temperature1_data <= (select temperature1_mean_value from configs_mean_table
+							where config_id=003 )-
+					 (select temperature1_value_sub from threshold_table
+							where id_value=1 ) and  mote_id="566")as temp_003_sub
                       
 					
                     
@@ -256,9 +256,9 @@ join
 from sensor_data_table
 where 
 inclination_data_X >= (select inclination_mean_value_X from configs_mean_table
-							where config_id=3 )+
+							where config_id=003 )+
 					  (select inclination_value_X_add from threshold_table
-							where id_value=1 ) and  mote_id="003")as incli_003_add
+							where id_value=1 ) and  mote_id="566")as incli_003_add
 join
 # The subtracting(DOWN LIMIT) part of algorithm with respect to threshold_table and configs_mean_table
 (select count(inclination_data_X) as incli_count_sub_003, max(time_stamp) as incli_lastupdate_sub_003
@@ -266,9 +266,9 @@ from sensor_data_table
 where
 # operators used for filtering the data from threshold_table and configs_mean_table
 inclination_data_X <= (select inclination_mean_value_X from configs_mean_table
-							where config_id=3 )-
+							where config_id=003 )-
 					 (select inclination_value_X_sub from threshold_table
-							where id_value=1 ) and  mote_id="003")as incli_003_sub                            
+							where id_value=1 ) and  mote_id="566")as incli_003_sub                            
                             
 
 
@@ -280,18 +280,18 @@ inclination_data_X <= (select inclination_mean_value_X from configs_mean_table
 join
 (select mote_id as moteid_004 from sensor_data_table
 group by  mote_id 
-having mote_id="004")as t4
+having mote_id="567")as t4
 
 
 
 # configuration values from mean tables
 join
 # joining the mean value from temperature mean table for  mote_id="00-17-0D-00-00-58-2F-F2")
-(select temperature_mean_value as temp_mean_004 from configs_mean_table
-							where config_id=4) as mean_temp_004
+(select temperature1_mean_value as temp_mean_004 from configs_mean_table
+							where config_id=004) as mean_temp_004
 join
 (select inclination_mean_value_X as incli_mean_004 from configs_mean_table
-							where config_id=2 ) as mean_incli_004                            
+							where config_id=004 ) as mean_incli_004                            
 
 
 
@@ -299,24 +299,24 @@ join
 					############ temperature part of algorithm  mote_id="004") ##################
 join
 # The adding(UP LIMIT) part of algorithm with respect to threshold_table and configs_mean_table
-(select count(temperature_data) as temp_count_add_004, max(time_stamp) as temp_lastupdate_add_004
+(select count(temperature1_data) as temp_count_add_004, max(time_stamp) as temp_lastupdate_add_004
 from sensor_data_table 
 where
 # operators used for filtering the data from threshold_table and configs_mean_table
-temperature_data >= (select temperature_mean_value from configs_mean_table
-							where config_id=4 )+
-					 (select temperature_value_add from threshold_table
-							where id_value=1 ) and  mote_id="004")as temp_004_add
+temperature1_data >= (select temperature1_mean_value from configs_mean_table
+							where config_id=004 )+
+					 (select temperature1_value_add from threshold_table
+							where id_value=1 ) and  mote_id="567")as temp_004_add
 join
 # The subtracting(DOWN LIMIT) part of algorithm with respect to threshold_table and configs_mean_table
-(select count(temperature_data) as temp_count_sub_004, max(time_stamp) as temp_lastupdate_sub_004
+(select count(temperature1_data) as temp_count_sub_004, max(time_stamp) as temp_lastupdate_sub_004
 from sensor_data_table 
 where
 # operators used for filtering the data from threshold_table and configs_mean_table
-temperature_data <= (select temperature_mean_value from configs_mean_table
-							where config_id=4 )-
-					 (select temperature_value_sub from threshold_table
-							where id_value=1 )	and  mote_id="004")as temp_004_sub                         
+temperature1_data <= (select temperature1_mean_value from configs_mean_table
+							where config_id=004 )-
+					 (select temperature1_value_sub from threshold_table
+							where id_value=1 )	and  mote_id="567")as temp_004_sub                         
                            
                            
 
@@ -328,9 +328,9 @@ join
 from sensor_data_table
 where 
 inclination_data_X >= (select inclination_mean_value_X from configs_mean_table
-							where config_id=4 )+
+							where config_id=004 )+
 					 (select inclination_value_X_add from threshold_table
-							where id_value=1 ) and  mote_id="004")as incli_004_add       
+							where id_value=1 ) and  mote_id="567")as incli_004_add       
 join
 # The subtracting(DOWN LIMIT) part of algorithm with respect to threshold_table and configs_mean_table
 (select count(inclination_data_X) as incli_count_sub_004, max(time_stamp) as incli_lastupdate_sub_004
@@ -338,10 +338,14 @@ from sensor_data_table
 where
 # operators used for filtering the data from threshold_table and configs_mean_table
 inclination_data_X <= (select inclination_mean_value_X from configs_mean_table
-							where config_id=4 )-
+							where config_id=004 )-
 					 (select inclination_value_X_sub from threshold_table
-							where id_value=1 ) and  mote_id="004")as incli_004_sub
+							where id_value=1 ) and  mote_id="567")as incli_004_sub
   						;
+  						
+  
+
+
   						
   
   

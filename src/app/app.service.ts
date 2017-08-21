@@ -55,7 +55,7 @@ getTemperatures(id: String): Observable<MyData[]> {
                 //console.log("mac at temps again "+ filtered);
                 data.filter(function(el){ return el.mote_id== filtered })
                 .forEach(function(item){ parsedData.push({ 
-                          x:item.epoch_time_stamp, y:parseFloat(item.temperature_data) });  });
+                          x:item.epoch_time_stamp, y:parseFloat(item.temperature1_data) });  });
                           console.log(parsedData);
                 return parsedData; })
                .catch(this.handleError);

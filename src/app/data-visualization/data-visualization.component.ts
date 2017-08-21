@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class DataVisualizationComponent  {
 
   macAddress:Array<String>=[
-  "001","002","003","004","005","006"
+  "564","564","564","564","564","564"
   ];
   
   macIdTitle:String;
