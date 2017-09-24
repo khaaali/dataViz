@@ -234,7 +234,6 @@ CREATE TABLE `threshold_table` (
   `temperature1_value_sub` varchar(10) NOT NULL,
   `inclination_value_X_add` varchar(10) NOT NULL,
   `inclination_value_X_sub` varchar(10) NOT NULL,
-  `inclination_value_Y` varchar(10) NOT NULL,
   `date_time` varchar(45) NOT NULL,
   PRIMARY KEY (`id_value`),
   UNIQUE KEY `date_time_UNIQUE` (`date_time`)
@@ -247,7 +246,7 @@ CREATE TABLE `threshold_table` (
 
 LOCK TABLES `threshold_table` WRITE;
 /*!40000 ALTER TABLE `threshold_table` DISABLE KEYS */;
-INSERT INTO `threshold_table` VALUES (1,'0.11','0.11','0.1111','0.111','1','2017-08-21 08:54:17');
+INSERT INTO `threshold_table` VALUES (1,'12','11','11','11','2017-09-24 19:49:55');
 /*!40000 ALTER TABLE `threshold_table` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -260,4 +259,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-24 19:18:17
+-- Dump completed on 2017-09-24 19:56:26

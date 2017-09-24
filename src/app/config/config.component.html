@@ -8,7 +8,6 @@
             <th><a ng-click="sortField = 'Moteid'; reverse=!reverse">Mote-Id</a></th>
             <th><a ng-click="sortField = 'Temperature'; reverse=!reverse">Mean Value Temp-Sensor 1 </a></th>
             <th><a ng-click="sortField = 'Inclination[X]'; reverse=!reverse">Mean Value Inclination [X]</a></th>
-            <th><a ng-click="sortField = 'Inclination[Y]'; reverse=!reverse">Mean Value Inclination [Y]</a></th>
             <th><a ng-click="sortField = 'Time'; reverse=!reverse">Time Stamp</a></th>
         </tr>
         <tr *ngFor="let tabule of configs ; let i = index" [attr.data-index]="i">
@@ -17,7 +16,6 @@
             <td>{{ tabule.config_mote_id }}</td>
             <td>{{ tabule.temperature1_mean_value}}</td>
             <td>{{ tabule.inclination_mean_value_X }}</td>
-            <td>{{ tabule.inclination_mean_value_Y }}</td>
             <td>{{ tabule.config_time }}</td>
         </tr>
     </table>

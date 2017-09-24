@@ -79,13 +79,11 @@ this.SetThreshold = false;
   let formIncli_X_add=this.model.InclinationValue_X_add;
   let formIncli_X_sub=this.model.InclinationValue_X_sub;
   
-  let formIncli_Y=this.model.InclinationValue_Y;
 
   console.log("from client set temp",formTemp_add,formTemp_sub);
   console.log("from client set incli",formIncli_X_add,formIncli_X_sub);
-  console.log("from client set incli",formIncli_Y);
 
-this._MySqlService.updateThresholds(formTemp_add,formTemp_sub,formIncli_X_add,formIncli_X_sub,formIncli_Y)
+this._MySqlService.updateThresholds(formTemp_add,formTemp_sub,formIncli_X_add,formIncli_X_sub)
       .subscribe(Data => console.log(Data));
 
  // this._router.navigate(['/settings']);

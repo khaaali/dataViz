@@ -24,10 +24,7 @@ show threshold values, criteria used to sort the data to send mail notifications
                         <div class="col-xs-3">Inclination [X]: </div>
                         <div class="col-xs-9 pull-left"> {{value.inclination_value_X_add}}</div>
                     </div>
-                    <div class="row">
-                        <div class="col-xs-3">Inclination [Y]: </div>
-                        <div class="col-xs-9 pull-left"> {{value.inclination_value_Y}}</div>
-                    </div>
+                    
 
                     <h4>Down-limit Thresholds:</h4>
                     
@@ -39,10 +36,7 @@ show threshold values, criteria used to sort the data to send mail notifications
                         <div class="col-xs-3">Inclination [X]: </div>
                         <div class="col-xs-9 pull-left"> {{value.inclination_value_X_sub}}</div>
                     </div>
-                    <div class="row">
-                        <div class="col-xs-3">Inclination [Y]: </div>
-                        <div class="col-xs-9 pull-left"> {{value.inclination_value_Y}}</div>
-                    </div>
+                    
                 </div>
                 <br>
                 <button class="btn btn-primary" (click)="onEdit()">Edit </button>
@@ -74,10 +68,7 @@ show threshold values, criteria used to sort the data to send mail notifications
                     <label for="Inclination">Inclination [X]</label>
                     <input type="text" class="form-control" id="Inclination_x_add" placeholder="Enter Value" required [(ngModel)]="model.InclinationValue_X_add" name="Inclination_x_add" #InclinationValue_x_add="ngModel">
                 </div>
-                <div class="form-group">
-                    <label for="Inclination">Inclination [Y]</label>
-                    <input type="text" class="form-control" id="Inclination_y" placeholder="Enter Value" required [(ngModel)]="model.InclinationValue_Y" name="Inclination_y" #InclinationValue_y="ngModel">
-                </div>
+               
                 <h4>Down-limit Thresholds:</h4>
                 <div class="form-group">
                     <label for="Temperature">Temperature</label>

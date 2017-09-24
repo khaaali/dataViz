@@ -261,7 +261,7 @@ app.put("/setting/edit",function(req,res){
         this.mail_inclivaluex_add=req.body.incliValue_X_add;
         this.mail_inclivaluex_sub=req.body.incliValue_X_sub;
 
-        this.mail_inclivaluey=req.body.incliValue_Y;
+        //this.mail_inclivaluey=req.body.incliValue_Y;
 
          //console.log("2 from mail_settime",this.mail_settime);
          //console.log("3 from mail_tempvalue",this.mail_tempvalue);
@@ -276,7 +276,7 @@ app.put("/setting/edit",function(req,res){
         var inclivalue_xadd=req.body.incliValuex_add;
         var inclivalue_xsub=req.body.incliValuex_sub;
 
-        var inclivalue_y=req.body.incliValuey;
+        //var inclivalue_y=req.body.incliValuey;
 
         
         /// creating payload for updating data into mysql 
@@ -289,7 +289,7 @@ app.put("/setting/edit",function(req,res){
         var _incliValueXadd= ''+ inclivalue_xadd + '' ;
         var _incliValueXsub= ''+ inclivalue_xsub + '' ;
         
-        var _incliValueY= ''+ inclivalue_y + '' ;
+        //var _incliValueY= ''+ inclivalue_y + '' ;
         
         //var tempValue=tempvalue;
         //var incliValue=inclivalue;
@@ -308,7 +308,7 @@ app.put("/setting/edit",function(req,res){
         inclination_value_X_add:_incliValueXadd,
         inclination_value_X_sub:_incliValueXsub,
         
-        inclination_value_Y:_incliValueY,
+        //inclination_value_Y:_incliValueY,
 
         date_time: settime
 
@@ -353,8 +353,8 @@ app.put("/setting/edit",function(req,res){
 
 
 
+//this request is not implemented with angular only 'put' method is used to post the data
 app.post("/setting",function(req,res){
-//this reuest is not implemented with angular only 'put' method is used to post the data
         console.log("from post");
         
 

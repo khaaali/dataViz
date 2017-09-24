@@ -184,8 +184,7 @@ createThresholds(formTemp:string,formIncli:string): Observable<Thresholds[]> {
 
 
 updateThresholds(formTemp_add:string,formTemp_sub:string,
-                 formIncli_X_add:string,formIncli_X_sub:string,
-                 formIncli_Y:string): Observable<Thresholds[]> {
+                 formIncli_X_add:string,formIncli_X_sub:string): Observable<Thresholds[]> {
     const url = this._Url+'/setting'+'/edit';              // should change here
     console.log(url);
 
@@ -197,7 +196,6 @@ updateThresholds(formTemp_add:string,formTemp_sub:string,
       incliValuex_add:formIncli_X_add,
       incliValuex_sub:formIncli_X_sub,
       
-      incliValuey:formIncli_Y
 
     }
     console.log("from service",formData);
