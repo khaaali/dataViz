@@ -85,7 +85,7 @@ class Database:
     host = 'localhost'
     user = 'root'
     password = 'sairam'
-    db = 'Astrose_smart_meshIP'
+    db = 'astrose_smart_meship'
 
     def __init__(self):
         self.connection = MySQLdb.connect(self.host, self.user, self.password, self.db)
@@ -252,19 +252,19 @@ def _notifCallback(notifName, notifParams):
                 #print(incliX_,incliY_,incliZ_)
                 
                 incliX_=incliX_/16384.0
-                incliX_="{0:.4f}".format(incliX_)
+                incliX_="{0:.2f}".format(incliX_)
 
                 incliY_=incliY_/16384.0
-                incliY_="{0:.4f}".format(incliY_)
+                incliY_="{0:.2f}".format(incliY_)
 
                 incliZ_=incliZ_/16384.0
-                incliZ_="{0:.4f}".format(incliZ_)
+                incliZ_="{0:.2f}".format(incliZ_)
 
                 incliX_=float(incliX_)
                 incliY_=float(incliY_)
                 incliZ_=float(incliZ_)
 
-                print "after division with constant and rounded to 4 decimals"
+                print "after division with constant and rounded to 2 decimals"
                 print(incliX_,incliY_,incliZ_)
                 
                 #### checking incliZ_ for range -1 < arccos(Z) < 1
@@ -288,13 +288,13 @@ def _notifCallback(notifName, notifParams):
                     incliY_= -1 
                 
                 inclination_data_X=np.arccos(incliX_)*(180/np.pi)
-                inclination_data_X="{0:.4f}".format(inclination_data_X)
+                inclination_data_X="{0:.2f}".format(inclination_data_X)
 
                 inclination_data_Y=np.arccos(incliY_)*(180/np.pi)
-                inclination_data_Y="{0:.4f}".format(inclination_data_Y)
+                inclination_data_Y="{0:.2f}".format(inclination_data_Y)
                 
                 inclination_data_Z=np.arccos(incliZ_)*(180/np.pi)
-                inclination_data_Z="{0:.4f}".format(inclination_data_Z)
+                inclination_data_Z="{0:.2f}".format(inclination_data_Z)
 
                 print "inclination data of XYZ:"
                 print mac_id,mote_id,temperature1_data,temperature2_data,inclination_data_X,inclination_data_Y,inclination_data_Z

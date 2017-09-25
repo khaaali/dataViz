@@ -11,7 +11,7 @@
 SET GLOBAL event_scheduler='ON';
 delimiter |
 CREATE EVENT configs_mean_table_event
-ON SCHEDULE EVERY 1 minute
+ON SCHEDULE EVERY 20 SECOND
 
 DO
   BEGIN

@@ -6,7 +6,7 @@
 SET GLOBAL event_scheduler='ON';
 delimiter |
 CREATE EVENT notify_para_table_event
-ON SCHEDULE EVERY 1 minute
+ON SCHEDULE EVERY 20 SECOND
 DO
   BEGIN
 
