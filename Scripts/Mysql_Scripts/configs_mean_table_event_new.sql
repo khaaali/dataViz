@@ -21,7 +21,7 @@ SET
 
 `temperature1_mean_value`=
 (select
-  avg(temperature1_data) as temp_avg
+  round(avg(temperature1_data),2) as temp_avg
 FROM (
     SELECT 
       temperature1_data
@@ -36,7 +36,7 @@ FROM (
     
 `inclination_mean_value_X`=
 (select
-    avg(inclination_data_X) as incli_X_avg
+    round(avg(inclination_data_X),2) as incli_X_avg
 FROM (
     SELECT 
       (inclination_data_X)
@@ -51,7 +51,7 @@ FROM (
     
 `inclination_mean_value_Y` =
 (select
-    avg(inclination_data_Y) as incli_Y_avg
+    round(avg(inclination_data_Y),2) as incli_Y_avg
 FROM (
     SELECT 
       (inclination_data_Y)
@@ -76,7 +76,7 @@ UPDATE `Astrose_smart_meshIP`.`configs_mean_table`
 SET 
 `temperature1_mean_value`=
 (select
-  avg(temperature1_data) as temp_avg
+  round(avg(temperature1_data),2) as temp_avg
 FROM (
     SELECT 
       temperature1_data
@@ -91,7 +91,7 @@ FROM (
     
 `inclination_mean_value_X`=
 (select
-    avg(inclination_data_X) as incli_X_avg
+    round(avg(inclination_data_X),2) as incli_X_avg
 FROM (
     SELECT 
       (inclination_data_X)
@@ -106,7 +106,7 @@ FROM (
     
 `inclination_mean_value_Y` =
 (select
-    avg(inclination_data_Y) as incli_Y_avg
+    round(avg(inclination_data_Y),2) as incli_Y_avg
 FROM (
     SELECT 
       (inclination_data_Y)
@@ -131,7 +131,7 @@ UPDATE `Astrose_smart_meshIP`.`configs_mean_table`
 SET 
 `temperature1_mean_value`=
 (select
-  avg(temperature1_data) as temp_avg
+  round(avg(temperature1_data),2) as temp_avg
 FROM (
     SELECT 
       temperature1_data
@@ -146,7 +146,7 @@ FROM (
     
 `inclination_mean_value_X`=
 (select
-    avg(inclination_data_X) as incli_X_avg
+    round(avg(inclination_data_X),2) as incli_X_avg
 FROM (
     SELECT 
       (inclination_data_X)
@@ -161,7 +161,7 @@ FROM (
     
 `inclination_mean_value_Y` =
 (select
-    avg(inclination_data_Y) as incli_Y_avg
+    round(avg(inclination_data_Y),2) as incli_Y_avg
 FROM (
     SELECT 
       (inclination_data_Y)
@@ -186,7 +186,7 @@ UPDATE `Astrose_smart_meshIP`.`configs_mean_table`
 SET 
 `temperature1_mean_value`=
 (select
-  avg(temperature1_data) as temp_avg
+  round(avg(temperature1_data),2) as temp_avg
 FROM (
     SELECT 
       temperature1_data
@@ -201,7 +201,7 @@ FROM (
     
 `inclination_mean_value_X`=
 (select
-    avg(inclination_data_X) as incli_X_avg
+    round(avg(inclination_data_X),2) as incli_X_avg
 FROM (
     SELECT 
       (inclination_data_X)
@@ -216,7 +216,7 @@ FROM (
     
 `inclination_mean_value_Y` =
 (select
-    avg(inclination_data_Y) as incli_Y_avg
+    round(avg(inclination_data_Y),2) as incli_Y_avg
 FROM (
     SELECT 
       (inclination_data_Y)
