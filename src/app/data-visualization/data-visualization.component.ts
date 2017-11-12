@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Input,Output,EventEmitter } from '@angular/core';
+import { ActivatedRoute, Params,Router } from '@angular/router';
+import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import {Thresholds} from '../Threshold';
 
 @Component({
   selector: 'app-data-visualization',
@@ -12,7 +15,14 @@ export class DataVisualizationComponent  {
   ];
   
   macIdTitle:String;
+  model = new Thresholds();
+  //sendData: string;
+  value = '';
 
+onEnter(value: string) { this.value = value;
+     console.log(value)
+    //this.OnSelect.emit(value)
+    }
 
   onClick(event){
 
@@ -20,11 +30,12 @@ export class DataVisualizationComponent  {
    var idAttr =event.srcElement.attributes[3];
    var targetid=String(idAttr.value);
    //var value=idAttr.nodeValue;
-   //console.log(targetid);
+   console.log("tartgetid"+targetid);
    var split=targetid.split('/');;
    //console.log(split[2]);
-   this.macIdTitle=split[2];
+   //this.macIdTitle=split[2];
    //this.macIdTitle=targetid;
+   this.macIdTitle=event.srcElement.childNodes["0"].data
     }
 
 }

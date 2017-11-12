@@ -564,7 +564,7 @@ app.get("/packet_loss", function(req, res) {
 //runs every minute 35th second
 var rule = new schedule.RecurrenceRule();
 //rule.minute = 40;
-rule.second = [10, 20, 30, 40, 50];
+rule.second = [00, 20, 40];
 
 var job = schedule.scheduleJob(rule, getSetThresholds);
 

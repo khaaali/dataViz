@@ -3,7 +3,8 @@ import { HttpModule }    from '@angular/http';
 import { ActivatedRoute, Params,Router } from '@angular/router';
 import { MySqlService } from '../../app.service';
 import {MyData} from '../../StructData';
-
+import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import {Thresholds} from '../../Threshold';
 
 declare const CanvasJS: any;
 

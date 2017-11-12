@@ -1,3 +1,4 @@
+import { Component, OnInit,Input,Output,EventEmitter } from '@angular/core';
 import { Injectable }    from '@angular/core';
 import { Headers, Http,Response } from '@angular/http';
 import { ActivatedRoute, Params,Router } from '@angular/router';
@@ -8,7 +9,7 @@ import {MyData} from './StructData';
 import { MySQLTable } from './MySqlTable';
 import {Thresholds} from './Threshold';
 import {setThreshold} from './setThresholds';
-
+import * as moment from 'moment';
 
 
 @Injectable()
@@ -19,6 +20,7 @@ public  filteredMac;
   private headers = new Headers({'Content-Type': 'application/json'});
   private _Url = 'http://localhost:3000';  // URL to web api
   myData:MyData[];
+  model = new Thresholds();
 
   constructor(
     private _http: Http,
@@ -44,16 +46,28 @@ getTable(): Observable<MySQLTable[]> {
 getTemperatures(id: String): Observable<MyData[]> {
     const url = this._Url+'/senor_data';              // should change here
     //console.log(url);
-    let filter= `${id}`;
-    let filtered=String(filter);
-    //console.log("mac at temps "+ filtered);
+     let filter= `${id}`;
+     let filtered=String(filter);
+     let data=filtered.split("#")
+     
+    console.log("data"+ data);
+
+     let filter_moteid=data[0]
+     let filter_datetime=data[1]
+     console.log("mac at temps "+ filter_moteid);
+     console.log("mac at temps "+ filter_datetime)
+     let convert_datetime = moment(filter_datetime, "YYYY-MM-DD HH:mm:ss");
+     let filter_epoch_time = moment(convert_datetime).valueOf();
+     console.log(filter_epoch_time)
+
+
     return this._http.get(url)
                .map(res =>{
                 let data=res.json();
                 //console.log(data);
                 let parsedData = [];
                 //console.log("mac at temps again "+ filtered);
-                data.filter(function(el){ return el.mote_id== filtered })
+                data.filter(function(el){ return (el.mote_id== filter_moteid && el.epoch_time_stamp>=filter_epoch_time) })
                 .forEach(function(item){ parsedData.push({ 
                           x:item.epoch_time_stamp, y:parseFloat(item.temperature1_data) });  });
                           console.log(parsedData);
@@ -67,14 +81,22 @@ getInclination(id: String): Observable<MyData[]> {
     const url = this._Url+'/senor_data';              // should change here
     //console.log(url);
     let filter= `${id}`;
-    let filtered=String(filter);
-    console.log("mac at incli "+ filtered);
+     let filtered=String(filter);
+     let data=filtered.split("#")
+     let filter_moteid=data[0]
+     let filter_datetime=data[1]
+     console.log("mac at incli "+ filter_moteid);
+     console.log("mac at incli "+ filter_datetime)
+     let convert_datetime = moment(filter_datetime, "YYYY-MM-DD HH:mm:ss");
+     let filter_epoch_time = moment(convert_datetime).valueOf();
+     console.log(filter_epoch_time)
+
     return this._http.get(url)
                .map(res =>{
                 let data=res.json();
                 let parsedData = []; 
                // let f=this.filteredMac;
-                data.filter(function(el){ return el.mote_id==filtered})
+                data.filter(function(el){ return (el.mote_id== filter_moteid && el.epoch_time_stamp>=filter_epoch_time) })
                 .forEach(function(item){ parsedData.push({ 
                           x:item.epoch_time_stamp, y:parseFloat(item.inclination_data_X) });  });
                          console.log(parsedData);
@@ -87,15 +109,23 @@ getVoltageLevels(id: String): Observable<MyData[]> {
     const url = this._Url+'/energy';      //should change here
     //console.log(url);
     let filter= `${id}`;
-    let filtered=String(filter);
-    //console.log("mac at both "+ filtered);
+     let filtered=String(filter);
+     let data=filtered.split("#")
+     let filter_moteid=data[0]
+     let filter_datetime=data[1]
+     console.log("mac at incli "+ filter_moteid);
+     console.log("mac at incli "+ filter_datetime)
+     let convert_datetime = moment(filter_datetime, "YYYY-MM-DD HH:mm:ss");
+     let filter_epoch_time = moment(convert_datetime).valueOf();
+     console.log(filter_epoch_time)
+
     return this._http.get(url)
                .map(res =>{
                 let data=res.json();
                 //console.log(data);
                 let parsedData = []; 
                 //let f=this.filteredMac;
-                data.filter(function(el){ return el.hr_mote_id==filtered})
+                data.filter(function(el){ return (el.hr_mote_id==filter_moteid && el.hr_epochStamp>=filter_epoch_time)})
                 .forEach(function(item){ parsedData.push({ 
                           x:item.hr_epochStamp, y:parseFloat(item.hr_batt_voltage) });  });
                          console.log(parsedData);
@@ -108,15 +138,23 @@ getSignalStrength(id: String): Observable<MyData[]> {
     const url = this._Url+'/avg_rssi';      //should change here
     //console.log(url);
     let filter= `${id}`;
-    let filtered=String(filter);
-    //console.log("mac at both "+ filtered);
+     let filtered=String(filter);
+     let data=filtered.split("#")
+     let filter_moteid=data[0]
+     let filter_datetime=data[1]
+     console.log("mac at incli "+ filter_moteid);
+     console.log("mac at incli "+ filter_datetime)
+     let convert_datetime = moment(filter_datetime, "YYYY-MM-DD HH:mm:ss");
+     let filter_epoch_time = moment(convert_datetime).valueOf();
+     console.log(filter_epoch_time)
+
     return this._http.get(url)
                .map(res =>{
                 let data=res.json();
                 //console.log(data);
                 let parsedData = []; 
                 //let f=this.filteredMac;
-                data.filter(function(el){ return el.hr_mote_id==filtered})
+                data.filter(function(el){ return (el.hr_mote_id==filter_moteid && el.hr_epochStamp>=filter_epoch_time)})
                 .forEach(function(item){ parsedData.push({ 
                           x:item.hr_epochStamp, y:parseInt(item.hr_avg_rssi) });  });
                          console.log(parsedData);
@@ -128,15 +166,23 @@ getPacketLoss(id: String): Observable<MyData[]> {
     const url = this._Url+'/packet_loss';      //should change here
     //console.log(url);
     let filter= `${id}`;
-    let filtered=String(filter);
-    //console.log("mac at both "+ filtered);
+     let filtered=String(filter);
+     let data=filtered.split("#")
+     let filter_moteid=data[0]
+     let filter_datetime=data[1]
+     console.log("mac at incli "+ filter_moteid);
+     console.log("mac at incli "+ filter_datetime)
+     let convert_datetime = moment(filter_datetime, "YYYY-MM-DD HH:mm:ss");
+     let filter_epoch_time = moment(convert_datetime).valueOf();
+     console.log(filter_epoch_time)
+
     return this._http.get(url)
                .map(res =>{
                 let data=res.json();
                 //console.log(data);
                 let parsedData = []; 
                 //let f=this.filteredMac;
-                data.filter(function(el){ return el.hr_mote_id==filtered})
+                data.filter(function(el){ return (el.hr_mote_id==filter_moteid && el.hr_epochStamp>=filter_epoch_time)})
                 .forEach(function(item){ parsedData.push({ 
                           x:item.hr_epochStamp, y:parseInt(item.hr_packetloss) });  });
                          console.log(parsedData);
