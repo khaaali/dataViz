@@ -288,7 +288,7 @@ def _notifCallback(notifName, notifParams):
                     incliY_= -1 
                 
                 inclination_data_X=np.arccos(incliX_)*(180/np.pi)
-                inclination_data_x="{0:.2f}".format(inclination_data_X)
+                inclination_data_X="{0:.2f}".format(inclination_data_X)
 
                 inclination_data_Y=np.arccos(incliY_)*(180/np.pi)
                 inclination_data_Y="{0:.2f}".format(inclination_data_Y)
@@ -296,30 +296,8 @@ def _notifCallback(notifName, notifParams):
                 inclination_data_Z=np.arccos(incliZ_)*(180/np.pi)
                 inclination_data_Z="{0:.2f}".format(inclination_data_Z)
 
-                #print "inclination data of XYZ:"
-                #print mac_id,mote_id,temperature1_data,temperature2_data,inclination_data_x,inclination_data_Y,inclination_data_Z
-                #print 'X-axis',type(inclination_data_x),inclination_data_x
-            
-                # Changing inclination data with wrt to offset, for X-axis: observed offeset=88.28 (resting on flat surface)
-                offset=88.28
-                
-                inclination_data_x=float(inclination_data_x)
-
-                if inclination_data_x == offset:
-                    inclination_data_X =0
-                elif inclination_data_x > offset:
-                    inclination_data_X =   inclination_data_x - offset  
-                    #print 'greater'
-                elif inclination_data_x < offset:
-                    inclination_data_X = inclination_data_x - offset 
-                    #print 'smaller'  
-
-
                 print "inclination data of XYZ:"
                 print mac_id,mote_id,temperature1_data,temperature2_data,inclination_data_X,inclination_data_Y,inclination_data_Z
-                print 'X-axis',inclination_data_X
-
-
 
                 Db_array=[]
                 Db_array.append(mac_id)

@@ -61,7 +61,7 @@ export class InclinationComponent implements OnInit {
 
 
       title:{
-       text: "Inclination [X]", 
+       text: "Inclination [°X]", 
        fontSize: 30,
        },
        exportEnabled: true,
@@ -87,7 +87,7 @@ export class InclinationComponent implements OnInit {
         interlacedColor: "#F1F1F1" 
       },
       axisY:{
-        title: "Inclination [X]",
+        title: "Inclination [°X]",
         tickLength: 15,
         titleFontSize: 20,
         includeZero: false,
@@ -104,7 +104,7 @@ export class InclinationComponent implements OnInit {
       //type: "line",
       lineThickness: 1,
       showInLegend: true,
-      legendText: "Inclination [X]",
+      legendText: "Inclination [°X]",
       xValueType: "dateTime",
       dataPoints: dataIncli
                     

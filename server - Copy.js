@@ -10,7 +10,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var schedule = require('node-schedule');
 var _ = require('lodash');
-var moment = require("moment")
 
 var diff = require('deep-diff').diff;
 var observableDiff = require('deep-diff').observableDiff,
@@ -565,7 +564,7 @@ app.get("/packet_loss", function(req, res) {
 //runs every minute 35th second
 var rule = new schedule.RecurrenceRule();
 //rule.minute = 40;
-rule.second = [00,10,20,30,40,50];
+rule.second = [00, 20, 40];
 
 var job = schedule.scheduleJob(rule, getSetThresholds);
 
@@ -614,28 +613,6 @@ function getSetThresholds() {
       //console.log('l',l);
       //console.log('p',p);
 
-      // holds string data for sending mail
-      var TempUpLimitz = []
-      var TempLowLimitz = []
-      var IncliUpLimitz = []
-      var IncliLowLimitz = []
-
-// object for holding data for processing: creating key values for the data
-      var obj = {
-        TempUpLimits: [],
-        TempLowLimits: [],
-        IncliUpLimits: [],
-        IncliLowLimits: []
-      };
-
-
-      // arrays for holding the data after checking valid duration of days and hours
-      var obj3 = {
-        TempUpLimits3: [],
-        TempLowLimits3: [],
-        IncliUpLimits3: [],
-        IncliLowLimits3: []
-      };
 
       var differences = diff(rows[_Last], rows[_Previous]);
       console.log(differences);
@@ -689,115 +666,6 @@ function getSetThresholds() {
         }
       }
 
-      
-
-      // preparing json object  for duration check
-
-      var time_now = moment().format('YYYY-MM-DD HH:mm:ss')
-      var timenow = moment(time_now)
-
-      // arrays for adding the diff data from database
-
-      for (i = 0; i < TempUpLimit.length; i++) {
-        // ignore if null data exits in the index
-        if (TempUpLimit[i] == null) {
-          console.log('imhere0')
-
-          console.log(TempUpLimit[i])
-
-        } else {
-          // split the string and extract macid, notif time and threshold to "obj" for holding temporarily
-          pay_array = TempUpLimit[i].split(/\s+/)
-          //console.log('payarray',pay_array)
-          obj.TempUpLimits.push({ mac_id: pay_array[1], notif_time: pay_array[7] + ' ' + pay_array[8], threshold: pay_array[5] });
-
-          notify_time = obj.TempUpLimits[i].notif_time
-          var duration = moment.duration(timenow.diff(notify_time));
-          // set duration of days for invalid data, below 1 denotes any data beyon 1 day is inavlid
-          if (duration._data.days >= 1) {
-            console.log('Duration old data days: No mail')
-          }
-          // on valid data check for hours of valid data, set to 10 or any value
-          else if (duration._data.days == 0 && duration._data.hours <= 1) {
-            //console.log('mailing', duration._data)
-            // holds array to send mail on valid data (when lenght is not 0)
-            TempUpLimitz.push('mac_id: ' + obj.TempUpLimits[i].mac_id + ' ' + 'has reached threshold' + ' ' + obj.TempUpLimits[i].threshold + ' ' + 'at' + ' ' + obj.TempUpLimits[i].notif_time)
-            //creating an obj3 copy of the same valid data for furtehr comparison on duration of minutes with sent mail time from specific mote
-            obj3.TempUpLimits3.push({ mac_id: obj.TempUpLimits[i].mac_id, notif_time: obj.TempUpLimits[i].notif_time, threshold: obj.TempUpLimits[i].threshold })
-          }
-        }
-      }
-      for (i = 0; i < TempLowLimit.length; i++) {
-        if (TempLowLimit[i] == null) {
-          console.log(TempLowLimit[i])
-
-        } else {
-
-          pay_array = TempLowLimit[i].split(/\s+/)
-          obj.TempLowLimits.push({ mac_id: pay_array[1], notif_time: pay_array[7] + ' ' + pay_array[8], threshold: pay_array[5] });
-          notify_time = obj.TempLowLimits[i].notif_time
-          var duration = moment.duration(timenow.diff(notify_time));
-          if (duration._data.days >= 1) {
-            console.log('Duration old data days: No mail')
-          } else if (duration._data.days == 0 && duration._data.hours <= 1) {
-            //console.log('mailing', duration._data)
-            TempLowLimitz.push('mac_id: ' + obj.TempLowLimits[i].mac_id + ' ' + 'has reached threshold' + ' ' + obj.TempLowLimits[i].threshold + ' ' + 'at' + ' ' + obj.TempLowLimits[i].notif_time)
-            obj3.TempLowLimits3.push({ mac_id: obj.TempLowLimits[i].mac_id, notif_time: obj.TempLowLimits[i].notif_time, threshold: obj.TempLowLimits[i].threshold })
-          }
-        }
-      }
-
-      for (i = 0; i < IncliUpLimit.length; i++) {
-        if (IncliUpLimit[i] == null) {
-          console.log(IncliUpLimit[i])
-
-        } else {
-          pay_array = IncliUpLimit[i].split(/\s+/)
-          obj.IncliUpLimits.push({ mac_id: pay_array[1], notif_time: pay_array[7] + ' ' + pay_array[8], threshold: pay_array[5] });
-          notify_time = obj.IncliUpLimits[i].notif_time
-          var duration = moment.duration(timenow.diff(notify_time));
-          if (duration._data.days >= 1) {
-            console.log('Duration old data days: No mail')
-          } else if (duration._data.days == 0 && duration._data.hours <= 1) {
-            //console.log('mailing', duration._data)
-            IncliUpLimitz.push('mac_id: ' + obj.IncliUpLimits[i].mac_id + ' ' + 'has reached threshold' + ' ' + obj.IncliUpLimits[i].threshold + ' ' + 'at' + ' ' + obj.IncliUpLimits[i].notif_time)
-            obj3.IncliUpLimits3.push({ mac_id: obj.IncliUpLimits[i].mac_id, notif_time: obj.IncliUpLimits[i].notif_time, threshold: obj.IncliUpLimits[i].threshold })
-
-          }
-        }
-      }
-      for (i = 0; i < IncliLowLimit.length; i++) {
-        if (IncliLowLimit[i] == null) {
-          console.log(IncliLowLimit[i])
-
-        } else {
-          pay_array = IncliLowLimit[i].split(/\s+/)
-          obj.IncliLowLimits.push({ mac_id: pay_array[1], notif_time: pay_array[7] + ' ' + pay_array[8], threshold: pay_array[5] });
-          notify_time = obj.IncliLowLimits[i].notif_time
-          var duration = moment.duration(timenow.diff(notify_time));
-          if (duration._data.days >= 1) {
-            console.log('Duration old data days: No mail')
-          } else if (duration._data.days == 0 && duration._data.hours <= 1) {
-            //console.log('mailing', duration._data)
-            IncliLowLimitz.push('mac_id: ' + obj.IncliLowLimits[i].mac_id + ' ' + 'has reached threshold' + ' ' + obj.IncliLowLimits[i].threshold + ' ' + 'at' + ' ' + obj.IncliLowLimits[i].notif_time)
-            obj3.IncliLowLimits3.push({ mac_id: obj.IncliLowLimits[i].mac_id, notif_time: obj.IncliLowLimits[i].notif_time, threshold: obj.IncliLowLimits[i].threshold })
-
-          }
-        }
-      }
-
-
-
-
-
-
-
-
-
-
-
-
-
       if (err) {
         JSON.stringify(err);
       } else if (LastEqualPrevious == _.isEqual(rows[_Last], rows[_Previous])) {
@@ -806,20 +674,12 @@ function getSetThresholds() {
       } else if (count == 16) {
         console.log("Null data: No mail:", count);
       } else {
-        if (TempUpLimitz.length != 0 || TempLowLimitz.length != 0 || IncliUpLimitz.length != 0 || IncliLowLimitz.length != 0) {
-          console.log("You gonna get a mail!!");
+        console.log("youth");
 
-          // console.log('imhere1', TempUpLimitz, TempLowLimitz, IncliUpLimitz, IncliLowLimitz);
-          //dummy=[]
-          //dummy.push('mac_id: 00-17-0d-00-00-30-47-00 has reached threshold 24.123 at 2017-10-06 00:54:54')
-          console.log(" mail sent")
-          //sendMail(dummy, dummy, dummy, dummy);
+        console.log(TempUpLimit, TempLowLimit, IncliUpLimit, IncliLowLimit);
 
-          sendMail(TempUpLimitz, TempLowLimitz, IncliUpLimitz, IncliLowLimitz);
-        } else {
-          console.log("Duration old data: No mail")
+        sendMail(TempUpLimit, TempLowLimit, IncliUpLimit, IncliLowLimit);
 
-        }
       }
 
       connection.release();

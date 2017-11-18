@@ -6,7 +6,7 @@
 SET GLOBAL event_scheduler='ON';
 delimiter |
 CREATE EVENT nodemailer_table_event
-ON SCHEDULE EVERY 20 SECOND
+ON SCHEDULE EVERY 10 SECOND
 DO
   BEGIN
 
